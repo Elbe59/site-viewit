@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>fragment</title>
+
+</head>
+<body>
+<!--Création du pied de page-->
+    <header th:fragment="header">
+        <div class="menu">
+            <ul>
+                <li><a href="accueil">Accueil</a></li>
+                <li><a href="favoris">Favoris</a></li>
+                <li><a href="ajoutfilm">Ajout de Film</a></li>
+                <li class="deroulant"><a href="#">Gestion</a>
+                    <ul class="sous">
+                        <li><a href="#">Gestion Utilisateur</a></li>
+                        <li><a href="#">Ajout de Film</a></li>
+                        <li><a href="#">Gestion Film</a></li>
+                        <li><a href="#">Demande de Film</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="conteneur_co">
+            <form method="post" action="connecter" class="formulaire_co">
+                <label>Identifiant: </label>
+                <input type="text" name="login">
+                <label>Mot de Passe: </label>
+                <input type="text" name="mdp">
+                <div class="btn_center">
+                    <button class="btn_profil" type="Submit">Se connecter</button>
+                </div>
+
+            </form>
+        </div>
+    </header>
+    <!--Création du pied de page-->
+    <footer th:fragment="footer">
+        <p>Ce projet a été réalisé en groupe de projet ITI au semestre 7.</p>
+        <p>Membre du groupe:</p>
+        <ul>
+            <li>Kylian Barthelemot</li>
+            <li>Quentin Callens</li>
+            <li>Emile Mongenet</li>
+            <li>Pierre Sanchez</li>
+        </ul>
+        <div class="conteneur_deco">
+            <form method="post" action="connecter" class="formulaire_co">
+                <label>Pseudo</label>
+                <div class="btn_center">
+                    <button class="btn_profil" type="Submit">Se connecter</button>
+                </div>
+
+            </form>
+        </div>
+    </footer>
+</body>
+</html>

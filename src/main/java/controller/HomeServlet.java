@@ -24,7 +24,7 @@ public class HomeServlet extends AbstractThymeleafServlet {
 		// context pour les variables
 		WebContext context = new WebContext(req, resp, req.getServletContext());
 
-		engine.process("film", context, resp.getWriter());
+		engine.process("accueil", context, resp.getWriter());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
