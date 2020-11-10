@@ -19,7 +19,7 @@ public class FilmDaoImpl implements FilmDao {
 		
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(Statement stm = co.createStatement()) {
-				try(ResultSet rs = stm.executeQuery("SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre ORDER BY titre")) {
+				try(ResultSet rs = stm.executeQuery("SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre ORDER BY titreFilm")) {
 					while(rs.next()) {
 						listOfFilms.add(new Film(
 								rs.getInt("idFilm"),
