@@ -2,11 +2,12 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<title>Film</title>
-	<link href="../css/film.css" type="text/css" rel="stylesheet">
+	<link href="film.css" type="text/css" rel="stylesheet">
+	<link href="menu.css" type="text/css" rel="stylesheet">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
 </head>
 <body>
-	<header th:replace="~{menu :: header}"></header>
+	<header th:replace="~{fragments :: header}"></header>
 	<h1 class="titre">Avengers : Infinity War</h1>
 	<div class="film">
 		<div class="note">96%</div>
@@ -35,6 +36,6 @@
 			<div class="genre">Genre : Action</div>
 		</div>
 	</div>
-	<footer th:replace="~{menu :: footer}"></footer>
+	<footer th:replace="~{fragments :: footer}"></footer>
 </body>
 </html>
