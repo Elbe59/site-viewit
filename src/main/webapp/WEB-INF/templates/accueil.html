@@ -1,85 +1,58 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>ViewIt</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="css/accueil.css">
-</head>
-<header th:replace="~{fragments :: header}"></header>
-<body>
-
-    <div class = "top">
-        <span class = "recherche" >
-            <label for="title">Recherche</label>
-            <input type="text" name="title" id="title" class = "form">
+<html>
+  <head>
+      <title>ViewIt</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" type="text/css" href="../../css/accueil.css">
+  </head>
+  <body>
+    <main>
+      <section id="accueil-search">
+        <span id= "zoneRecherche">
+          <label for="recherche">Rechercher :</label>
+          <input type="text" name="recherche" id="recherche">
         </span>
-            <span class = "deroule" >
-                <label for="trier">Trier par</label>
-                <select name="trier" id="trier" class = "form">
-                    <option value="popularite">popularité</option>
-                    <option value="genre">genre</option>
-                    <option value="recent">Plus récent</option>
-                    <option value="ancien">Plus ancien</option>
-                </select>
-            </span>
-    </div>
-    <div class = "film">
-        <figure>
-            <img src="../Images/avengersInfinityWar.jpg" alt="couverture film" style="width:40%">
-            <figcaption>89%</figcaption>
-        </figure>
-    </div>
-    <div class = "film">
-        <figure>
-            <img src="../Images/avengersInfinityWar.jpg" alt="couverture film" style="width:40%">
-            <figcaption>89%</figcaption>
-        </figure>
-    </div>
-    <div class = "film">
-        <figure>
-            <img src="../Images/avengersInfinityWar.jpg" alt="couverture film" style="width:40%">
-            <figcaption>89%</figcaption>
-        </figure>
-    </div>
-    <div class = "film">
-        <figure>
-            <img src="../Images/avengersInfinityWar.jpg" alt="couverture film" style="width:40%">
-            <figcaption>89%</figcaption>
-        </figure>
-    </div>
-    <div class = "film">
-        <figure>
-            <img src="../Images/avengersInfinityWar.jpg" alt="couverture film" style="width:40%">
-            <figcaption>89%</figcaption>
-        </figure>
-    </div>
-    <div class = "film">
-        <figure>
-            <img src="../Images/avengersInfinityWar.jpg" alt="couverture film" style="width:40%">
-            <figcaption>89%</figcaption>
-        </figure>
-    </div>
-    <div class = "film">
-        <figure>
-            <img src="../Images/avengersInfinityWar.jpg" alt="couverture film" style="width:40%">
-            <figcaption>89%</figcaption>
-        </figure>
-    </div>
-    <div class = "film">
-        <figure>
-            <img src="../Images/avengersInfinityWar.jpg" alt="couverture film" style="width:40%">
-            <figcaption>89%</figcaption>
-        </figure>
-    </div>
-    <div class = "film">
-        <figure>
-            <img src="../Images/avengersInfinityWar.jpg" alt="couverture film" style="width:40%">
-            <figcaption>89%</figcaption>
-        </figure>
-    </div>
-
-
-</body>
-<footer th:replace="~{fragments :: footer}"></footer>
+        <span id= "zoneTrie">
+          <label for="trie">Trier par :</label>
+          <select id="trier" name="trier">
+            <option value="alphabethique">Alphabéthique</option>
+            <option value="popularite">Popularité</option>
+            <option value="genre">Genre</option>
+            <option value="recent">Plus récent</option>
+            <option value="ancien">Plus ancien</option>
+          </select>
+        </span>
+      </section>
+      <section id="accueil-List-Film">
+        <article>
+          <p>98%</p>
+          <a href="#"">
+            <svg width="1.5em" height="1.5em" viewBox="0 0 32 33" class="bi bi-file-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M24 2c-3.363 0-6.258 2.736-7.599 5.594-1.342-2.858-4.237-5.594-7.601-5.594-4.637 0-8.4 3.764-8.4 8.401 0 9.433 9.516 11.906 16.001 21.232 6.13-9.268 15.999-12.1 15.999-21.232 0-4.637-3.763-8.401-8.4-8.401z"></path>
+            </svg>
+          </a>
+          <a href="#"><img src="../../images/avengersInfinityWar.jpg" alt="Avengers Infinity War"></a>
+        </article>
+        <article>
+          <p>98%</p>
+          <a href="#"">
+            <svg width="1.5em" height="1.5em" viewBox="0 0 32 33" class="bi bi-file-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M24 2c-3.363 0-6.258 2.736-7.599 5.594-1.342-2.858-4.237-5.594-7.601-5.594-4.637 0-8.4 3.764-8.4 8.401 0 9.433 9.516 11.906 16.001 21.232 6.13-9.268 15.999-12.1 15.999-21.232 0-4.637-3.763-8.401-8.4-8.401z"></path>
+            </svg>
+          </a>
+          <a href="#"><img src="../../images/ca.jpg" alt="Ca le film !"></a>
+        </article>
+        <article>
+          <p>98%</p>
+          <a href="#"">
+            <svg width="1.5em" height="1.5em" viewBox="0 0 32 33" class="bi bi-file-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M24 2c-3.363 0-6.258 2.736-7.599 5.594-1.342-2.858-4.237-5.594-7.601-5.594-4.637 0-8.4 3.764-8.4 8.401 0 9.433 9.516 11.906 16.001 21.232 6.13-9.268 15.999-12.1 15.999-21.232 0-4.637-3.763-8.401-8.4-8.401z"></path>
+            </svg>
+          </a>
+          <a href="#"><img src="../../images/joker.jpg" alt="Joker"></a>
+        </article>
+      </section>
+    </main>
+  </body>
 </html>

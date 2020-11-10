@@ -1,60 +1,54 @@
-
-.form {
-    background-color: lightgray;
+body {
+    background-color: grey;
 }
-
-.recherche{
-    float: inside;
+main {
+  margin-left: 5em;
+  margin-right: 5em;
 }
-
-.top{
-    background-color: bisque;
-    margin: 0;
-    padding: 0;
-    padding-top: 1em;
-    margin-bottom: 1em;
+/*Zone de recherche et de trie*/
+#accueil-search {
+  margin-top: 2em;
+  margin-bottom: 2em;
+  margin-left: 1em;
+  margin-right: 1em;
 }
-
-.deroule{
+@media only screen and (max-width: 750px) {
+  #zoneTrie {
+    display: inline-block;
+    margin-top: 1em;
+  }
+}
+@media only screen and (min-width: 750px) {
+  #zoneTrie {
     position: absolute;
-    right: 0;
+    right: 1em;
+    margin-right: 5em;
+  }
 }
-
-.film figcaption{
-    z-index: 1;
-    position: absolute;
-    color:red;
-    background-color: azure;
-    font-weight: bold;
-    border-radius: 60%;
-    padding: 0.3em;
+/*Liste des films*/
+#accueil-List-Film {
+  display: flex;
+  flex-wrap: wrap;
 }
-
-img{
-    background-size: contain;
-    z-index: 0;
-    margin-left: 0;
+article {
+  margin: 1em;
+  position: relative;
 }
-
-.film figure{
-    width: fit-content;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column-reverse;
+article img {
+  height: 300px;
+  width: 225px;
 }
+#accueil-List-Film p {
+  color: lightgreen;
+  position: absolute;
+  bottom: 0;
+  left: 1em;
 
-.film{
-    clear: both;
-    display: inline-flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    flex-shrink: 2;
-    flex-grow: 0;
-    width: 30%;
 }
-
-body{
-    background-image: url("../images/fond.jpg");
+#accueil-List-Film svg {
+  color: grey;
+  opacity: 0.6;
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
 }
