@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>Menu</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
 <!-- Bootstrap -->
 <link href="../css/menu.css" rel="stylesheet">
 </head>
 <body>
 	<!--Création du pied de page-->
-	<header>
+	<header th:fragment="header">
 		<div class="menu">
 			<ul>
 				<li><a href="accueil">Accueil</a></li>
@@ -24,7 +24,6 @@
 			    </li>
 			</ul>
 		</div>
-
 		<div class="conteneur_co">
 			<form method="post" action="connecter" class="formulaire_co" id="formulaire_connection">
 				<label for="login">Identifiant: </label>
@@ -37,13 +36,10 @@
 				
 			</form>
 		</div>
-			
-
-
 	</header>
-
-<!--Création du pied de page-->
-	<footer>
+	
+	<!--Création du pied de page-->
+	<footer th:fragment="footer">
 		<p>Ce projet a été réalisé en groupe de projet ITI au semestre 7.</p>
 		<p>Membre du groupe:</p>
 		<ul>
@@ -61,8 +57,6 @@
 				
 			</form>
 		</div>
-
-
 	</footer>
 </body>
 </html>
