@@ -1,0 +1,60 @@
+
+.form {
+    background-color: lightgray;
+}
+
+.recherche{
+    float: inside;
+}
+
+.top{
+    background-color: bisque;
+    margin: 0;
+    padding: 0;
+    padding-top: 1em;
+    margin-bottom: 1em;
+}
+
+.deroule{
+    position: absolute;
+    right: 0;
+}
+
+.film figcaption{
+    z-index: 1;
+    position: absolute;
+    color:red;
+    background-color: azure;
+    font-weight: bold;
+    border-radius: 60%;
+    padding: 0.3em;
+}
+
+img{
+    background-size: contain;
+    z-index: 0;
+    margin-left: 0;
+}
+
+.film figure{
+    width: fit-content;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.film{
+    clear: both;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-shrink: 2;
+    flex-grow: 0;
+    width: 30%;
+}
+
+body{
+    background-image: url("../Images/fond.jpg");
+}
