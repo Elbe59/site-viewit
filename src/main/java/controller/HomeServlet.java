@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,25 +11,24 @@ import javax.servlet.http.HttpServletResponse;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
-@WebServlet("/home")
-public class HomeServlet extends AbstractThymeleafServlet {
+import entity.Film;
+import service.FilmService;
+
+@WebServlet("/accueil")
+public class HomeServlet extends ServletGenerique {
 	private static final long serialVersionUID = 1L;
 
-    public HomeServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		TemplateEngine engine = this.createTemplateEngine(req.getServletContext());
+        WebContext context = new WebContext(req, resp, req.getServletContext());
+        List<Film> listOfFilms = FilmService.getInstance().listFilms();
+        context.setVariable("listFilms", listOfFilms);
 
-		// context pour les variables
-		WebContext context = new WebContext(req, resp, req.getServletContext());
-
-		engine.process("accueil", context, resp.getWriter());
+        TemplateEngine engine = createTemplateEngine(req.getServletContext());
+        engine.process("accueil", context, resp.getWriter());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
