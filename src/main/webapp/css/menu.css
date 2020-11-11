@@ -125,6 +125,7 @@ footer{
 	padding: 10px;
 	display: flex;
 	background-color: lightgray;
+	width : 100%;
 }
 
 footer ul{
