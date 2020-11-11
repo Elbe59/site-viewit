@@ -2,11 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
       <title>ViewIt - Accueil</title>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
       <link rel="stylesheet" type="text/css" href="css/accueil.css">
+      <link rel="stylesheet" type="text/css" href="css/menu.css">
   </head>
   <body>
+  	<header th:replace="~{fragments :: header}"></header>
     <main>
       <section id="accueil-search">
         <span id= "zoneRecherche">
@@ -36,5 +37,6 @@
         </article>
       </section>
     </main>
+    <footer th:replace="~{fragments :: footer}"></footer>
   </body>
 </html>
