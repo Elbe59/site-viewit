@@ -38,7 +38,7 @@ public class FilmDaoImpl implements FilmDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+		System.out.println(listOfFilms.get(0).getImageName());
 		return listOfFilms;
 	}
 
