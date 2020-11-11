@@ -1,5 +1,4 @@
 body{
-	margin:0px;
 	background-color: lightgray;
 }
 header{
@@ -17,9 +16,11 @@ header{
 
 }
 
-input{
+.formulaire_co input{
 	display: flex;
 	border-radius: 5px;
+	margin-top: 5px;
+	margin-bottom: 10px;
 }
 
 .btn_profil{
@@ -48,19 +49,12 @@ input{
     justify-content: space-between;
     width: 150%;
     font-size: 1.5em;
-
 }
-
-input{
-	margin-top: 5px;
-	margin-bottom: 10px;
-}
-
-
 
 ul{
     list-style-type: none;
 }
+
 .formulaire_co{
 	margin: 20px;
 	background-color: lightblue;
@@ -77,9 +71,6 @@ header ul li{
     width: 100%;
     text-align: center;
     position: relative;
-
-
-
 }
 
 header ul{
@@ -107,6 +98,7 @@ header a:hover{
     background-color: lightblue;
     position: absolute;
     width: 100%;
+    font-size: 1em;
     
 }
 li:hover .sous{

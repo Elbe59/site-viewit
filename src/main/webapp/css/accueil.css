@@ -1,21 +1,21 @@
 body {
-    background-color: grey;
+    
 }
 main {
-  margin-left: 5em;
-  margin-right: 5em;
+  	margin-left: 5em;
+	margin-right: 5em;
 }
 /*Zone de recherche et de trie*/
 #accueil-search {
-  margin-top: 2em;
-  margin-bottom: 2em;
-  margin-left: 1em;
-  margin-right: 1em;
+	margin-top: 2em;
+	margin-bottom: 2em;
+	margin-left: 1em;
+	margin-right: 1em;
 }
 @media only screen and (max-width: 750px) {
   #zoneTrie {
     display: inline-block;
-    margin-top: 1em;
+    
   }
 }
 @media only screen and (min-width: 750px) {
@@ -25,6 +25,7 @@ main {
     margin-right: 5em;
   }
 }
+
 /*Liste des films*/
 #accueil-List-Film {
   display: flex;
