@@ -3,11 +3,11 @@
   <head>
       <title>ViewIt - Accueil</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
-      <!-- <link rel="stylesheet" type="text/css" href="css/menu.css"> -->
+      <link rel="stylesheet" type="text/css" href="css/menu.css">
       <link rel="stylesheet" type="text/css" href="css/accueil.css">
   </head>
   <body>
-<!--  	<header th:replace="~{fragments :: header}"></header> -->  
+  <header th:replace="~{fragments :: header}"></header>
     <main>
       <section id="accueil-search">
         <span id= "zoneRecherche">
@@ -15,7 +15,7 @@
           <input type="text" name="recherche" id="recherche">
         </span>
         <span id= "zoneTrie">
-          <label for="trie">Trier par :</label>
+          <label for="trier">Trier par :</label>
           <select id="trier" name="trier">
             <option value="alphabethique">Alphabéthique</option>
             <option value="popularite">Popularité</option>
@@ -37,7 +37,7 @@
         </article>
       </section>
     </main>
-    <!-- <footer th:replace="~{fragments :: footer}"></footer>  -->
+    <footer th:replace="~{fragments :: footer}"></footer>
 
   </body>
 </html>
