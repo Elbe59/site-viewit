@@ -2,8 +2,7 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<title>ViewIt - Film</title>
-	<link href="css/film.css" type="text/css" rel="stylesheet">
-	<link href="css/menu.css" type="text/css" rel="stylesheet">
+	<link href="../../css/film.css" type="text/css" rel="stylesheet">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
 </head>
 <body>
@@ -11,10 +10,9 @@
 	<h1 class="titre">Avengers : Infinity War</h1>
 	<div class="film">
 		<div class="note">96%</div>
-		<img src="../Images/avengersInfinityWar.jpg"/>
+		<img src="../../images/avengersInfinityWar.jpg"/>
 		<div class="synopsis">
-			<div th:fragment="test">Synopsis</div>
-			<div th:replace="~{film :: test}">test</div>
+			<div>Synopsis</div>
 			<p>
 			<div>
 				Père adoptif de Gamora et Nébula, Thanos a commencé à recueillir les six Pierres d'Infinité : 
