@@ -1,0 +1,201 @@
+@charset "UTF-8";
+
+html {
+	background: url("../images/background.jpg");
+}
+
+/* Header */
+/* Mise en page */
+
+header{
+	list-style-type: none;
+	display: flex;
+	align-items: center;
+	padding-right: 20px;
+	padding-left: 20px;
+	flex-direction: row;
+	justify-content: space-between;
+	border-bottom-style: solid;
+	border-color: black;
+	border-width: 5px;
+}
+
+/* Formulaire de connexion */
+
+.formulaire_co{
+	margin: 20px;
+	background-color: gray;
+	padding: 1em;
+	margin: 0em;
+	border-style: solid;
+	border-color: black;
+	border-radius: 5px;
+	border-width: 2px;
+}
+
+.formulaire_co input{
+	display: flex;
+	border-radius: 5px;
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+
+.btn_profil{
+	border-radius: 10px;
+	border-color: lightblue;
+	border-width: 2px;
+	padding: 0.5em;
+	background-color: RGBa(255,255,255,0.3);
+}
+
+.btn_profil:hover{
+	color: white;
+}
+
+.btn_center{
+	display: flex;
+	flex-direction: column;
+}
+
+/* Menu de navigation */
+
+.menu{
+	margin: 0;
+    top: 0px;
+    justify-content: space-between;
+    width: 100%;
+}
+
+ul{
+	list-style-type: none;
+}
+
+header ul li{
+    width: 100%;
+    text-align: center;
+    position: relative;
+}
+
+header ul{
+	padding: 0;
+	display: flex;
+}
+
+header a{
+    display: block;
+    text-decoration: none;
+    color: white;
+    border-bottom: 2px solid transparent;
+    padding: 10px 0px;
+}
+
+header a:hover{
+    color: red;
+    border-bottom:3px solid red;
+}
+
+.sous{
+    display: none;
+    box-shadow: 0px 1px 2px;
+    background-color: gray;
+    position: absolute;
+    width: 100%;
+    font-size: 1em;
+}
+
+li:hover .sous{
+    display: block;
+    padding: 0;
+}
+
+.sous a{
+    padding: 10px;
+    border-bottom: none;
+}
+
+.sous a:hover{
+    border-bottom: none;
+    background-color: RGBa(200,200,200,0.1);
+}
+
+.deroulant > a::after{
+    content:" ▼";
+    font-size: 12px;
+}
+
+/* Footer */
+/* Mise en page */
+
+footer{
+	margin-top:1em;
+	padding: 10px;
+	display: flex;
+	color: white;
+	justify-content: space-between;
+	border-top-style: solid;
+	border-color: black;
+	border-width: 5px;
+}
+
+/* Document général */
+/* Mise en page */
+
+main {
+  	margin-left: 5em;
+	margin-right: 5em;
+}
+
+/* Zone de recherche et de trie */
+#accueil-search {
+	margin-top: 2em;
+	margin-bottom: 2em;
+	margin-left: 1em;
+	margin-right: 1em;
+	color: white;
+}
+
+@media only screen and (max-width: 750px) {
+  #zoneTrie {
+    display: inline-block;  
+  }
+}
+
+@media only screen and (min-width: 750px) {
+  #zoneTrie {
+    position: absolute;
+    right: 1em;
+    margin-right: 5em;
+  }
+}
+
+/* Liste des films */
+
+#accueil-List-Film {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+article {
+  margin: 1em;
+  position: relative;
+}
+
+article img {
+  height: 300px;
+  width: 225px;
+}
+
+#accueil-List-Film p {
+  color: lightgreen;
+  position: absolute;
+  bottom: 0;
+  left: 1em;
+}
+
+#accueil-List-Film svg {
+  color: grey;
+  opacity: 0.6;
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+}
