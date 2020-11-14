@@ -4,7 +4,7 @@ html {
 	background: url("../images/background.jpg");
 }
 
-/* Header */
+/* -------------Header------------ */
 /* Mise en page */
 
 header{
@@ -123,21 +123,7 @@ li:hover .sous{
     font-size: 12px;
 }
 
-/* Footer */
-/* Mise en page */
-
-footer{
-	margin-top:1em;
-	padding: 10px;
-	display: flex;
-	color: white;
-	justify-content: space-between;
-	border-top-style: solid;
-	border-color: black;
-	border-width: 5px;
-}
-
-/* Document général */
+/* -------------Liste Films------------ */
 /* Mise en page */
 
 main {
@@ -198,4 +184,62 @@ article img {
   position: absolute;
   top: 0.5em;
   right: 0.5em;
+}
+
+/* -------------Detail film------------ */
+.titreDetail {
+	color : white;
+	margin : 0;
+	font-size : 300%;
+	text-align : center;
+}
+
+.filmDetail {
+	margin-left : 10%;
+	margin-right : 10%;
+}
+
+.note {
+	color : lightgreen;
+	margin-left : 0.5em;
+	text-align : left;
+	font-size : 200%;
+}
+
+#imgDetail {
+	width : 30%;
+	float : left;
+	padding : 0.5em;
+}
+
+#resumeDetail {
+	color : white;
+	width : 65%;
+	float : left;
+	padding : 0.5em;
+	box-sizing : border-box;
+	text-align : justify;
+	font-size : 120%;
+}
+
+#infoDetail {
+	color : white;
+	width : 100%;
+	float : left;
+	padding : 0.5em;
+	font-size : 120%;
+}
+
+/* -------------Footer------------ */
+/* Mise en page */
+
+footer{
+	margin-top:1em;
+	padding: 10px;
+	display: flex;
+	color: white;
+	justify-content: space-between;
+	border-top-style: solid;
+	border-color: black;
+	border-width: 5px;
 }
