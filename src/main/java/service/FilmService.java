@@ -26,4 +26,8 @@ public class FilmService {
 		return filmDao.listFilms();
 	}
 	
+	public Film getFilm(int id) {
+		return filmDao.getFilm(id);
+	}
+	
 }
