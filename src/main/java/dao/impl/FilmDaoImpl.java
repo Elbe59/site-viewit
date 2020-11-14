@@ -1,6 +1,7 @@
 package dao.impl;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -45,8 +46,9 @@ public class FilmDaoImpl implements FilmDao {
 	@Override
 	public Film getFilm(Integer id) {
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-			try(Statement stm = co.createStatement()) {
-				try(ResultSet rs = stm.executeQuery("SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre AND film.idFilm = ?;")) {
+			try(PreparedStatement pStm = co.prepareStatement("SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre AND film.idFilm = ?;")) {
+				pStm.setInt(1, id);
+				try(ResultSet rs = pStm.executeQuery()) {
 					while(rs.next()) {
 						return new Film(
 								rs.getInt("idFilm"),

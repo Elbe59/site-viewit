@@ -58,4 +58,23 @@ public class FilmDaoTestCase {
 						tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action"));
 	}
 	
+	@Test
+	public void shouldGetFilm() {
+		//WHEN
+		Film film = filmDao.getFilm(1);
+		//THEN
+		assertThat(film).isNotNull();
+		assertThat(film.getId()).isEqualTo(1);
+		assertThat(film.getTitre()).isEqualTo("titre 1");
+		assertThat(film.getResume()).isEqualTo("resume 1");
+		assertThat(film.getDateSortie()).isEqualTo(LocalDate.of(2020,11,11));
+		assertThat(film.getDuree()).isEqualTo(123);
+		assertThat(film.getRealisateur()).isEqualTo("realisateur 1");
+		assertThat(film.getActeur()).isEqualTo("acteur 1");
+		assertThat(film.getImageName()).isEqualTo("image1.png");
+		assertThat(film.getUrlBA()).isEqualTo("youtube.com/1");
+		assertThat(film.getGenre().getId()).isEqualTo(1);
+		assertThat(film.getGenre().getNom()).isEqualTo("Aventure");
+	}
+	
 }
