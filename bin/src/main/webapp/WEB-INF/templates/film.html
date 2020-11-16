@@ -1,42 +1,31 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
-<head>
-	<title>ViewIt - Film</title>
-	<link href="css/film.css" type="text/css" rel="stylesheet">
-	<link href="css/menu.css" type="text/css" rel="stylesheet">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
-</head>
-<body>
-	<header th:replace="~{fragments :: header}"></header>
-	<h1 class="titre">Avengers : Infinity War</h1>
-	<div class="film">
-		<div class="note">96%</div>
-		<img src="../Images/avengersInfinityWar.jpg"/>
-		<div class="synopsis">
-			<div th:fragment="test">Synopsis</div>
-			<div th:replace="~{film :: test}">test</div>
-			<p>
-			<div>
-				Père adoptif de Gamora et Nébula, Thanos a commencé à recueillir les six Pierres d'Infinité : 
-				la Pierre du Pouvoir, la Pierre de l'Espace, la Pierre de Réalité, la Pierre de l'Âme, 
-				la Pierre du Temps et la Pierre de l'Esprit. Son objectif est de réunir ces six gemmes sur un gantelet 
-				doré, forgé par le nain Eitri sur Nidavellir, afin d'utiliser leur immense puissance pour détruire la 
-				moitié de la population de l'Univers et rétablir ainsi un certain équilibre. Dans sa quête le menant sur 
-				diverses planètes, la Terre, Knowhere et Vormir, Thanos est aidé par ses enfants adoptifs : 
-				Ebony Maw, Cull Obsidian, Corvus Glaive et Proxima Midnight. Face à cette nouvelle 
-				menace qui concerne l'Univers entier, le groupe de super-héros des Avengers, divisé depuis 2 ans, 
-				doit se reformer, et s'associer au Docteur Strange, aux Gardiens de la Galaxie et au peuple du Wakanda.
+	<head>
+		<title th:text="${'ViewIt - ' + film.titre}">ViewIt - Film</title>
+		<link rel="stylesheet" type="text/css" href="css/viewit.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+	</head>
+	<body>
+		<header th:replace="~{fragments :: header}"></header>
+		<h1 class="titreDetail" th:text="${film.titre}">Avengers : Infinity War</h1>
+		<div class="filmDetail">
+			<div class="note">98%</div>
+			<img id="imgDetail" th:src="@{'images/'+${film.imageName}}" th:alt-title="${film.titre}"/>
+			<div id="resumeDetail">
+				<div>Synopsis</div>
+				<p>
+				<div>
+				<p th:text="${film.resume}">Résumé du film ...</p>
+				</div>
+			</div>
+			<div id="infoDetail">
+				<div class="realisateur" th:text="${'Réalisateur : ' + film.realisateur}">Réalisateur : ?</div>
+				<div class="acteurs" th:text="${'Acteur : ' + film.acteur}">Acteurs : ?</div>
+				<div class="duree" th:text="${'Durée : ' + film.duree + ' min'}">Durée : ?</div>
+				<div class="datesortie" th:text="${'Date de sortie : ' + #temporals.format(film.DateSortie, 'd MMMM yyyy')}">Date de sortie : ?</div>
+				<div class="genre" th:text="${'Genre : ' + film.genre.nom}">Genre : Action</div>
 			</div>
 		</div>
-		<div class="resume">
-			<div class="realisateur">Réalisateur : Frères Russeau</div>
-			<div class="acteurs">Acteurs : Robert Downey Jr., Chris Evans, Tom Holland</div>
-			<div class="duree">Durée : 90 min</div>
-			<div class="datesortie">Date de sortie : 2019</div>
-			<div class="genre">Genre : Action</div>
-		</div>
-	</div>
-
-</body>
-<footer th:replace="~{fragments :: footer}"></footer>
+	</body>
+	<footer th:replace="~{fragments :: footer}"></footer>
 </html>

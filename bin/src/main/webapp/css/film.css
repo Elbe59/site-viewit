@@ -2,32 +2,33 @@ html {
 	background : url("../images/background.jpg");
 }
 
-.titre {
+/* -------------Détail film------------ */
+.titreDetail {
 	color : white;
 	margin : 0;
 	font-size : 300%;
 	text-align : center;
 }
 
-.film {
+.filmDetail {
 	margin-left : 10%;
 	margin-right : 10%;
 }
 
 .note {
-	color : white;
+	color : lightgreen;
 	margin-left : 0.5em;
 	text-align : left;
 	font-size : 200%;
 }
 
-img {
+#imgDetail {
 	width : 30%;
 	float : left;
 	padding : 0.5em;
 }
 
-.synopsis {
+#resumeDetail {
 	color : white;
 	width : 65%;
 	float : left;
@@ -37,7 +38,7 @@ img {
 	font-size : 120%;
 }
 
-.resume {
+#infoDetail {
 	color : white;
 	width : 100%;
 	float : left;
