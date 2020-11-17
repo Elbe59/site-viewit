@@ -126,7 +126,7 @@ li:hover .sous{
 /* -------------Liste Films------------ */
 /* Mise en page */
 
-main {
+.main-Accueil {
   	margin-left: 5em;
 	margin-right: 5em;
 }
@@ -238,7 +238,7 @@ article img {
 
 /*ajout utilisateur*/
 
-form#ajout_utilisateur {
+#ajout_utilisateur form {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -251,17 +251,60 @@ form#ajout_utilisateur {
 	border-width: 2px;
 }
 
-form.ajout_utilisateur{
+.ajout_utilisateur form {
 	border: solid black;
 	border: 0.05em;
 	background-color: darkgrey;
 }
 
-input.ajout_utilisateur{
+.ajout_utilisateur input {
 	border-style: solid;
 	border-color: black;
 	border-radius: 5px;
 	border-width: 2px;
+}
+
+/* -------------Page Ajout Film------------ */
+
+.main-AddFilm {
+  margin-left: 5vw;
+  margin-right: 5vw;
+  align-content: center;
+}
+
+.addFilmForm {
+  text-align: center;
+}
+
+.infoAddBlock {
+  margin-top: 1em;
+}
+
+.infoAddBlock label {
+  color: white;
+}
+
+.infoAddBlock input, textarea, select {
+  width: 40%;
+  margin-top: 0.2em;
+  resize: none;
+  border-radius: 10px;
+  background-color: lightgrey;
+  text-align: center;
+  justify-content: center;
+}
+
+.div-btn-addFilm {
+  margin-top: 1em;
+}
+
+#btn-addFilm {
+  border-radius: 10px;
+}
+
+#btn-addFilm:hover {
+  width: auto;
+  background-color: lightgreen;
 }
 
 /* -------------Footer------------ */

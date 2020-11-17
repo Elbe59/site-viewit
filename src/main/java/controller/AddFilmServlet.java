@@ -1,40 +1,28 @@
 package controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class AddFilmServlet
- */
-@WebServlet("/ajoutfilm")
-public class AddFilmServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public AddFilmServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+@WebServlet("/ajoutFilm")
+public class AddFilmServlet extends ServletGenerique {
+	private static final long serialVersionUID = 1L;
+ 
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        WebContext context = new WebContext(req, resp, req.getServletContext());
+
+        TemplateEngine engine = createTemplateEngine(req.getServletContext());
+        engine.process("ajoutFilm", context, resp.getWriter());
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
