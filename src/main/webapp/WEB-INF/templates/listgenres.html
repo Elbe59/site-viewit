@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>ViewIt</title>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/viewit.css" rel="stylesheet">
+  </head>
+  <body>
+	<!-- Navigation menu -->
+	<header th:replace="~{fragments :: header}"></header>
+	
+	<div class="container">
+		<div>
+			<div>
+				<div class="conteneur-genre">
+					<h3>Genres</h3>
+	        		<div class="zone-recherche-film-genre-user">
+	          			<label for="recherche">Rechercher :</label>
+	          			<input type="text" name="recherche" id="recherche">
+	        		</div>
+					<div class="ajout">
+						<h3>Ajouter un genre:</h3>
+						<form method="post">
+							<input type="text" name="name" id="name" required>
+							<input class="btn-add-genre" type="submit" name="Enregistrer" value="Valider">
+						</form>	
+					</div>
+
+					
+				</div>
+				<table class="tablelist">
+					<thead>
+						<tr class="user">
+							<th>#</th>
+							<th>Nom</th>
+							<th>Gestion</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>Art Martiaux</td>
+							<td class="small_column">
+								<form method="post">
+									<button class="btn-delete" type="submit" th:id="${genreStat.index}" ><img class="img_liste" src="/supprimer.png"alt="supprimer"></button>
+								</form>
+								
+							</td>
+						</tr>
+						<tr>
+							<td>1</td>
+							<td>Art Martiaux</td>
+							<td class="small_column">
+								<form method="post">
+									<button class="btn-delete" type="submit" th:id="${genreStat.index}" ><img class="img_liste" src="/supprimer.png"alt="supprimer"></button>
+								</form>
+								
+							</td>
+						</tr>
+						<tr>
+							<td>1</td>
+							<td>Art Martiaux</td>
+							<td class="small_column">
+								<form method="post">
+									<button class="btn-delete" type="submit" th:id="${genreStat.index}" ><img class="img_liste" src="/supprimer.png"alt="supprimer"></button>
+								</form>
+								
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+    	</div>
+	</div>
+  </body>
+  <footer th:replace="~{fragments :: footer}"></footer>
+</html>

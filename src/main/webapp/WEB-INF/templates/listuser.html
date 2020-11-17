@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>ViewIt</title>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/viewit.css" rel="stylesheet">
+  </head>
+  <body>
+	<!-- Navigation menu -->
+	<header th:replace="~{fragments :: header}"></header>
+
+	<div class="container">
+		<div>
+			<div>
+				<h3>Utilisateurs</h3>
+        		<div class="zone-recherche-film-genre-user">
+          			<label for="recherche">Rechercher :</label>
+          			<input type="text" name="recherche" id="recherche">
+        		</div>
+				<table class="tablelist">
+					<thead>
+						<tr class="user">
+							<th>#</th>
+							<th>Prénom</th>
+							<th>Nom</th>
+							<th>Email</th>
+							<th>Admin</th>
+							<th>Gestion</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>Quentin</td>
+							<td>Callens</td>
+							<td>quentin.callens@hei.yncrea.fr</td>
+							<td class="small_column">Oui</td>
+							<td class="small_column">
+								<div class="column-gestion">
+									<a href="#"><img class="img_liste" src="/modification.png"alt="modifier"></a>
+									<form method="post">
+										<button class="btn-delete" type="submit" th:id="${genreStat.index}"><img class="img_liste" src="/supprimer.png"alt="supprimer"></button>
+									</form>
+								</div>
+
+							</td>
+						</tr>
+						<tr>
+							<td>1</td>
+							<td>Quentin</td>
+							<td>Callens</td>
+							<td>quentin.callens@hei.yncrea.fr</td>
+							<td class="small_column">Oui</td>
+							<td class="small_column">
+								<div class="column-gestion">
+									<a href="#"><img class="img_liste" src="/modification.png"alt="modifier"></a>
+									<form method="post">
+										<button class="btn-delete" type="submit" th:id="${genreStat.index}"><img class="img_liste" src="/supprimer.png"alt="supprimer"></button>
+									</form>
+								</div>
+
+							</td>
+						</tr>
+
+						<tr>
+							<td>1</td>
+							<td>Quentin</td>
+							<td>Callens</td>
+							<td>quentin.callens@hei.yncrea.fr</td>
+							<td class="small_column">Oui</td>
+							<td class="small_column">
+								<div class="column-gestion">
+									<a href="#"><img class="img_liste" src="images/modification.png"alt="modifier"></a>
+									<form method="post">
+										<button class="btn-delete" type="submit" th:id="${genreStat.index}"><img class="img_liste" src="images/supprimer.png"alt="supprimer"></button>
+									</form>
+								</div>
+
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+    	</div>
+	</div>
+  </body>
+  <footer th:replace="~{fragments :: footer}"></footer>
+</html>
