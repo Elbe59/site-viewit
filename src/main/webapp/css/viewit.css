@@ -206,12 +206,6 @@ article img {
 	font-size : 200%;
 }
 
-.lienBA {
-	color: white;
-	float: left;
-	width:100%;
-}
-
 #imgDetail {
 	width : 30%;
 	float : left;
@@ -225,15 +219,22 @@ article img {
 	padding : 0.5em;
 	box-sizing : border-box;
 	text-align : justify;
-	font-size : 120%;
+	font-size : 2vw;
 }
 
 #infoDetail {
 	color : white;
-	width : 100%;
+	width : 30%;
 	float : left;
 	padding : 0.5em;
-	font-size : 120%;
+	font-size : 1.5vw;
+}
+
+.bandeAnnonce {
+	padding: 0.5em;
+	float: right;
+	width: 60%;
+	height: 25vw;
 }
 
 /*ajout utilisateur*/

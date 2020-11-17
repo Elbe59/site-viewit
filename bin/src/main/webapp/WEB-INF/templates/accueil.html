@@ -7,7 +7,7 @@
   </head>
   <body>
   <header th:replace="~{fragments :: header}"></header>
-    <main>
+    <main class="main-Accueil">
       <section id="accueil-search">
         <span id= "zoneRecherche">
           <label for="recherche">Rechercher :</label>
@@ -25,7 +25,7 @@
         </span>
       </section>
       <section id="accueil-List-Film">
-        <article th:each="film : ${listFilms}">
+        <article th:each="film : ${listFilms}" th:if="${film.valide == 1}">
           <p>98%</p>
           <a href="#">
             <svg width="1.5em" height="1.5em" viewBox="0 0 32 33" class="bi bi-file-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
