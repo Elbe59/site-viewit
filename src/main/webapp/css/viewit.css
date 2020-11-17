@@ -206,6 +206,12 @@ article img {
 	font-size : 200%;
 }
 
+.lienBA {
+	color: white;
+	float: left;
+	width:100%;
+}
+
 #imgDetail {
 	width : 30%;
 	float : left;
@@ -229,6 +235,7 @@ article img {
 	padding : 0.5em;
 	font-size : 120%;
 }
+
 /*ajout utilisateur*/
 
 form#ajout_utilisateur {

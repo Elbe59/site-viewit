@@ -18,6 +18,7 @@
 				<p th:text="${film.resume}">Résumé du film ...</p>
 				</div>
 			</div>
+			<div class="lienBA">Lien vers la bande-annonce : <a th:href="${film.urlBA}" th:text="${film.titre}"></a></div>
 			<div id="infoDetail">
 				<div class="realisateur" th:text="${'Réalisateur : ' + film.realisateur}">Réalisateur : ?</div>
 				<div class="acteurs" th:text="${'Acteur : ' + film.acteur}">Acteurs : ?</div>
