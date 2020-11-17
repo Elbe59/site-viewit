@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS UTILISATEUR;
 
 #--- Création des tables
 
-#--- admin = 0 : Utilistaeur, admin = 1 : Administrateur
+#--- admin = 0 : Utilisateur, admin = 1 : Administrateur
 CREATE TABLE UTILISATEUR(
 	idUtilisateur     Int(5)  Auto_increment  NOT NULL ,
 	prenomUtilisateur Varchar (50) NOT NULL ,
@@ -26,6 +26,7 @@ CREATE TABLE GENRE(
 	CONSTRAINT GENRE_PK PRIMARY KEY (idGenre)
 );
 
+#--- valide = 0 : Non affiché, valide = 1 : Affiche
 CREATE TABLE FILM(
     idFilm      Int(5)  Auto_increment  NOT NULL ,
     titreFilm   Varchar (50) NOT NULL ,
@@ -37,6 +38,7 @@ CREATE TABLE FILM(
     imgFilm     Varchar(100) NOT NULL,
     urlBA       Varchar (100) NOT NULL,
 	idGenre     Int(2) NOT NULL,
+	valide		Int(1) NOT NULL,
 	CONSTRAINT FILM_PK PRIMARY KEY (idFilm),
 	
 	CONSTRAINT FILM_GENRE_FK FOREIGN KEY (idGenre) REFERENCES GENRE(idGenre)
@@ -55,7 +57,7 @@ CREATE TABLE COMMENTAIRE(
 );
 
 #--- liker = 0 : défaut, liker = 1 : j'aime, liker = 2 : j'aime pas
-#--- favoris = 0 : non défaut; favoris = 2 : oui
+#--- favoris = 0 : non défaut; favoris = 1 : oui
 CREATE TABLE Preferer(
     idFilm        Int(5) NOT NULL ,
     idUtilisateur Int(5) NOT NULL,
@@ -96,13 +98,13 @@ INSERT INTO GENRE (idGenre, nomGenre) VALUES
 (16, "Historique"),
 (17, "Super-Héros");
 
-INSERT INTO FILM (idFilm, titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre) VALUES
-(1, "Captain America: First Avenger", "Captain America: First Avenger nous plonge dans les premières années de l'univers Mavel. Steve Rogers,  frête et timide participe à un programme expérimental le transformant en Super Soldat, plus connu sous le nom de Captain America. Il sera confronté à la diabolique organisation HYDRA dirigée par le redoutable Red Skull.", "2011-08-17", 124, "Joe Johnston", "Chris Evans", "captainAmericaFirstAvenger.jpg", "https://youtu.be/IsiV9IJieMk", 17),
-(2, "Iron Man", "Tony Stark, playboy, milliardaire, n'est pas seulement l'héritier des usines d'armement de son père, c'est également un inventeur de génie. Alors qu'il est en déplacement en Afghanistan pour présenter sa dernière création, il est enlevé par des terroristes. Traumatisé par cette expérience, il décida de créer une armure de combat unique pour combattre le mal.", "2008-04-30", 126, "Jon Favreau", "Robert Downey Jr.", "ironMan.jpg", "https://youtu.be/Q2lEqf_F6Pk", 17),
-(3, "Iron Man 2", "Le monde sait désormais que l'inventeur milliardaire Tony Stark et le super-héros Iron Man ne font qu'un. Cependant, malgré les pressions, Tony n'est pas disposé à divulguer les secrets de son armure, redoutant que l'information atterrisse dans de mauvaises mains. Avec Pepper Potts et James Rhodey Rhodes à ses côtés, Tony va forger de nouvelles alliances et affronter de nouvelles forces toutes-puissantes.", "2010-04-28", 126, "Jon Favreau", "Robert Downey Jr.", "ironMan2.jpg", "https://youtu.be/VdZj2QYTAic", 17),
-(4, "Thor", "Au royaume d'Asgard, Thor est un guerrier aussi puissant qu'arrogant. Alors que ses actes téméraires, qui ont déclenché une guerre ancestrale, l'ont fait bannir sur Terre par Odin, son père, il est condamné à vivre parmi les hommes. Cependant, lorsque les forces du mal, en provenance d'Asgard, s'apprêtent à se déchaîner sur la Terre, Thor va devoir se comporter en véritable héros.", "2011-04-27", 114, "Kenneth Branagh", "Chris Hemsworth", "thor.jpg", "https://youtu.be/MeN3Gwf2sDg", 17),
-(5, "L'Incroyable Hulk", "Le scientifique Bruce Banner cherche désespérément un antidote aux radiations qui ont créé Hulk. Il vit dans l'ombre et parcourt la planète à la recherche d'un remède. La force destructrice de Hulk attire le Général Thaddeus E. Ross et son bras droit Blonsky qui rêvent de l'utiliser à des fins militaires. Ils tentent de développer un sérum pour créer des soldats surpuissants.", "2008-07-23", 114, "Louis Leterrier", "Edward Norton", "theIncredibleHulk.jpg", "https://youtu.be/LCjTxK1B5Pg", 6),
-(6, "Ça : Chapitre 2", "Tous les 27 ans, une créature maléfique revient hanter les rues de Derry, dans le Maine. Près de trente ans après les événements du premier opus, les membres du Club des Ratés, désormais adultes, se retrouvent.", "2019-08-26", 169, "Andrés Muschietti", "Bill Hader", "ca.jpg", "https://youtu.be/G8fR1vvrLmI", 15);
+INSERT INTO FILM (idFilm, titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide) VALUES
+(1, "Captain America: First Avenger", "Captain America: First Avenger nous plonge dans les premières années de l'univers Mavel. Steve Rogers,  frête et timide participe à un programme expérimental le transformant en Super Soldat, plus connu sous le nom de Captain America. Il sera confronté à la diabolique organisation HYDRA dirigée par le redoutable Red Skull.", "2011-08-17", 124, "Joe Johnston", "Chris Evans", "captainAmericaFirstAvenger.jpg", "https://youtu.be/IsiV9IJieMk", 17, 1),
+(2, "Iron Man", "Tony Stark, playboy, milliardaire, n'est pas seulement l'héritier des usines d'armement de son père, c'est également un inventeur de génie. Alors qu'il est en déplacement en Afghanistan pour présenter sa dernière création, il est enlevé par des terroristes. Traumatisé par cette expérience, il décida de créer une armure de combat unique pour combattre le mal.", "2008-04-30", 126, "Jon Favreau", "Robert Downey Jr.", "ironMan.jpg", "https://youtu.be/Q2lEqf_F6Pk", 17, 1),
+(3, "Iron Man 2", "Le monde sait désormais que l'inventeur milliardaire Tony Stark et le super-héros Iron Man ne font qu'un. Cependant, malgré les pressions, Tony n'est pas disposé à divulguer les secrets de son armure, redoutant que l'information atterrisse dans de mauvaises mains. Avec Pepper Potts et James Rhodey Rhodes à ses côtés, Tony va forger de nouvelles alliances et affronter de nouvelles forces toutes-puissantes.", "2010-04-28", 126, "Jon Favreau", "Robert Downey Jr.", "ironMan2.jpg", "https://youtu.be/VdZj2QYTAic", 17, 1),
+(4, "Thor", "Au royaume d'Asgard, Thor est un guerrier aussi puissant qu'arrogant. Alors que ses actes téméraires, qui ont déclenché une guerre ancestrale, l'ont fait bannir sur Terre par Odin, son père, il est condamné à vivre parmi les hommes. Cependant, lorsque les forces du mal, en provenance d'Asgard, s'apprêtent à se déchaîner sur la Terre, Thor va devoir se comporter en véritable héros.", "2011-04-27", 114, "Kenneth Branagh", "Chris Hemsworth", "thor.jpg", "https://youtu.be/MeN3Gwf2sDg", 17, 0),
+(5, "L'Incroyable Hulk", "Le scientifique Bruce Banner cherche désespérément un antidote aux radiations qui ont créé Hulk. Il vit dans l'ombre et parcourt la planète à la recherche d'un remède. La force destructrice de Hulk attire le Général Thaddeus E. Ross et son bras droit Blonsky qui rêvent de l'utiliser à des fins militaires. Ils tentent de développer un sérum pour créer des soldats surpuissants.", "2008-07-23", 114, "Louis Leterrier", "Edward Norton", "theIncredibleHulk.jpg", "https://youtu.be/LCjTxK1B5Pg", 6, 1),
+(6, "Ça : Chapitre 2", "Tous les 27 ans, une créature maléfique revient hanter les rues de Derry, dans le Maine. Près de trente ans après les événements du premier opus, les membres du Club des Ratés, désormais adultes, se retrouvent.", "2019-08-26", 169, "Andrés Muschietti", "Bill Hader", "ca.jpg", "https://youtu.be/G8fR1vvrLmI", 15, 1);
 
 INSERT INTO COMMENTAIRE (idCommentaire, dateCommentaire, contenuCommentaire, idFilm, idUtilisateur) VALUES
 (1, "2020-11-10", "Je ne comprend pas à quel moment cela peut exister, un géant vert en mousse.", 5, 6),

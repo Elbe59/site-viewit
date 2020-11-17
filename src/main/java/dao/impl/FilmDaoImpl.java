@@ -32,7 +32,8 @@ public class FilmDaoImpl implements FilmDao {
 								rs.getString("acteur"),
 								rs.getString("imgFilm"),
 								rs.getString("urlBA"),
-								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre"))));
+								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
+								rs.getInt("valide")));
 					}
 				}
 			}
@@ -60,7 +61,8 @@ public class FilmDaoImpl implements FilmDao {
 								rs.getString("acteur"),
 								rs.getString("imgFilm"),
 								rs.getString("urlBA"),
-								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")));
+								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
+								rs.getInt("valide"));
 					}
 				}
 			}

@@ -14,9 +14,10 @@ public class Film {
 	private String imageName;
 	private String urlBA;
 	private Genre genre;
+	private Integer valide;
 	
 	public Film(Integer id, String titre, String resume, LocalDate dateSortie, Integer duree, String realisateur,
-			String acteur, String imageName, String urlBA, Genre genre) {
+			String acteur, String imageName, String urlBA, Genre genre, Integer valide) {
 		this.id = id;
 		this.titre = titre;
 		this.resume = resume;
@@ -27,6 +28,7 @@ public class Film {
 		this.imageName = imageName;
 		this.urlBA = urlBA;
 		this.genre = genre;
+		this.valide = valide;
 	}
 	
 	public Integer getId() {
@@ -97,5 +99,12 @@ public class Film {
 	}
 	public void setGenre(Genre genre) {
 		this.genre = genre;
+	}
+
+	public Integer getValide() {
+		return valide;
+	}
+	public void setValide(Integer valide) {
+		this.valide = valide;
 	}
 }
