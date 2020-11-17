@@ -229,6 +229,33 @@ article img {
 	padding : 0.5em;
 	font-size : 120%;
 }
+/*ajout utilisateur*/
+
+form#ajout_utilisateur {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 10% 40%;
+	background-color: darkgrey;
+	border-style: solid;
+	border-color: black;
+	border-radius: 5px;
+	border-width: 2px;
+}
+
+form.ajout_utilisateur{
+	border: solid black;
+	border: 0.05em;
+	background-color: darkgrey;
+}
+
+input.ajout_utilisateur{
+	border-style: solid;
+	border-color: black;
+	border-radius: 5px;
+	border-width: 2px;
+}
 
 /* -------------Footer------------ */
 /* Mise en page */
@@ -244,3 +271,4 @@ footer{
 	border-width: 5px;
 	width: 100%;
 }
+

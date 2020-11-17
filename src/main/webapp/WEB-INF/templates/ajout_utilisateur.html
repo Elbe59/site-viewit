@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>ajout utilisateur</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/viewit.css">
+    </head>
+    <body>
+    <header th:replace="~{fragments :: header}"></header>
+        <form  method="post" action="ajout_utilisateur" id="ajout_utilisateur">
+                <label for="mail">e-mail</label>
+                <input type="text" name = "mail" id = "mail" class="ajout_utilisateur">
+                <label for="nom">nom</label>
+                <input type="text" name = "nom" id = "nom" class="ajout_utilisateur">
+                <label for="prenom">prenom</label>
+                <input type="text" name = "prenom" id = "prenom" class="ajout_utilisateur">
+                <label for="mdp">mot de passe</label>
+                <input type="password" name = "mdp" id = "mdp" class="ajout_utilisateur">
+                <label for="admin">administrateur</label>
+                <input type="checkbox" name = "admin" id = "admin" class="ajout_utilisateur">
+                <input type="submit" name = "send" id = "send" value="valider" class="ajout_utilisateur">
+        </form>
+    </body>
+    <footer th:replace="~{fragments :: footer}"></footer>
+</html>
