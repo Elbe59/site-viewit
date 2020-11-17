@@ -4,6 +4,8 @@ import dao.FilmDao;
 import entity.Film;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
@@ -78,5 +80,31 @@ public class FilmDaoTestCase {
 		assertThat(film.getGenre().getNom()).isEqualTo("Aventure");
 		assertThat(film.getValide()).isEqualTo(1);
 	}
+
+
+	/*@Test
+	public void shouldDeleteFilm() {
+		//GIVEN
+		int id = 2;
+		String title = "cc";
+		//WHEN
+		filmDao.deleteFilm(id);
+		//Then
+		try (Connection connection = DataSourceProvider.getDataSource().getConnection();
+			 Statement stmt = connection.createStatement()) {
+			try (ResultSet rs = stmt.executeQuery("SELECT * FROM film WHERE title = 'my title 2'")) {
+				assertThat(rs.next()).isFalse();
+			}
+			/*try (ResultSet rs = stmt.executeQuery("SELECT * FROM film")) {
+				int compteur=0;
+				while(rs.next()){
+					compteur++;
+					assertThat(rs.getInt("film_id")).isEqualTo(compteur);
+				}*/
+
+
+		/*} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		}*/
 	
 }

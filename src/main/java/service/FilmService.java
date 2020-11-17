@@ -29,5 +29,7 @@ public class FilmService {
 	public Film getFilm(int id) {
 		return filmDao.getFilm(id);
 	}
+
+	public void deleteFilm(int id){filmDao.deleteFilm(id);}
 	
 }

@@ -78,4 +78,26 @@ public class FilmDaoImpl implements FilmDao {
 		return null;
 	}
 
+	@Override
+	public void deleteFilm(Integer id) {
+		try(Connection connection=DataSourceProvider.getDataSource().getConnection()){
+			String sqlQuery="DELETE FROM `film` WHERE idFilm = ?";
+			String sqlQuery2="UPDATE film SET idFilm = ? WHERE idFilm = ?";
+			PreparedStatement statement= connection.prepareStatement(sqlQuery);
+			statement.setInt(1,id);
+			int nb= statement.executeUpdate();
+			statement.close();
+			for(int i=id+1;i< listFilms().size()+2;i++){
+				PreparedStatement statement1= connection.prepareStatement(sqlQuery2);
+				statement1.setInt(1,(i-1));
+				statement1.setInt(2,i);
+				int nb1= statement1.executeUpdate();
+				System.out.println("J'ai décalé l'indice"+i);
+				statement1.close();
+			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		}
+	}
+
 }
