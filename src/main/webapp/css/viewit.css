@@ -312,7 +312,6 @@ article img {
 
 .container{
 	padding: 2em;
-
 }
 h3{
 	color: white;
@@ -321,7 +320,6 @@ h3{
 	border-collapse: collapse;
 	background-color: gray;
 	width: 100%;
-
 }
 
 .tablelist td, .tablelist th {
@@ -334,16 +332,15 @@ h3{
 .tablelist tr:hover {background-color: #FC775A;}
 
 .tablelist th {
-	padding-top: 15px;
-	padding-bottom: 15px;
+	padding: 10px;
 	text-align: center;
 	background-color: #4CAF50;
 	color: white;
+	font-size: 1vw;
 }
 .img_liste{
-
-	width: 20px;
-	height: 20px;
+	width: 2vw;
+	height: 2vw;
 	border-style: solid;
 	border-color: transparent;
 }
@@ -357,13 +354,14 @@ td{
 
 td.small_column
 {
-	width: 80px;
+	width: 100px;
+	padding: 0px;
 }
 
 div.column-gestion{
 	display: flex;
 	width: 100%;
-	justify-content: space-between;
+	justify-content: space-evenly;
 	padding: 0px;
 	margin: 0px;
 	margin-left: 3px;
@@ -397,7 +395,7 @@ div.ajout h3{
 	padding-bottom: 10px;
 }
 
-button img.img_liste{
+button.img_liste{
 	padding: 0px;
 }
 
