@@ -44,6 +44,47 @@ public class FilmDaoImpl implements FilmDao {
 		return listOfFilms;
 	}
 
+
+	public List<Film> listFilms(String colonne) {
+		List<Film> listOfFilms = new ArrayList<Film>();
+		String sql = "";
+		if(colonne.equals("alpha"))
+			sql = "titreFilm";
+		else if (colonne.equals("recent"))
+			sql = "dateSortie DESC";
+		else if (colonne.equals("ancien"))
+			sql = "dateSortie";
+		else if (colonne.equals("genre"))
+			sql = "nomGenre";
+		else
+			//popularité
+		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+			try(PreparedStatement pStm = co.prepareStatement("SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre ORDER BY ?;")) {
+				pStm.setString(1, sql);
+				try(ResultSet rs = pStm.executeQuery()) {
+					while(rs.next()) {
+						listOfFilms.add(new Film(
+								rs.getInt("idFilm"),
+								rs.getString("titreFilm"),
+								rs.getString("resumeFilm"),
+								rs.getDate("dateSortie").toLocalDate(),
+								rs.getInt("dureeFilm"),
+								rs.getString("realisateur"),
+								rs.getString("acteur"),
+								rs.getString("imgFilm"),
+								rs.getString("urlBA"),
+								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
+								rs.getInt("valide")));
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return listOfFilms;
+	}
+
 	@Override
 	public Film getFilm(Integer id) {
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
