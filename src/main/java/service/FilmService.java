@@ -29,6 +29,9 @@ public class FilmService {
 	public List<Film> listFilms() {
 		return filmDao.listFilms();
 	}
+	public List<Film> listFilms(String colonne) {
+		return filmDao.listFilms(colonne);
+	}
 	
 	public Film getFilm(int id) {
 		return filmDao.getFilm(id);

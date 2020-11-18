@@ -20,19 +20,19 @@ public class GestionFilmServlet extends ServletGenerique {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         WebContext context = new WebContext(req, resp, req.getServletContext());
-        List<Film> listOfFilms = FilmService.getInstance().listFilms();
+        List<Film> listOfFilms = FilmService.getInstance().listFilms("valide");
         context.setVariable("listFilms", listOfFilms);
         TemplateEngine engine = createTemplateEngine(req.getServletContext());
         engine.process("listfilms", context, resp.getWriter());
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //int id= Integer.parseInt(req.getParameter("filmStat.index"));
-        int id = Integer.parseInt(request.getParameter("supp"));
-
+        List<Film> listOfFilms = FilmService.getInstance().listFilms("valide");
+        int index = Integer.parseInt(request.getParameter("supp"));
+        int id=listOfFilms.get(index).getId();
         System.out.println("Delete: "+(id+1));
         //int id=3;
-        FilmService.getInstance().deleteFilm(id+1);
+        FilmService.getInstance().deleteFilm(id);
         response.sendRedirect("gestionfilm");
     }
 }

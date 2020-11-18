@@ -47,20 +47,24 @@ public class FilmDaoImpl implements FilmDao {
 
 	public List<Film> listFilms(String colonne) {
 		List<Film> listOfFilms = new ArrayList<Film>();
-		String sql = "";
+		String param = "";
 		if(colonne.equals("alpha"))
-			sql = "titreFilm";
+			param = "titreFilm";
 		else if (colonne.equals("recent"))
-			sql = "dateSortie DESC";
+			param = "dateSortie DESC";
 		else if (colonne.equals("ancien"))
-			sql = "dateSortie";
+			param = "dateSortie";
 		else if (colonne.equals("genre"))
-			sql = "nomGenre";
-		else
-			//popularité
+			param = "nomGenre";
+		else if (colonne.contentEquals("valide"))
+			param = "valide";
+		else {
+			param = "valide";//popularité
+		}
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-			try(PreparedStatement pStm = co.prepareStatement("SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre ORDER BY ?;")) {
-				pStm.setString(1, sql);
+			String sqlQuery="SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre ORDER BY "+param;
+			try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
+				//pStm.setString(1, param);
 				try(ResultSet rs = pStm.executeQuery()) {
 					while(rs.next()) {
 						listOfFilms.add(new Film(
@@ -81,7 +85,6 @@ public class FilmDaoImpl implements FilmDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return listOfFilms;
 	}
 
@@ -123,19 +126,19 @@ public class FilmDaoImpl implements FilmDao {
 	public void deleteFilm(Integer id) {
 		try(Connection connection=DataSourceProvider.getDataSource().getConnection()){
 			String sqlQuery="DELETE FROM `film` WHERE idFilm = ?";
-			String sqlQuery2="UPDATE film SET idFilm = ? WHERE idFilm = ?";
+			//String sqlQuery2="UPDATE film SET idFilm = ? WHERE idFilm = ?";
 			PreparedStatement statement= connection.prepareStatement(sqlQuery);
 			statement.setInt(1,id);
 			int nb= statement.executeUpdate();
 			statement.close();
-			for(int i=id+1;i< listFilms().size()+2;i++){
+			/*for(int i=id+1;i< listFilms().size()+2;i++){
 				PreparedStatement statement1= connection.prepareStatement(sqlQuery2);
 				statement1.setInt(1,(i-1));
 				statement1.setInt(2,i);
 				int nb1= statement1.executeUpdate();
 				System.out.println("J'ai décalé l'indice"+i);
 				statement1.close();
-			}
+			}*/
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		}
