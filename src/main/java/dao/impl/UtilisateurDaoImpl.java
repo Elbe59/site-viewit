@@ -84,4 +84,18 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
             e.printStackTrace();
         }
     }
+
+    public Utilisateur deleteUser(Integer id) throws UserNotFoundException, SQLException {
+        Utilisateur user = null;
+        try{
+            user = getUser(id);
+            try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
+                try (PreparedStatement pStm = co.prepareStatement("DELETE FROM UTILISATEUR WHERE idUtilisateur = ?;")) {
+                    pStm.setInt(1, id);
+                } catch (SQLException e) { }
+            }
+        }catch(UserNotFoundException e){
+        }
+        return user;
+    }
 }
