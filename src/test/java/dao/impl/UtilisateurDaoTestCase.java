@@ -6,17 +6,18 @@ import entity.Film;
 import entity.Utilisateur;
 import exception.UserAlreadyExistingException;
 import exception.UserNotFoundException;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.Connection;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
 
 import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
+
 
 public class UtilisateurDaoTestCase {
 
@@ -84,5 +85,31 @@ public class UtilisateurDaoTestCase {
         userDao.addUser(user);
         //then
         fail("UserAlreadyExisting not throw as expected");
+    }
+
+    @Test
+    public void shouldDeleteUser() throws UserNotFoundException, SQLException {
+        //given
+        Utilisateur user4 = new Utilisateur(4,"prenom4", "nom4", "email4@gmail.com", "mdp4", false);
+        try (Connection co = DataSourceProvider.getDataSource().getConnection();
+             Statement stm = co.createStatement()) {
+            stm.executeUpdate(
+                    "INSERT INTO UTILISATEUR ( idUtilisateur, prenomUtilisateur, nomUtilisateur, email, mdp, admin) "
+                            + "VALUES (4,'prenom4', 'nom4', 'email4@gmail.com', 'mdp4', 0);");
+        } catch (SQLException e) { }
+        //when
+        Utilisateur userDelete = userDao.deleteUser(4);
+        //then
+        Assertions.assertThat(userDelete.getEmail()).isEqualTo(user4.getEmail());
+    }
+
+    @Test
+    public void shouldDelteUserThrowUserNotFoundException() throws UserNotFoundException, SQLException {
+        //given
+        int id = 5;
+        //when
+        Utilisateur res = userDao.deleteUser(id);
+        //then
+        Assertions.assertThat(res).isNull();
     }
 }
