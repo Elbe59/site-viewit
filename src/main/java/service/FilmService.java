@@ -3,8 +3,11 @@ package service;
 import java.util.List;
 
 import dao.FilmDao;
+import dao.GenreDao;
 import dao.impl.FilmDaoImpl;
+import dao.impl.GenreDaoImpl;
 import entity.Film;
+import entity.Genre;
 
 public class FilmService {
 
@@ -17,6 +20,7 @@ public class FilmService {
 	}
 	
 	private FilmDao filmDao = new FilmDaoImpl();
+	private GenreDao genreDao = new GenreDaoImpl();
 	
 	private FilmService() {
 		
@@ -29,20 +33,9 @@ public class FilmService {
 	public Film getFilm(int id) {
 		return filmDao.getFilm(id);
 	}
-	
-	public Film addFilm(Film film) {
-		if(film == null) {
-			throw new IllegalArgumentException("Erreur : Ajout d'un film null impossible.");
-		}
-		if(film.getTitre() == null) {
-			throw new IllegalArgumentException("Erreur : Ajout d'un film null impossible.");
-		}
-		
-		return film;
-	}
 
-	public void deleteFilm(int id) {
-		filmDao.deleteFilm(id);
-	}
+	public void deleteFilm(int id){filmDao.deleteFilm(id);}
+
+	public List<Genre> listGenre(){return genreDao.listGenre();}
 	
 }
