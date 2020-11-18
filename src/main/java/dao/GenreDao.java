@@ -1,5 +1,9 @@
 package dao;
 
-public interface GenreDao {
+import entity.Genre;
 
+import java.util.List;
+
+public interface GenreDao {
+    public List<Genre> listGenre();
 }

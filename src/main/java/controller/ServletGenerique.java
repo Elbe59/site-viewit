@@ -1,5 +1,7 @@
 package controller;
 
+import java.nio.charset.StandardCharsets;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 
@@ -17,6 +19,7 @@ public abstract class ServletGenerique extends HttpServlet {
         ServletContextTemplateResolver resolver = new ServletContextTemplateResolver(context);
         resolver.setPrefix("/WEB-INF/templates/");
         resolver.setSuffix(".html");
+        resolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
         resolver.setTemplateMode(TemplateMode.HTML);
 
         // moteur Thymeleaf
