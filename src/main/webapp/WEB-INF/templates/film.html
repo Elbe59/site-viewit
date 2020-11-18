@@ -3,7 +3,7 @@
 	<head>
 		<title th:text="${'ViewIt - ' + film.titre}">ViewIt - Film</title>
 		<link rel="stylesheet" type="text/css" href="css/viewit.css">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<body>
 		<header th:replace="~{fragments :: header}"></header>
@@ -15,14 +15,14 @@
 				<div>Synopsis</div>
 				<p>
 				<div>
-				<p th:text="${film.resume}">RÃ©sumÃ© du film ...</p>
+				<p th:text="${film.resume}">Résumé du film ...</p>
 				</div>
 			</div>
 			<embed class="bandeAnnonce" th:src="@{'https://youtube.com/embed/'+${film.urlBA}}">
 			<div id="infoDetail">
-				<div class="realisateur" th:text="${'RÃ©alisateur : ' + film.realisateur}">RÃ©alisateur : ?</div>
+				<div class="realisateur" th:text="${'Réalisateur : ' + film.realisateur}">Réalisateur : ?</div>
 				<div class="acteurs" th:text="${'Acteur : ' + film.acteur}">Acteurs : ?</div>
-				<div class="duree" th:text="${'DurÃ©e : ' + film.duree + ' min'}">DurÃ©e : ?</div>
+				<div class="duree" th:text="${'Durée : ' + film.duree + ' min'}">Durée : ?</div>
 				<div class="datesortie" th:text="${'Date de sortie : ' + #temporals.format(film.DateSortie, 'd MMMM yyyy')}">Date de sortie : ?</div>
 				<div class="genre" th:text="${'Genre : ' + film.genre.nom}">Genre : Action</div>
 			</div>

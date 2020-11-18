@@ -29,7 +29,20 @@ public class FilmService {
 	public Film getFilm(int id) {
 		return filmDao.getFilm(id);
 	}
+	
+	public Film addFilm(Film film) {
+		if(film == null) {
+			throw new IllegalArgumentException("Erreur : Ajout d'un film null impossible.");
+		}
+		if(film.getTitre() == null) {
+			throw new IllegalArgumentException("Erreur : Ajout d'un film null impossible.");
+		}
+		
+		return film;
+	}
 
-	public void deleteFilm(int id){filmDao.deleteFilm(id);}
+	public void deleteFilm(int id) {
+		filmDao.deleteFilm(id);
+	}
 	
 }
