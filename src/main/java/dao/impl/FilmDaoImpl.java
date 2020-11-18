@@ -118,11 +118,42 @@ public class FilmDaoImpl implements FilmDao {
 
 	@Override
 	public Film addFilm(Film film) {
-		// TODO Auto-generated method stub
-		return null;
+		return film;
 	}
 
-	@Override
+	public Film activeFilm(Integer id){
+		Film film = null;
+		try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
+			String sqlQuery = "UPDATE `film` SET `valide` = '1' WHERE `film`.`idFilm` = ?";
+			PreparedStatement statement = connection.prepareStatement(sqlQuery);
+			statement.setInt(1, id);
+			int nb = statement.executeUpdate();
+			statement.close();
+
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		}
+		film=getFilm(id);
+		return film;
+	}
+
+	public Film desactiveFilm(Integer id){
+		Film film = null;
+		try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
+			String sqlQuery = "UPDATE `film` SET `valide` = '0' WHERE `film`.`idFilm` = ?";
+			PreparedStatement statement = connection.prepareStatement(sqlQuery);
+			statement.setInt(1, id);
+			int nb = statement.executeUpdate();
+			statement.close();
+
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		}
+		film=getFilm(id);
+		return film;
+	}
+
+		@Override
 	public Film deleteFilm(Integer id) {
 		Film film = null;
 		try(Connection connection=DataSourceProvider.getDataSource().getConnection()){

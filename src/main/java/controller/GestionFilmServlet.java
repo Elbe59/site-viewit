@@ -28,11 +28,27 @@ public class GestionFilmServlet extends ServletGenerique {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Film> listOfFilms = FilmService.getInstance().listFilms("valide");
-        int index = Integer.parseInt(request.getParameter("supp"));
-        int id=listOfFilms.get(index).getId();
-        System.out.println("Delete: "+(id+1));
-        //int id=3;
-        FilmService.getInstance().deleteFilm(id);
+        if(request.getParameter("supp")!=null) {
+            int index = Integer.parseInt(request.getParameter("supp"));
+            int id = listOfFilms.get(index).getId();
+            System.out.println("Delete film: " + (id));
+            FilmService.getInstance().deleteFilm(id);
+        }
+        if(request.getParameter("active")!=null){
+            int index = Integer.parseInt(request.getParameter("active"));
+            int id = listOfFilms.get(index).getId();
+            System.out.println("Valide film: " + (id));
+            FilmService.getInstance().activeFilm(id);
+        }
+        if(request.getParameter("desactive")!=null){
+            int index = Integer.parseInt(request.getParameter("desactive"));
+            int id = listOfFilms.get(index).getId();
+            System.out.println("Valide film: " + (id));
+            FilmService.getInstance().desactiveFilm(id);
+        }
+
+
+
         response.sendRedirect("gestionfilm");
     }
 }

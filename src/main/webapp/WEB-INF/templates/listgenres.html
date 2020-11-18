@@ -41,11 +41,11 @@
 					</thead>
 					<tbody>
 						<tr th:each="genre : ${listGenres}">
-							<td th:text="${genre.id}">1</td>
+							<td th:text="${genreStat.index+1}">1</td>
 							<td th:text="${genre.nom}">Art Martiaux</td>
 							<td class="small_column">
 								<form method="post">
-									<button onclick="if(confirm('Etes vous sur de vouloir supprimer cette utilisateur ?')){}else{return false;}" name="supp" th:value="${genreStat.index}" th:title="'Supprimer ' +${genre.nom}" class="btn-delete" type="submit" th:id="${genreStat.index}"><img class="img_liste" src="images/supprimer.png"alt="supprimer"></button>
+									<button onclick="if(confirm('Etes vous sur de vouloir supprimer cette utilisateur ?')){}else{return false;}" name="supp" th:value="${genreStat.index}" th:title="'Supprimer ' +${genre.nom}" class="btn-delete" type="submit" th:id="${genreStat.index}"><img class="img_liste" src="images/icones/supprimer.png"alt="supprimer"></button>
 								</form>
 								
 							</td>

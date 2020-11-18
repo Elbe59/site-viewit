@@ -10,7 +10,7 @@
 		<h1 class="titreDetail" th:text="${film.titre}">Avengers : Infinity War</h1>
 		<div class="filmDetail">
 			<div class="note">98%</div>
-			<img id="imgDetail" th:src="@{'images/'+${film.imageName}}" th:alt-title="${film.titre}"/>
+			<img id="imgDetail" th:src="@{'images/film/'+${film.imageName}}" th:alt-title="${film.titre}"/>
 			<div id="resumeDetail">
 				<div>Synopsis</div>
 				<p>
@@ -23,7 +23,7 @@
 				<div class="realisateur" th:text="${'Réalisateur : ' + film.realisateur}">Réalisateur : ?</div>
 				<div class="acteurs" th:text="${'Acteur : ' + film.acteur}">Acteurs : ?</div>
 				<div class="duree" th:text="${'Durée : ' + film.duree + ' min'}">Durée : ?</div>
-				<div class="datesortie" th:text="${'Date de sortie : ' + #temporals.format(film.DateSortie, 'd MMMM yyyy')}">Date de sortie : ?</div>
+				<div class="datesortie" th:text="${'Date de sortie : ' + #temporals.format(film.dateSortie, 'd MMMM yyyy')}">Date de sortie : ?</div>
 				<div class="genre" th:text="${'Genre : ' + film.genre.nom}">Genre : Action</div>
 			</div>
 		</div>

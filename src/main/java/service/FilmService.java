@@ -32,6 +32,10 @@ public class FilmService {
 	public List<Film> listFilms(String colonne) {
 		return filmDao.listFilms(colonne);
 	}
+
+	public Film activeFilm(Integer id){return filmDao.activeFilm(id);}
+
+	public Film desactiveFilm(Integer id){return filmDao.desactiveFilm(id);}
 	
 	public Film getFilm(int id) {
 		return filmDao.getFilm(id);
@@ -44,5 +48,6 @@ public class FilmService {
 	public List<Genre> listGenre(){
 		return genreDao.listGenre();
 	}
+
 	
 }
