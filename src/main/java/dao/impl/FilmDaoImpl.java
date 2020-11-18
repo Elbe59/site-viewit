@@ -123,9 +123,11 @@ public class FilmDaoImpl implements FilmDao {
 	}
 
 	@Override
-	public void deleteFilm(Integer id) {
+	public Film deleteFilm(Integer id) {
+		Film film = null;
 		try(Connection connection=DataSourceProvider.getDataSource().getConnection()){
 			String sqlQuery="DELETE FROM `film` WHERE idFilm = ?";
+			film = getFilm(id);
 			//String sqlQuery2="UPDATE film SET idFilm = ? WHERE idFilm = ?";
 			PreparedStatement statement= connection.prepareStatement(sqlQuery);
 			statement.setInt(1,id);
@@ -142,6 +144,7 @@ public class FilmDaoImpl implements FilmDao {
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		}
+		return film;
 	}
 
 }
