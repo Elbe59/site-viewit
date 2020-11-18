@@ -2,8 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <title>ViewIt</title>
-	<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="css/viewit.css" rel="stylesheet">
   </head>
@@ -39,9 +38,9 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>1</td>
-							<td>Art Martiaux</td>
+						<tr th:each="genre : ${listGenres}">
+							<td th:text="${genre.id}">1</td>
+							<td th:text="${genre.nom}">Art Martiaux</td>
 							<td class="small_column">
 								<form method="post">
 									<button class="btn-delete" type="submit" ><img class="img_liste" src="images/supprimer.png"alt="supprimer"></button>

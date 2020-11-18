@@ -2,8 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <title>ViewIt</title>
-	<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="css/viewit.css" rel="stylesheet">
   </head>
@@ -45,13 +44,8 @@
 							<div class="column-gestion">
 								<a th:title="${'Modifier ' +film.titre}" th:href="${'modiffilm?id='+film.id}"><img class="img_liste" src="images/modification.png"></a>
 								<form method="post" >
-									<button onclick="myFunction()" name="supp" th:value="${filmStat.index}" th:title="${'Supprimer ' +film.titre}" class="btn-delete" type="submit" th:id="${filmStat.index}"><img class="img_liste" src="images/supprimer.png"></button>
+									<button  onclick="if(confirm('Etes vous sur de vouloir supprimer ce film ?')){}else{return false;}" name="supp" th:value="${filmStat.index}" th:title="${'Supprimer ' +film.titre}" class="btn-delete" type="submit" th:id="${filmStat.index}"><img class="img_liste" src="images/supprimer.png"></button>
 								</form>
-								<script>
-									function myFunction() {
-										confirm("Etes vous sur de vouloir supprimer ce film?");
-									}
-								</script>
 							</div>
 						</td>
 					</tr>
