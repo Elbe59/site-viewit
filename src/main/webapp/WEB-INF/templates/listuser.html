@@ -37,6 +37,9 @@
 						<td th:text="${user.admin == 1}? 'Oui' : 'Non'" class="small_column">Oui</td>
 						<td class="small_column">
 							<div class="column-gestion">
+								<form method="post" >
+									<button  onclick="if(confirm('Etes vous sur de vouloir changer le rôle de cette utilisateur ?')){}else{return false;}" th:name="${user.admin==0} ? 'up' : 'down'" th:value="${userStat.index}" th:title="${user.admin==1} ? ${'Retrograder '+user.prenom + ' '+user.nom} : ${'Promouvoir '+user.prenom + ' '+user.nom }" class="btn-delete" type="submit" th:id="${userStat.index}"><img class="img_liste" th:src="${user.admin == 0} ? 'images/icones/up.png' : 'images/icones/down_user.png'"></button>
+								</form>
 								<a href="#"><img class="img_liste" src="images/modification.png"alt="modifier"></a>
 								<form method="post">
 									<button onclick="if(confirm('Etes vous sur de vouloir supprimer cette utilisateur ?')){}else{return false;}" name="supp" th:value="${userStat.index}" th:title="'Supprimer ' +${user.prenom} +' '+${user.nom}" class="btn-delete" type="submit" th:id="${userStat.index}"><img class="img_liste" src="images/supprimer.png"alt="supprimer"></button>

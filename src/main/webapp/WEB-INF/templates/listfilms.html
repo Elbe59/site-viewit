@@ -42,6 +42,9 @@
 						<td  class="small_column"><a th:href="${'film?id=' + film.id}" th:title="${'Détail de: ' +film.titre}"><img  th:alt="${'Détail de: ' +film.titre}" class="img_liste" src="images/loupe.png"></a></td>
 						<td class="small_column">
 							<div class="column-gestion">
+								<form method="post" >
+									<button  onclick="if(confirm('Etes vous sur de vouloir activer / désactiver ce film ?')){}else{return false;}" name="valid" th:value="${filmStat.index}" th:title="${film.valide == 0} ? ${'Activer '+film.titre} : ${'Désactiver '+film.titre}" class="btn-delete" type="submit" th:id="${filmStat.index}"><img class="img_liste" th:src="${film.valide == 0} ? 'images/icones/active_icon.png' : 'images/icones/desactive_icon.png'"></button>
+								</form>
 								<a th:title="${'Modifier ' +film.titre}" th:href="${'modiffilm?id='+film.id}"><img class="img_liste" src="images/modification.png"></a>
 								<form method="post" >
 									<button  onclick="if(confirm('Etes vous sur de vouloir supprimer ce film ?')){}else{return false;}" name="supp" th:value="${filmStat.index}" th:title="${'Supprimer ' +film.titre}" class="btn-delete" type="submit" th:id="${filmStat.index}"><img class="img_liste" src="images/supprimer.png"></button>
