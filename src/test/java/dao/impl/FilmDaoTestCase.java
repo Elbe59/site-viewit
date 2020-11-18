@@ -108,29 +108,22 @@ public class FilmDaoTestCase {
 	}
 
 
-	/*@Test
-	public void shouldDeleteFilm() {
+	@Test
+	public void shouldDeleteFilm() throws SQLException {
 		//GIVEN
 		int id = 2;
-		String title = "cc";
+		String title = "titre 2";
 		//WHEN
-		filmDao.deleteFilm(id);
+		Film filmDelete = filmDao.deleteFilm(id);
 		//Then
 		try (Connection connection = DataSourceProvider.getDataSource().getConnection();
 			 Statement stmt = connection.createStatement()) {
-			try (ResultSet rs = stmt.executeQuery("SELECT * FROM film WHERE title = 'my title 2'")) {
+			try (ResultSet rs = stmt.executeQuery("SELECT * FROM film WHERE title = 'titre 2'")) {
 				assertThat(rs.next()).isFalse();
+			} catch (SQLException e) {
 			}
-			/*try (ResultSet rs = stmt.executeQuery("SELECT * FROM film")) {
-				int compteur=0;
-				while(rs.next()){
-					compteur++;
-					assertThat(rs.getInt("film_id")).isEqualTo(compteur);
-				}*/
-
-
-		/*} catch (SQLException throwables) {
-			throwables.printStackTrace();
-		}*/
+			assertThat(filmDelete.getTitre()).isEqualTo(title);
+		}
+	}
 	
 }
