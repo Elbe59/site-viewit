@@ -37,8 +37,12 @@ public class FilmService {
 		return filmDao.getFilm(id);
 	}
 
-	public void deleteFilm(int id){filmDao.deleteFilm(id);}
+	public void deleteFilm(int id){
+		filmDao.deleteFilm(id);
+	}
 
-	public List<Genre> listGenre(){return genreDao.listGenre();}
+	public List<Genre> listGenre(){
+		return genreDao.listGenre();
+	}
 	
 }

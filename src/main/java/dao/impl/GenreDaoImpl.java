@@ -12,11 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GenreDaoImpl implements GenreDao {
+	
     public List<Genre> listGenre() {
         List<Genre> listOfGenres = new ArrayList<Genre>();
         try(Connection co = DataSourceProvider.getDataSource().getConnection()){
             try(Statement stm = co.createStatement()) {
-                try(ResultSet rs = stm.executeQuery("SELECT * FROM GENRE ORDER BY idGenre;")) {
+                try(ResultSet rs = stm.executeQuery("SELECT * FROM GENRE ORDER BY nomGenre;")) {
                     while(rs.next()) {
                         listOfGenres.add(new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")));
                     }

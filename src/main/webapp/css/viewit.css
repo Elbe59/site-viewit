@@ -285,7 +285,7 @@ article img {
   color: white;
 }
 
-.infoAddBlock input, textarea, select {
+.infoAddBlock input, .infoAddBlock textarea, .infoAddBlock select {
   width: 40%;
   margin-top: 0.2em;
   resize: none;

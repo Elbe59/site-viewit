@@ -9,7 +9,7 @@
   <body>
     <main class="main-AddFilm">
       <section class="addFilmSection">
-        <form class="addFilmForm" action="addFilm" method="post">
+        <form class="addFilmForm" action="ajoutFilm" method="post">
           <div class="infoAddBlock">
             <label for="titre">Titre</label>
             <div>
@@ -19,11 +19,11 @@
           <div class="infoAddBlock">
             <label for="resume">Synopsis</label>
             <div>
-              <textarea name="name" rows="8" cols="80" placeholder="Synopsis du film ..."></textarea>
+              <textarea name="resume" rows="8" cols="80" placeholder="Synopsis du film ..."></textarea>
             </div>
           </div>
           <div class="infoAddBlock">
-            <label for="realisateur">Réalisateur</label>
+            <label for="realisateur">R�alisateur</label>
             <div>
               <input type="text" name="realisateur">
             </div>
@@ -35,7 +35,7 @@
             </div>
           </div>
           <div class="infoAddBlock">
-            <label for="duree">Durée</label>
+            <label for="duree">Dur�e</label>
             <div>
               <input type="number" name="duree" min="0" step="1">
             </div>
@@ -43,16 +43,15 @@
           <div class="infoAddBlock">
             <label for="date">Date de sortie</label>
             <div>
-              <input type="date" name="date">
+              <input type="date" name="dateSortie">
             </div>
           </div>
           <div class="infoAddBlock">
             <label for="genre">Genre</label>
             <div>
-              <select id="genre-addFilm" name="genre">
-                <option value="genre1">Alphabéthique</option>
-                <option value="genre2">Popularité</option>
-                <option value="genre3">Genre</option>
+              <select id="genre-addFilm" name="genre" onfocus="this.size=5;" onblur="this.size=1;" 
+        onchange="this.size=1; this.blur();">
+                <option th:each="genre : ${genres}" th:text="${genre.nom}" th:id="${genre.id}">Genre</option>
               </select>
             </div>
           </div>
