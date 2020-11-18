@@ -41,6 +41,32 @@ public class FilmDaoTestCase {
 	@Test
 	public void shouldListFilm() {
 		//WHEN
+		List<Film> films = filmDao.listFilms("ancien");
+		//THEN
+		assertThat(films).hasSize(2);
+		assertThat(films.get(0).getDateSortie()).isEqualTo(LocalDate.of(2020, 11, 11));
+		assertThat(films.get(1).getDateSortie()).isEqualTo(LocalDate.of(2020, 11, 12));
+		assertThat(films).extracting(
+				Film::getId,
+				Film::getTitre,
+				Film::getResume,
+				Film::getDateSortie,
+				Film::getDuree,
+				Film::getRealisateur,
+				Film::getActeur,
+				Film::getImageName,
+				Film::getUrlBA,
+				Film -> Film.getGenre().getId(),
+				Film -> Film.getGenre().getNom(),
+				Film::getValide).contains(
+						tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1),
+						tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 1));
+	}
+
+	@Test
+	public void souldListFilmWithParameter()
+	{
+		//WHEN
 		List<Film> films = filmDao.listFilms();
 		//THEN
 		assertThat(films).hasSize(2);
@@ -57,10 +83,10 @@ public class FilmDaoTestCase {
 				Film -> Film.getGenre().getId(),
 				Film -> Film.getGenre().getNom(),
 				Film::getValide).containsOnly(
-						tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1),
-						tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 1));
+				tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1),
+				tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 1));
 	}
-	
+
 	@Test
 	public void shouldGetFilm() {
 		//WHEN
