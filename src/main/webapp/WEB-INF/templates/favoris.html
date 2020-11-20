@@ -1,10 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-      <title>ViewIt - Favoris</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="stylesheet" type="text/css" href="../../css/accueil.css">
-  </head>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr" dir="ltr">
+<head th:replace="~{fragments :: head(ViewIt-Favoris)}"></head>
+<header th:replace="~{fragments :: header}"></header>
   <body>
     <main>
       <section id="accueil-search">
@@ -13,7 +10,7 @@
           <input type="text" name="recherche" id="recherche">
         </span>
         <span id= "zoneTrie">
-          <label for="trie">Trier par :</label>
+          <label for="trier">Trier par :</label>
           <select id="trier" name="trier">
             <option value="alphabethique">Alphabéthique</option>
             <option value="popularite">Popularité</option>
@@ -54,4 +51,5 @@
       </section>
     </main>
   </body>
+<footer th:replace="~{fragments :: footer}"></footer>
 </html>
