@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org" >
-	<head>
-		<title th:text="${'ViewIt - ' + film.titre}">ViewIt - Film</title>
-		<link rel="stylesheet" type="text/css" href="css/viewit.css">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	</head>
+<head th:replace="~{fragments :: head(${'ViewIt '+film.titre})}"></head>
 	<body>
 		<header th:replace="~{fragments :: header}"></header>
 		<h1 class="titreDetail" th:text="${film.titre}">Avengers : Infinity War</h1>

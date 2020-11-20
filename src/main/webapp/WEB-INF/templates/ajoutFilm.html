@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="fr" dir="ltr">
-  <head>
-    <title>ViewIt</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="css/viewit.css">
-  </head>
+<head th:replace="~{fragments :: head(ViewIt-addFilm)}"></head>
   <header th:replace="~{fragments :: header}"></header>
   <body>
     <main class="main-AddFilm">
@@ -23,7 +19,7 @@
             </div>
           </div>
           <div class="infoAddBlock">
-            <label for="realisateur">Réalisateur</label>
+            <label for="realisateur">Rï¿½alisateur</label>
             <div>
               <input type="text" name="realisateur">
             </div>
@@ -35,7 +31,7 @@
             </div>
           </div>
           <div class="infoAddBlock">
-            <label for="duree">Durée</label>
+            <label for="duree">Durï¿½e</label>
             <div>
               <input type="number" name="duree" min="0" step="1">
             </div>
