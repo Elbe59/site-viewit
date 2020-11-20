@@ -8,6 +8,9 @@ import dao.impl.FilmDaoImpl;
 import dao.impl.GenreDaoImpl;
 import entity.Film;
 import entity.Genre;
+import exception.FilmAlreadyActiveException;
+import exception.FilmAlreadyDesactiveException;
+import exception.FilmNotFoundException;
 
 public class FilmService {
 
@@ -33,15 +36,15 @@ public class FilmService {
 		return filmDao.listFilms(colonne);
 	}
 
-	public Film activeFilm(Integer id){return filmDao.activeFilm(id);}
+	public Film activeFilm(Integer id) throws FilmNotFoundException, FilmAlreadyActiveException {return filmDao.activeFilm(id);}
 
-	public Film desactiveFilm(Integer id){return filmDao.desactiveFilm(id);}
+	public Film desactiveFilm(Integer id) throws FilmNotFoundException, FilmAlreadyDesactiveException {return filmDao.desactiveFilm(id);}
 	
-	public Film getFilm(int id) {
+	public Film getFilm(int id) throws FilmNotFoundException {
 		return filmDao.getFilm(id);
 	}
 
-	public void deleteFilm(int id){
+	public void deleteFilm(int id) throws FilmNotFoundException {
 		filmDao.deleteFilm(id);
 	}
 

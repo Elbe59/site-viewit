@@ -1,6 +1,9 @@
 package controller;
 
 import entity.Film;
+import exception.FilmAlreadyActiveException;
+import exception.FilmAlreadyDesactiveException;
+import exception.FilmNotFoundException;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import service.FilmService;
@@ -32,19 +35,31 @@ public class GestionFilmServlet extends ServletGenerique {
             int index = Integer.parseInt(request.getParameter("supp"));
             int id = listOfFilms.get(index).getId();
             System.out.println("Delete film: " + (id));
-            FilmService.getInstance().deleteFilm(id);
+            try {
+                FilmService.getInstance().deleteFilm(id);
+            } catch (FilmNotFoundException e) {
+                e.printStackTrace();
+            }
         }
         if(request.getParameter("active")!=null){
             int index = Integer.parseInt(request.getParameter("active"));
             int id = listOfFilms.get(index).getId();
             System.out.println("Valide film: " + (id));
-            FilmService.getInstance().activeFilm(id);
+            try {
+                FilmService.getInstance().activeFilm(id);
+            } catch (FilmNotFoundException | FilmAlreadyActiveException e) {
+                e.printStackTrace();
+            }
         }
         if(request.getParameter("desactive")!=null){
             int index = Integer.parseInt(request.getParameter("desactive"));
             int id = listOfFilms.get(index).getId();
             System.out.println("Valide film: " + (id));
-            FilmService.getInstance().desactiveFilm(id);
+            try {
+                FilmService.getInstance().desactiveFilm(id);
+            } catch (FilmNotFoundException | FilmAlreadyDesactiveException e) {
+                e.printStackTrace();
+            }
         }
 
 

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import exception.FilmNotFoundException;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -28,12 +29,16 @@ public class DetailFilmServlet extends ServletGenerique {
 		TemplateEngine engine = createTemplateEngine(req.getServletContext());
 		FilmService service = FilmService.getInstance();
 		WebContext context = new WebContext(req, resp, req.getServletContext());
-		if(filmId != -1 && service.getFilm(filmId) != null) {
-			context.setVariable("film", service.getFilm(filmId));
-			engine.process("film", context, resp.getWriter());
-		} else {
-			System.out.println("Film non trouve: "+ filmId);
-			resp.sendRedirect("/accueil");
+		try {
+			if(filmId != -1 && service.getFilm(filmId) != null) {
+				context.setVariable("film", service.getFilm(filmId));
+				engine.process("film", context, resp.getWriter());
+			} else {
+				System.out.println("Film non trouve: "+ filmId);
+				resp.sendRedirect("/accueil");
+			}
+		} catch (FilmNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 
