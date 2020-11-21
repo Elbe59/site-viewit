@@ -13,5 +13,5 @@ public interface UtilisateurDao {
     public Utilisateur getUser(Integer id) throws UserNotFoundException;
     public void addUser(Utilisateur user) throws UserAlreadyExistingException;
     public Utilisateur deleteUser(Integer id) throws UserNotFoundException, SQLException;
-
+    public Utilisateur getUserByEmail(String email) throws UserNotFoundException;
 }

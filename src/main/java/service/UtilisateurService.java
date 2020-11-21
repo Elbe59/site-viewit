@@ -33,6 +33,8 @@ public class UtilisateurService {
         return utilisateurDao.getUser(id);
     }
 
+    public Utilisateur getUserByEmail(String email) throws UserNotFoundException {return utilisateurDao.getUserByEmail(email);}
+
     //public void deleteUser(int id){utilisateurDao.deleteUser(id);}
 
 }

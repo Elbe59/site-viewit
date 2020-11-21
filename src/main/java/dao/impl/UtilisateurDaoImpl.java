@@ -98,4 +98,31 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
         }
         return user;
     }
+
+    @Override
+    public Utilisateur getUserByEmail(String email) throws UserNotFoundException{
+        Utilisateur user = null;
+        try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+            String sqlQuery="SELECT * FROM UTILISATEUR WHERE email=?";
+            try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
+                pStm.setString(1,email);
+                try(ResultSet rs = pStm.executeQuery()) {
+                    while(rs.next()) {
+                        user = new Utilisateur(
+                                rs.getInt("idUtilisateur"),
+                                rs.getString("prenomUtilisateur"),
+                                rs.getString("nomUtilisateur"),
+                                rs.getString("email"),
+                                rs.getString("mdp"),
+                                rs.getInt("admin")==1?true:false);
+                    }
+                    if (user==null)
+                        throw new UserNotFoundException();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
 }
