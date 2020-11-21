@@ -1,5 +1,6 @@
 package service;
 
+import java.io.File;
 import java.util.List;
 
 import dao.FilmDao;
@@ -14,6 +15,10 @@ import exception.FilmNotFoundException;
 
 public class FilmService {
 
+	private FilmDao filmDao = new FilmDaoImpl();
+	private GenreDao genreDao = new GenreDaoImpl();
+	private StockageImageService stockageService = new StockageImageService();
+	
 	private static class FilmHolder {
 		private final static FilmService instance = new FilmService();
 	}
@@ -21,9 +26,6 @@ public class FilmService {
 	public static FilmService getInstance() {
 		return FilmHolder.instance;
 	}
-	
-	private FilmDao filmDao = new FilmDaoImpl();
-	private GenreDao genreDao = new GenreDaoImpl();
 	
 	private FilmService() {
 		
@@ -43,6 +45,10 @@ public class FilmService {
 	public Film getFilm(int id) throws FilmNotFoundException {
 		return filmDao.getFilm(id);
 	}
+	
+	public void addFilm(File img) {
+		stockageService.addImage(img);
+	}
 
 	public void deleteFilm(int id) throws FilmNotFoundException {
 		filmDao.deleteFilm(id);
@@ -52,5 +58,7 @@ public class FilmService {
 		return genreDao.listGenre();
 	}
 
-	
+	public List<Film> getFilmByUtilisateur(Integer idUtilisateur) throws FilmNotFoundException{
+		return filmDao.getFilmByUtilisateur(idUtilisateur);
+	};
 }
