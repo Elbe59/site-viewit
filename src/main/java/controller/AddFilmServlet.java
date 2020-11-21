@@ -14,7 +14,7 @@ import org.thymeleaf.context.WebContext;
 import entity.Genre;
 import service.FilmService;
 
-@WebServlet("/ajoutFilm")
+@WebServlet("/user/ajoutfilm")
 public class AddFilmServlet extends ServletGenerique {
 	private static final long serialVersionUID = 1L;
  

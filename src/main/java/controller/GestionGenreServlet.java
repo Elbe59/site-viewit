@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/gestiongenre")
+@WebServlet("/admin/gestiongenre")
 public class GestionGenreServlet extends ServletGenerique {
     private static final long serialVersionUID = 1L;
 

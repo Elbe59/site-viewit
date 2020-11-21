@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/gestionuser")
+@WebServlet("/admin/gestionuser")
 public class GestionUserServlet extends ServletGenerique {
     private static final long serialVersionUID = 1L;
 

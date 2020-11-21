@@ -3,23 +3,23 @@
 <head th:fragment="head(pageName)">
     <title th:text="${pageName}">ViewIt - Accueil</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="css/viewit.css">
-    <script src="js/view_it.js" type="application/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="../css/viewit.css">
+    <script src="../js/view_it.js" type="application/javascript"></script>
 </head>
 <body>
 <!--Création du pied de page-->
     <header th:fragment="header">
         <div class="menu">
             <ul>
-                <li id="header_accueil"><a href="accueil">Accueil</a></li>
-                <li id="header_favoris"><a href="favoris">Favoris</a></li>
-                <li id="header_ajoutfilm"><a href="ajoutFilm">Demande de Film</a></li>
+                <li id="header_accueil"><a href="../accueil">Accueil</a></li>
+                <li id="header_favoris"><a href="../user/favoris">Favoris</a></li>
+                <li id="header_ajoutfilm"><a href="../user/ajoutfilm">Demande de Film</a></li>
                 <li id="header_gestion"class="deroulant"><a href="#">Gestion</a>
                     <ul class="sous">
-                        <li><a href="gestionuser">Gestion Utilisateur</a></li>
-                        <li><a href="gestionfilm">Gestion Film</a></li>
-                        <li><a href="gestiongenre">Gestion Genre</a></li>
-                        <li><a href="ajoutFilm">Ajout de Film</a></li>
+                        <li><a href="../admin/gestionuser">Gestion Utilisateur</a></li>
+                        <li><a href="../admin/gestionfilm">Gestion Film</a></li>
+                        <li><a href="../admin/gestiongenre">Gestion Genre</a></li>
+                        <li><a href="../user/ajoutfilm">Ajout de Film</a></li>
                     </ul>
                 </li>
             </ul>
