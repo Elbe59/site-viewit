@@ -7,7 +7,6 @@ import java.util.List;
 import dao.FilmDao;
 import entity.Film;
 import entity.Genre;
-import entity.Utilisateur;
 import exception.*;
 
 public class FilmDaoImpl implements FilmDao {
@@ -42,7 +41,7 @@ public class FilmDaoImpl implements FilmDao {
 		return listOfFilms;
 	}
 
-
+	@Override
 	public List<Film> listFilms(String colonne) {
 		List<Film> listOfFilms = new ArrayList<Film>();
 		String param = "";
@@ -84,7 +83,7 @@ public class FilmDaoImpl implements FilmDao {
 		}
 		return listOfFilms;
 	}
-
+	
 	@Override
 	public Film getFilm(Integer id) throws FilmNotFoundException{
 		Film film = null;
@@ -116,6 +115,29 @@ public class FilmDaoImpl implements FilmDao {
 		return film;
 	}
 
+	@Override
+	public List<Film> getFilmByUtilisateur( Integer idUtilisateur) throws FilmNotFoundException {
+		List<Film> listOfFilms = new ArrayList<Film>();
+		Film film = null;
+		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+			try(PreparedStatement pStm = co.prepareStatement("SELECT idfilm FROM PREFERER WHERE idUtilisateur=6 AND favoris = 1;")) {
+				//pStm.setInt(1, idUtilisateur);
+				try(ResultSet rs = pStm.executeQuery()) {
+					while(rs.next()) {
+						Integer idFilm = rs.getInt("idFilm");
+						film = getFilm(idFilm);
+						listOfFilms.add(film);
+					}
+					if(film == null)
+						throw new FilmNotFoundException();
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listOfFilms;
+	}
+	
 	@Override
 	public Film addFilm(Film film) throws FilmAlreadyExistingException{
 		/*

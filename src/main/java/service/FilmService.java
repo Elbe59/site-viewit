@@ -58,5 +58,7 @@ public class FilmService {
 		return genreDao.listGenre();
 	}
 
-	
+	public List<Film> getFilmByUtilisateur(Integer idUtilisateur) throws FilmNotFoundException{
+		return filmDao.getFilmByUtilisateur(idUtilisateur);
+	};
 }

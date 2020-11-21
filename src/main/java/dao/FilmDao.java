@@ -17,5 +17,6 @@ public interface FilmDao {
 	public Film deleteFilm(Integer id) throws FilmNotFoundException;
 	public Film activeFilm(Integer id) throws FilmNotFoundException, FilmAlreadyActiveException;
 	public Film desactiveFilm(Integer id) throws FilmNotFoundException, FilmAlreadyDesactiveException;
+	public List<Film> getFilmByUtilisateur(Integer idUtilisateur) throws FilmNotFoundException;
 	
 }
