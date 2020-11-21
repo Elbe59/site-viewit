@@ -1,4 +1,4 @@
-package filter;
+/*package filter;
 
 import entity.Utilisateur;
 
@@ -35,3 +35,4 @@ public class getUserRoleFilter implements Filter{
 
 
 }
+*/

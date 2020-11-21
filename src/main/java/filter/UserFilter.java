@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebFilter("/user/*")
 public class UserFilter implements Filter {
@@ -18,9 +19,11 @@ public class UserFilter implements Filter {
             System.out.println("Il faut être utilisateur pour accéder à cette page !");
             HttpServletResponse httpResponse = (HttpServletResponse) resp;
             httpResponse.sendRedirect("../accueil");
-           // role="lambda";
+           // role="lambda"
         }
+
         chain.doFilter(req,resp);
+
         //req.setAttribute("utilisateur",role);
 
     }

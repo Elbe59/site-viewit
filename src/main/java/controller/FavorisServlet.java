@@ -24,19 +24,21 @@ public class FavorisServlet extends ServletGenerique {
         WebContext context = new WebContext(req, resp, req.getServletContext());
         Utilisateur utilisateur = (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
         List<Film> listOfFilms = null;
-		try {
-			listOfFilms = FilmService.getInstance().getFilmByUtilisateur(utilisateur.getId());
-		} catch (FilmNotFoundException e) {
-			e.printStackTrace();
+		if(utilisateur != null){
+			try {
+				listOfFilms = FilmService.getInstance().getFilmByUtilisateur(utilisateur.getId());
+				context.setVariable("listFilms", listOfFilms);
+				TemplateEngine engine = createTemplateEngine(req.getServletContext());
+				engine.process("favoris", context, resp.getWriter());
+			} catch (FilmNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
-        context.setVariable("listFilms", listOfFilms);
+		//resp.sendRedirect("accueil");
 
-        TemplateEngine engine = createTemplateEngine(req.getServletContext());
-        engine.process("favoris", context, resp.getWriter());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
 	}
 	
 }
