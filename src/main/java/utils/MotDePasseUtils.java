@@ -24,7 +24,7 @@ public class MotDePasseUtils {
 		return verif;
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		String mdp=MotDePasseUtils.genererMotDePasse("123");
 		String mdp1=MotDePasseUtils.genererMotDePasse("1234");
 		String mdp2=MotDePasseUtils.genererMotDePasse("DenisDu59");
@@ -37,5 +37,5 @@ public class MotDePasseUtils {
 		System.out.println(mdp3);
 		System.out.println(mdp4);
 		System.out.println(mdp5);
-	}
+	}*/
 }
