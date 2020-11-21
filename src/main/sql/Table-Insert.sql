@@ -59,7 +59,7 @@ CREATE TABLE COMMENTAIRE(
 
 #--- liker = 0 : défaut, liker = 1 : j'aime, liker = 2 : j'aime pas
 #--- favoris = 0 : non défaut; favoris = 1 : oui
-CREATE TABLE Preferer(
+CREATE TABLE PREFERER (
     idFilm        Int(5) NOT NULL ,
     idUtilisateur Int(5) NOT NULL,
 	liker		  Int(1) NOT NULL,
