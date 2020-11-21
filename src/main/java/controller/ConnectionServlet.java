@@ -23,7 +23,7 @@ public class ConnectionServlet extends HttpServlet {
             utilisateur = UtilisateurService.getInstance().getUserByEmail(email);
 
         if(utilisateur !=null){
-            String pwdHache=utilisateur.getMdp();
+            String pwdHache=utilisateur.getMdpHash();
             if(MotDePasseUtils.validerMotDePasse(pwd, pwdHache)) {
                 request.getSession().setAttribute("utilisateurConnecte", utilisateur);
                 System.out.println("Vous êtes connecté: "+ utilisateur.getNom());

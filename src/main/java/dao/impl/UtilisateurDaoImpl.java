@@ -25,6 +25,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
                                 rs.getString("nomUtilisateur"),
                                 rs.getString("email"),
                                 rs.getString("mdp"),
+                                rs.getString("mdpHash"),
                                 rs.getInt("admin")==1?true:false));
                     }
                 }
@@ -49,6 +50,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
                                 rs.getString("nomUtilisateur"),
                                 rs.getString("email"),
                                 rs.getString("mdp"),
+                                rs.getString("mdpHash"),
                                 rs.getInt("admin")==1?true:false);
                     }
                     if (user==null)
@@ -77,6 +79,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
                 pStm.setString(2, user.getNom());
                 pStm.setString(3, user.getEmail());
                 pStm.setString(4, user.getMdp());
+                //pStm.setString(5, user.getMdpHash);
                 pStm.setInt(5, user.isAdmin()?1:0);
                 pStm.executeUpdate();
             }
@@ -114,6 +117,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
                                 rs.getString("nomUtilisateur"),
                                 rs.getString("email"),
                                 rs.getString("mdp"),
+                                rs.getString("mdpHash"),
                                 rs.getInt("admin")==1?true:false);
                     }
                     if (user==null)

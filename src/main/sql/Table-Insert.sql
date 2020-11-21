@@ -16,7 +16,7 @@ CREATE TABLE UTILISATEUR(
     nomUtilisateur    Varchar (50) NOT NULL ,
     email             Varchar (266) NOT NULL ,
     mdp               Varchar (50) NOT NULL ,
-    mdpHash           Varchar (300) NOT NULL ,
+    mdpHash           Varchar (1000) NOT NULL ,
     admin             Int(1) NOT NULL,
 	CONSTRAINT UTILISATEUR_PK PRIMARY KEY (idUtilisateur)
 );
@@ -73,18 +73,12 @@ CREATE TABLE Preferer(
 #--- Création des insert
 
 INSERT INTO UTILISATEUR (idUtilisateur, prenomUtilisateur, nomUtilisateur, email, mdp,mdpHash, admin) VALUES
-(1,'Defaut', 'Defaut','defaut.defaut@gmail.com','123','$argon2i$v=19$m=65536,t=5,p=1$zFnaINNvYeCrC75OYuuZEl9al5weOMnSXcOUoIWhUdIMRbNvXF1ipU5aMaU0HVXtsotzpepy/LxIHtd7SJMgFpk7T4T6eE24y3CxyiuG1woN5vMrPCnl4ldjtAmWQ/iEsL0JRXuthPrbFO1GkA+k4D2s7E9SNF9JA8sJaSHURU8$U5xfj0Qz7+T3sr05PxuUhEgAKU2+WxhcrFMUUS2yVGi2egf4rSsxZ9FSXYliBnx03aXgNEvtPrZ7zWq2TQdw9LA+gWS4+IOrKkR56EkVZDgD59jkDVE5P59jmqSIVpQq51jx8SkCITxgOaS8xMGuDaUtpBIce1UfxGGEgGi8pRg
-',0),
-(2,'Jack', 'Barzone','jack.barzone@gmail.com','1234','$argon2i$v=19$m=65536,t=5,p=1$dTSkKiptldBfurDMM/Ez+1xdd8kAbGOk6INnM4YxG8bBVkywlRCjWB7+qrQjj9Ifb1axUqWswQHEX8zm8jKcg1SFi+WCb1ZHTFea6TtkNnsTva+sOT6SshKfiCY7HOLAvUUmDsX+W8mxUtDhOdvHfYU96dkgy6H2TM5CkP73Im0$q0xJDLk0mJcq+JodHjncyxtqOk+2KPr9AQ1womwdmYajdeoVuRaS/IrDoKVlwxYBL6M5BzNAUk7sDudKtEzSwKcsjeBcJEkKWoIZIsS+yo59tJ7vwd0PsgWLqWt1M49UG0sT1dS/jVAUIp6ANclZkTtgq5kJrNncR6SCSPyjLk8
-',1),
-(3,'Denis', 'Cauchois','denis.cauchois@yncrea.fr','DenisDu59','$argon2i$v=19$m=65536,t=5,p=1$WPUiir9tiipIBdnm7yTVpZu11Z14DGoBPgQ/8kVJpO+FozRh+LcwA5UchCcpPOxHjzPxRs5FOSSS+1OTrGPyiYA65tq8W5sOldJMVLvCCDIGEqnHuz1vhoAZHzbcfrH3uK9W3SHFiWZAONF9+v/N2zrxLgtd7DBllOK3N5viuEU$Y6/QAaEt/u9cO7uSd7wL25hCTRG8VVLnk+SrTTszEteHh5Soa9t4cz0Bs2zl3DhTNNDfAq18uheiLNu0hZlORuPmEnbbDRo1vF+2pHiD+OhVBaHeouhEY/IypHqa3oOKXdbtxRqHq4bwPIp4+QhM0jcU+xSXX88T9R9kO11bYJA
-',1),
-(4,'Yann', 'Riquier','yann.riquier@externe.junia.com','Yann1234','$argon2i$v=19$m=65536,t=5,p=1$+Q2ncq4NWBznggWM4VNPDfc0+AB5qT2RXBtkcauZ0OhkdtTCHJ/H4ASooZtoOxSKj0p32oXZcBHkpEYt8e2FNU343WZY4TfnTi5Dy6LtZ2MSPCevEEeCb1WseVQ7NYs+u1H2hf54HRCBSJ0Jg7Zz1dJn7o2nuI0UJwPbJ6mmkHg$KVtSpZ2ceqrJ13Kig6MvyMTpf/Hzvc/fo4cSGYATmG42H2ukYU8Tw5u9Ro7WQEOwFguW3Nb8mi6W2qzZIieU8pNaM8kIC3G19ckCIHlcwoBLoDoF6mSEeiO9yZMAp73AZvLnVXvpGTgCJtZuEpcMVBG5QQXQ1r5ak9d3c5W/TqQ
-',0),
-(5,'Fabien', 'Turpin','fab.turpin@gmail.com','motdepasse','$argon2i$v=19$m=65536,t=5,p=1$jWTIoFAnUmy7rl4vW96liLXkGT8Y/CqS9OcFNUP7fBMeYQLhgvR3nM101cCtlnlzlm7036NPPkzHBzGrwAIapzyGTQu+JsIqdpvAZGKEApfMplP2Kk5BlM37DoYpZ7lGi/dYI41QPDoHT19ptO1eKP7JJdRWLDmqL2fNr1kjwZ4$ykaOBReDqgQoNpsdvlc2zxQGfHykaSC6Jkamm4Tr6oanUIQdevqHXcXKwnAYvqaW8n3h+H8A0H+lLzC9PJYSTFuP6urw6oVO3HoW/oX3pNwfI00P1NzeCMWr+eH9wFO0joGEIOOaF3c2c4fFiHY3pTerXROeDdRuALN43hBUqWE
-',0),
-(6,'Jean', 'Dupont','jean.dupont@gmail.com','JPdu59','$argon2i$v=19$m=65536,t=5,p=1$oH8H9ga/FfvciTjmvJIXHA5bfOg4Gkdd/oCX9rmeKodLflqrIVlCpZQnD07AKvw0/0f/yv2NGvhICutwSJgnEewmxTyvpO/KsZZblWC1H69XSoqra5n9sgbxTN7T2VhYsrg8KDtJBGvJqvwDSW1nuMGHebSzrVIsSSdk9H7XRcA$JVNigVCKVNAN/Lj0uX5V+bK5wlE5VJ6S4EN1v/RJEjJtvvbn30qOYmUnKLrZ3kpVTatF6aTGTQBCv3kMjQffoP/Fts0RFCTWLDXBTiM5a+0JVwXfHiaeVg9H4mOPLbx9NLy7JDlp14u1mFcy6TBDtf/vd2zI3rEGT5H4qYk8dVM
-',0);
+(1,'Defaut', 'Defaut','defaut.defaut@gmail.com','123','$argon2i$v=19$m=65536,t=5,p=1$zFnaINNvYeCrC75OYuuZEl9al5weOMnSXcOUoIWhUdIMRbNvXF1ipU5aMaU0HVXtsotzpepy/LxIHtd7SJMgFpk7T4T6eE24y3CxyiuG1woN5vMrPCnl4ldjtAmWQ/iEsL0JRXuthPrbFO1GkA+k4D2s7E9SNF9JA8sJaSHURU8$U5xfj0Qz7+T3sr05PxuUhEgAKU2+WxhcrFMUUS2yVGi2egf4rSsxZ9FSXYliBnx03aXgNEvtPrZ7zWq2TQdw9LA+gWS4+IOrKkR56EkVZDgD59jkDVE5P59jmqSIVpQq51jx8SkCITxgOaS8xMGuDaUtpBIce1UfxGGEgGi8pRg',0),
+(2,'Jack', 'Barzone','jack.barzone@gmail.com','1234','$argon2i$v=19$m=65536,t=5,p=1$dTSkKiptldBfurDMM/Ez+1xdd8kAbGOk6INnM4YxG8bBVkywlRCjWB7+qrQjj9Ifb1axUqWswQHEX8zm8jKcg1SFi+WCb1ZHTFea6TtkNnsTva+sOT6SshKfiCY7HOLAvUUmDsX+W8mxUtDhOdvHfYU96dkgy6H2TM5CkP73Im0$q0xJDLk0mJcq+JodHjncyxtqOk+2KPr9AQ1womwdmYajdeoVuRaS/IrDoKVlwxYBL6M5BzNAUk7sDudKtEzSwKcsjeBcJEkKWoIZIsS+yo59tJ7vwd0PsgWLqWt1M49UG0sT1dS/jVAUIp6ANclZkTtgq5kJrNncR6SCSPyjLk8',1),
+(3,'Denis', 'Cauchois','denis.cauchois@yncrea.fr','DenisDu59','$argon2i$v=19$m=65536,t=5,p=1$WPUiir9tiipIBdnm7yTVpZu11Z14DGoBPgQ/8kVJpO+FozRh+LcwA5UchCcpPOxHjzPxRs5FOSSS+1OTrGPyiYA65tq8W5sOldJMVLvCCDIGEqnHuz1vhoAZHzbcfrH3uK9W3SHFiWZAONF9+v/N2zrxLgtd7DBllOK3N5viuEU$Y6/QAaEt/u9cO7uSd7wL25hCTRG8VVLnk+SrTTszEteHh5Soa9t4cz0Bs2zl3DhTNNDfAq18uheiLNu0hZlORuPmEnbbDRo1vF+2pHiD+OhVBaHeouhEY/IypHqa3oOKXdbtxRqHq4bwPIp4+QhM0jcU+xSXX88T9R9kO11bYJA',1),
+(4,'Yann', 'Riquier','yann.riquier@externe.junia.com','Yann1234','$argon2i$v=19$m=65536,t=5,p=1$+Q2ncq4NWBznggWM4VNPDfc0+AB5qT2RXBtkcauZ0OhkdtTCHJ/H4ASooZtoOxSKj0p32oXZcBHkpEYt8e2FNU343WZY4TfnTi5Dy6LtZ2MSPCevEEeCb1WseVQ7NYs+u1H2hf54HRCBSJ0Jg7Zz1dJn7o2nuI0UJwPbJ6mmkHg$KVtSpZ2ceqrJ13Kig6MvyMTpf/Hzvc/fo4cSGYATmG42H2ukYU8Tw5u9Ro7WQEOwFguW3Nb8mi6W2qzZIieU8pNaM8kIC3G19ckCIHlcwoBLoDoF6mSEeiO9yZMAp73AZvLnVXvpGTgCJtZuEpcMVBG5QQXQ1r5ak9d3c5W/TqQ',0),
+(5,'Fabien', 'Turpin','fab.turpin@gmail.com','motdepasse','$argon2i$v=19$m=65536,t=5,p=1$jWTIoFAnUmy7rl4vW96liLXkGT8Y/CqS9OcFNUP7fBMeYQLhgvR3nM101cCtlnlzlm7036NPPkzHBzGrwAIapzyGTQu+JsIqdpvAZGKEApfMplP2Kk5BlM37DoYpZ7lGi/dYI41QPDoHT19ptO1eKP7JJdRWLDmqL2fNr1kjwZ4$ykaOBReDqgQoNpsdvlc2zxQGfHykaSC6Jkamm4Tr6oanUIQdevqHXcXKwnAYvqaW8n3h+H8A0H+lLzC9PJYSTFuP6urw6oVO3HoW/oX3pNwfI00P1NzeCMWr+eH9wFO0joGEIOOaF3c2c4fFiHY3pTerXROeDdRuALN43hBUqWE',0),
+(6,'Jean', 'Dupont','jean.dupont@gmail.com','JPdu59','$argon2i$v=19$m=65536,t=5,p=1$oH8H9ga/FfvciTjmvJIXHA5bfOg4Gkdd/oCX9rmeKodLflqrIVlCpZQnD07AKvw0/0f/yv2NGvhICutwSJgnEewmxTyvpO/KsZZblWC1H69XSoqra5n9sgbxTN7T2VhYsrg8KDtJBGvJqvwDSW1nuMGHebSzrVIsSSdk9H7XRcA$JVNigVCKVNAN/Lj0uX5V+bK5wlE5VJ6S4EN1v/RJEjJtvvbn30qOYmUnKLrZ3kpVTatF6aTGTQBCv3kMjQffoP/Fts0RFCTWLDXBTiM5a+0JVwXfHiaeVg9H4mOPLbx9NLy7JDlp14u1mFcy6TBDtf/vd2zI3rEGT5H4qYk8dVM',0);
 
 INSERT INTO GENRE (idGenre, nomGenre) VALUES
 (1, "Comédie"),

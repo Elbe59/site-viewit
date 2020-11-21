@@ -2,19 +2,22 @@ package entity;
 
 public class Utilisateur {
 
+
 	private Integer id;
 	private String prenom;
 	private String nom;
 	private String email;
 	private String mdp;
+	private String mdpHash;
 	private boolean admin;
 	
-	public Utilisateur(Integer id, String prenom, String nom, String email, String mdp, boolean admin) {
+	public Utilisateur(Integer id, String prenom, String nom, String email, String mdp,String mdpHash, boolean admin) {
 		this.id = id;
 		this.prenom = prenom;
 		this.nom = nom;
 		this.email = email;
 		this.mdp = mdp;
+		this.mdpHash=mdpHash;
 		this.admin = admin;
 	}
 	
@@ -54,4 +57,6 @@ public class Utilisateur {
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
 	}
+	public String getMdpHash() { return mdpHash; }
+	public void setMdpHash(String mdpHash) {this.mdpHash = mdpHash;	}
 }

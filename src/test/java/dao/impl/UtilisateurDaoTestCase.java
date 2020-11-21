@@ -80,7 +80,7 @@ public class UtilisateurDaoTestCase {
     public void shouldAddUserThrowUserAlreadyExistingException() throws UserAlreadyExistingException
     {
         //given
-        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1", false);
+        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","$argon2i$v=19$m=65536,t=5,p=1$zFnaINNvYeCrC75OYuuZEl9al5weOMnSXcOUoIWhUdIMRbNvXF1ipU5aMaU0HVXtsotzpepy/LxIHtd7SJMgFpk7T4T6eE24y3CxyiuG1woN5vMrPCnl4ldjtAmWQ/iEsL0JRXuthPrbFO1GkA+k4D2s7E9SNF9JA8sJaSHURU8$U5xfj0Qz7+T3sr05PxuUhEgAKU2+WxhcrFMUUS2yVGi2egf4rSsxZ9FSXYliBnx03aXgNEvtPrZ7zWq2TQdw9LA+gWS4+IOrKk", false);
         //when
         userDao.addUser(user);
         //then
@@ -90,12 +90,12 @@ public class UtilisateurDaoTestCase {
     @Test
     public void shouldDeleteUser() throws UserNotFoundException, SQLException {
         //given
-        Utilisateur user4 = new Utilisateur(4,"prenom4", "nom4", "email4@gmail.com", "mdp4", false);
+        Utilisateur user4 = new Utilisateur(4,"prenom4", "nom4", "email4@gmail.com", "mdp4","$argon2i$v=19$m=65536,t=5,p=1$zFnaINNvYeCrC75OYuuZEl9al5weOMnSXcOUoIWhUdIMRbNvXF1ipU5aMaU0HVXtsotzpepy/LxIHtd7SJMgFpk7T4T6eE24y3CxyiuG1woN5vMrPCnl4ldjtAmWQ/iEsL0JRXuthPrbFO1GkA+k4D2s7E9SNF9JA8sJaSHURU8$U5xfj0Qz7+T3sr05PxuUhEgAKU2+WxhcrFMUUS2yVGi2egf4rSsxZ9FSXYliBnx03aXgNEvtPrZ7zWq2TQdw9LA+gWS4+IOrKk", false);
         try (Connection co = DataSourceProvider.getDataSource().getConnection();
              Statement stm = co.createStatement()) {
             stm.executeUpdate(
                     "INSERT INTO UTILISATEUR ( idUtilisateur, prenomUtilisateur, nomUtilisateur, email, mdp, admin) "
-                            + "VALUES (4,'prenom4', 'nom4', 'email4@gmail.com', 'mdp4', 0);");
+                            + "VALUES (4,'prenom4', 'nom4', 'email4@gmail.com', 'mdp4','$argon2i$v=19$m=65536,t=5,p=1$zFnaINNvYeCrC75OYuuZEl9al5weOMnSXcOUoIWhUdIMRbNvXF1ipU5aMaU0HVXtsotzpepy/LxIHtd7SJMgFpk7T4T6eE24y3CxyiuG1woN5vMrPCnl4ldjtAmWQ/iEsL0JRXuthPrbFO1GkA+k4D2s7E9SNF9JA8sJaSHURU8$U5xfj0Qz7+T3sr05PxuUhEgAKU2+WxhcrFMUUS2yVGi2egf4rSsxZ9FSXYliBnx03aXgNEvtPrZ7zWq2TQdw9LA+gWS4+IOrKk', 0);");
         } catch (SQLException e) { }
         //when
         Utilisateur userDelete = userDao.deleteUser(4);
