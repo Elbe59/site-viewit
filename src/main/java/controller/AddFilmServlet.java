@@ -1,13 +1,17 @@
 package controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.core.util.IOUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -40,9 +44,12 @@ public class AddFilmServlet extends ServletGenerique {
 		String urlBA = req.getParameter("url");
 		String genre = req.getParameter("genre");
 		
+		LocalDate dateSortie = formaterDate(dateSortieStr);
+		
 		System.out.println("Titre : " + titre);
 		System.out.println("resume : " + resume);
-		System.out.println("dateSortie : " + dateSortieStr);
+		System.out.println("dateSortieStr : " + dateSortieStr);
+		System.out.println("dateSortie : " + dateSortie);
 		System.out.println("duree : " + duree);
 		System.out.println("realisateur : " + realisateur);
 		System.out.println("acteur : " + acteur);
@@ -50,7 +57,15 @@ public class AddFilmServlet extends ServletGenerique {
 		System.out.println("urlBA : " + urlBA);
 		System.out.println("genre : " + genre);
 		
+		//FilmService.getInstance().addFilm();
+		
 		resp.sendRedirect("ajoutFilm");
 	}
+	
+	private LocalDate formaterDate(String date) {
+		return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+	}
+	
+	
 
 }
