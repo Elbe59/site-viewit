@@ -116,12 +116,12 @@ public class FilmDaoImpl implements FilmDao {
 	}
 
 	@Override
-	public List<Film> getFilmByUtilisateur( Integer idUtilisateur) throws FilmNotFoundException {
+	public List<Film> getFilmByUtilisateur(Integer idUtilisateur) throws FilmNotFoundException {
 		List<Film> listOfFilms = new ArrayList<Film>();
 		Film film = null;
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-			try(PreparedStatement pStm = co.prepareStatement("SELECT idfilm FROM PREFERER WHERE idUtilisateur=6 AND favoris = 1;")) {
-				//pStm.setInt(1, idUtilisateur);
+			try(PreparedStatement pStm = co.prepareStatement("SELECT idfilm FROM PREFERER WHERE idUtilisateur=? AND favoris = 1;")) {
+				pStm.setInt(1, idUtilisateur);
 				try(ResultSet rs = pStm.executeQuery()) {
 					while(rs.next()) {
 						Integer idFilm = rs.getInt("idFilm");
@@ -216,7 +216,7 @@ public class FilmDaoImpl implements FilmDao {
 		return film;
 	}
 
-		@Override
+	@Override
 	public Film deleteFilm(Integer id) throws FilmNotFoundException{
 		Film film = null;
 		try(Connection connection=DataSourceProvider.getDataSource().getConnection()){
