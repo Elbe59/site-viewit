@@ -27,13 +27,14 @@ public class FavorisServlet extends ServletGenerique {
 		if(utilisateur != null){
 			try {
 				listOfFilms = FilmService.getInstance().getFilmByUtilisateur(utilisateur.getId());
-				context.setVariable("listFilms", listOfFilms);
-				TemplateEngine engine = createTemplateEngine(req.getServletContext());
-				engine.process("favoris", context, resp.getWriter());
+				context.setVariable("listUser", listOfFilms);
+
 			} catch (FilmNotFoundException e) {
 				e.printStackTrace();
 			}
 		}
+		TemplateEngine engine = createTemplateEngine(req.getServletContext());
+		engine.process("favoris", context, resp.getWriter());
 		//resp.sendRedirect("accueil");
 
 	}
