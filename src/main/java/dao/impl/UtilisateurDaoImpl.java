@@ -95,6 +95,29 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
             try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
                 try (PreparedStatement pStm = co.prepareStatement("DELETE FROM UTILISATEUR WHERE idUtilisateur = ?;")) {
                     pStm.setInt(1, id);
+                    pStm.executeUpdate();
+                } catch (SQLException e) { }
+            }
+        }catch(UserNotFoundException e){
+        }
+        return user;
+    }
+
+    public Utilisateur changeRoleUser(String action,Integer id) throws SQLException {
+        Utilisateur user = null;
+        String sqlQuery;
+        try{
+            user = getUser(id);
+            try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
+                if(action.contentEquals("up")){
+                    sqlQuery="UPDATE `utilisateur` SET `admin` = '1' WHERE `utilisateur`.`idUtilisateur`=?";
+                }
+                else {
+                    sqlQuery="UPDATE `utilisateur` SET `admin` = '0' WHERE `utilisateur`.`idUtilisateur`=?";
+                }
+                try (PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
+                    pStm.setInt(1, id);
+                    pStm.executeUpdate();
                 } catch (SQLException e) { }
             }
         }catch(UserNotFoundException e){

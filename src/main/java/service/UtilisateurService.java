@@ -36,6 +36,6 @@ public class UtilisateurService {
 
     public Utilisateur getUserByEmail(String email) throws UserNotFoundException {return utilisateurDao.getUserByEmail(email);}
 
-    public void deleteUser(int id) throws UserNotFoundException, SQLException {utilisateurDao.deleteUser(id);}
-
+    public Utilisateur deleteUser(Integer id) throws UserNotFoundException, SQLException {return utilisateurDao.deleteUser(id);}
+    public Utilisateur changeRoleUser(String action,Integer id) throws SQLException {return utilisateurDao.changeRoleUser(action,id);}
 }

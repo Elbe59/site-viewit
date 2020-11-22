@@ -52,8 +52,8 @@ public class GestionUserServlet extends ServletGenerique {
             int id = listOfUsers.get(index).getId();
             System.out.println("Retrograde: " + (id));
             try {
-                UtilisateurService.getInstance().activeFilm(id);
-            } catch (FilmNotFoundException | FilmAlreadyActiveException e) {
+                UtilisateurService.getInstance().changeRoleUser("down",id);
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -62,8 +62,8 @@ public class GestionUserServlet extends ServletGenerique {
             int id = listOfUsers.get(index).getId();
             System.out.println("Promouvoir: " + (id));
             try {
-                FilmService.getInstance().desactiveFilm(id);
-            } catch (FilmNotFoundException | FilmAlreadyDesactiveException e) {
+                UtilisateurService.getInstance().changeRoleUser("up",id);
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
