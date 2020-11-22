@@ -1,6 +1,7 @@
 package service;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 import dao.FilmDao;
@@ -11,6 +12,7 @@ import entity.Film;
 import entity.Genre;
 import exception.FilmAlreadyActiveException;
 import exception.FilmAlreadyDesactiveException;
+import exception.FilmAlreadyExistingException;
 import exception.FilmNotFoundException;
 
 public class FilmService {
@@ -18,7 +20,11 @@ public class FilmService {
 	private FilmDao filmDao = new FilmDaoImpl();
 	private GenreDao genreDao = new GenreDaoImpl();
 	private StockageImageService stockageService = new StockageImageService();
-	
+
+	public Film addFilm(Film film, InputStream in) throws FilmAlreadyExistingException {
+		return filmDao.addFilm(film,in);
+	}
+
 	private static class FilmHolder {
 		private final static FilmService instance = new FilmService();
 	}

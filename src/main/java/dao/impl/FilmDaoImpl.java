@@ -154,8 +154,7 @@ public class FilmDaoImpl implements FilmDao {
 	}
 	
 	@Override
-	public Film addFilm(Film film) throws FilmAlreadyExistingException{
-		/*
+	public Film addFilm(Film film,InputStream image) throws FilmAlreadyExistingException{
 		List<Film> films = listFilms();
 		boolean existing  = false;
 		for (int i = 0; i<films.size(); i++)
@@ -167,25 +166,29 @@ public class FilmDaoImpl implements FilmDao {
 			}
 		}
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
-			if (existing)
+			if (existing) {
 				throw new FilmAlreadyExistingException();
-			try (PreparedStatement pStm = co.prepareStatement("INSERT INTO FILM (idFilm, titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide) VALUES (?,?,?,?,?,?,?,?,?,?,?);")) {
-				pStm.setInt(1, film.getId());
-				pStm.setString(2, film.getTitre());
-				pStm.setString(3, film.getResume());
-				pStm.setTimestamp(4, Timestamp.valueOf(film.getDateSortie().atStartOfDay()));
-				pStm.setInt(5, film.getDuree());
-				pStm.setString(6, film.getRealisateur());
-				pStm.setString(7, film.getActeur());
-				pStm.setString(8, film.getImageName());
-				pStm.setString(9, film.getUrlBA());//mettre l'image ?
-				pStm.setInt(10, film.getGenre());//besoin d'obtenir idgenre à partir de genre
-				pStm.setInt(11, film.getValide());
-				pStm.executeUpdate();
+			} else {
+				try (PreparedStatement pStm = co.prepareStatement("INSERT INTO FILM (titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide,image) VALUES (?,?,?,?,?,?,?,?,?,?,?);")) {
+					pStm.setString(1, film.getTitre());
+					pStm.setString(2, film.getResume());
+					pStm.setTimestamp(3, Timestamp.valueOf(film.getDateSortie().atStartOfDay()));
+					pStm.setInt(4, film.getDuree());
+					pStm.setString(5, film.getRealisateur());
+					pStm.setString(6, film.getActeur());
+					pStm.setString(7, film.getImageName());
+					pStm.setString(8, film.getUrlBA());//mettre l'image ?
+					pStm.setInt(9, film.getGenre().getId());//besoin d'obtenir idgenre à partir de genre
+					pStm.setInt(10, film.getValide());
+					pStm.setBlob(11, image);
+					pStm.executeUpdate();
+				} catch (SQLException throwables) {
+					throwables.printStackTrace();
+				}
 			}
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}*/
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		}
 		return film;
 	}
 

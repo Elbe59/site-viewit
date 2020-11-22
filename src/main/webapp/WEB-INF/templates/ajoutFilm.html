@@ -48,7 +48,7 @@
             <div>
               <select id="genre-addFilm" name="genre" onfocus="this.size=5;" onblur="this.size=1;" 
         onchange="this.size=1; this.blur();">
-                <option th:each="genre : ${genres}" th:text="${genre.nom}" th:id="${genre.id}">Genre</option>
+                <option th:each="genre : ${genres}" th:text="${genre.nom}" th:value="${genreStat.index}" th:id="${genreStat.index}">Genre</option>
               </select>
             </div>
           </div>
@@ -56,7 +56,6 @@
             <label for="image">Image de couverture</label>
             <div>
               <input type="file" name="fichier" id="fichier" accept=".png, .jpg, .jpeg">
-
             </div>
           </div>
           <div class="infoAddBlock">
