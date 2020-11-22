@@ -14,7 +14,7 @@
                 <li id="header_accueil"><a href="../accueil">Accueil</a></li>
                 <li id="header_favoris" th:class="${role_value==0} ? hidden : ''"><a href="../user/favoris">Favoris</a></li>
                 <li id="header_ajoutfilm" th:class="${role_value==0} ? hidden : ''"><a href="../user/ajoutfilm" th:text="${role_value==1} ? 'Demande de Film' : 'Ajout de Film'">Demande de Film</a></li>
-                <li id="header_gestion" class="deroulant" th:classappend="${role_value!=2} ? hidden : ''"><a href="#">Gestion</a>
+                <li id="header_gestion" class="deroulant" th:classappend="${role_value!=2} ? hidden : ''"><a href="#">Gestion ...</a>
                     <ul class="sous">
                         <li><a href="../admin/gestionuser">Gestion Utilisateur</a></li>
                         <li><a href="../admin/gestionfilm">Gestion Film</a></li>
@@ -24,7 +24,7 @@
                 </li>
             </ul>
         </div>
-        <div class="conteneur_co" >
+        <div class="conteneur_co" th:style="${role_value != 0} ? 'display : none' : ''">
             <form method="post" action="../connection" class="formulaire_co">
                 <label>Email: </label>
                 <input type="email" name="email">
@@ -32,6 +32,14 @@
                 <input type="password" name="mdp">
                 <div class="btn_center">
                     <button class="btn_profil" type="Submit">Se connecter</button>
+                </div>
+            </form>
+        </div>
+        <div class="conteneur_deco" th:style="${role_value == 0} ? 'display : none' : ''">
+            <form method="post" action="../deconnection" class="formulaire_deco">
+                <label th:text="${utilisateur}"></label>
+                <div class="btn_center">
+                    <button class="btn_deco" type="Submit">Se déconnecter</button>
                 </div>
 
             </form>
@@ -47,15 +55,7 @@
             <li>Emile Mongenet</li>
             <li>Pierre Sanchez</li>
         </ul>
-        <div class="conteneur_deco">
-            <form method="post" action="../deconnection" class="formulaire_co">
-                <label>Pseudo</label>
-                <div class="btn_center">
-                    <button class="btn_profil" type="Submit">Se connecter</button>
-                </div>
 
-            </form>
-        </div>
     </footer>
 </body>
 </html>
