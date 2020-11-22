@@ -21,12 +21,12 @@ public class HomeServlet extends ServletGenerique {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpServletRequest httpRequest = (HttpServletRequest) req;
-		String role=(String) httpRequest.getSession().getAttribute("role_user");
-		System.out.println("Selon la page d'accueil, vous êtes un "+role);
-        WebContext context = new WebContext(req, resp, req.getServletContext());
-        List<Film> listOfFilms = FilmService.getInstance().listFilms();
-        context.setVariable("listFilms", listOfFilms);
+		String role=(String) httpRequest.getSession().getAttribute("role");
 
+		System.out.println("Selon la page d'accueil, vous êtes un "+role);
+		List<Film> listOfFilms = FilmService.getInstance().listFilms();
+        WebContext context = new WebContext(req, resp, req.getServletContext());
+        context.setVariable("listFilms", listOfFilms);
         TemplateEngine engine = createTemplateEngine(req.getServletContext());
         engine.process("accueil", context, resp.getWriter());
 	}

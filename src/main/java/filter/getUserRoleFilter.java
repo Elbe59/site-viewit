@@ -1,38 +1,39 @@
-/*package filter;
+package filter;
 
 import entity.Utilisateur;
+import org.thymeleaf.context.WebContext;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter("/*")
-public class getUserRoleFilter implements Filter{
+public class getUserRoleFilter extends HttpFilter {
 
-    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
-        HttpServletRequest httpRequest = (HttpServletRequest) req;
-        String role="lambda";
-        Utilisateur utilisateur = (Utilisateur) httpRequest.getSession().getAttribute("utilisateurConnecte");
+    public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws ServletException, IOException {
+        String role="0";
+        Utilisateur utilisateur = (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
         if (utilisateur==null) {
             System.out.println("Personne n'est connecté");
-            role="lambda";
+            role="0";
         }
         else{
             if(utilisateur.isAdmin() == false){
                 System.out.println("Vous êtes simple utilisateur");
-                role="user";
+                role="1";
             }
             else{
                 System.out.println("Vous êtes admin suprême");
-                role="admin";
+                role="2";
             }
         }
-        chain.doFilter(req,resp);
-        httpRequest.getSession().setAttribute("user_role",role);
+        req.setAttribute("role_value",role);
+        super.doFilter(req,resp,chain);
+
     }
 
 
 }
-*/

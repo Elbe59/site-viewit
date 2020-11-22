@@ -40,6 +40,10 @@ header{
 	margin-bottom: 10px;
 }
 
+li.hidden{
+	visibility: hidden;
+}
+
 .btn_profil{
 	border-radius: 10px;
 	border-color: lightblue;
@@ -402,6 +406,7 @@ button.img_liste{
 
 /* -------------Footer------------ */
 /* Mise en page */
+
 
 footer{
 	margin-top:1em;
