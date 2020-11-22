@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="fr" dir="ltr">
 <head th:replace="~{fragments :: head(ViewIt-addFilm)}"></head>
@@ -5,7 +6,7 @@
   <body>
     <main class="main-AddFilm">
       <section class="addFilmSection">
-        <form class="addFilmForm" action="../ajoutfilm" method="post">
+        <form class="addFilmForm" action="../user/ajoutfilm" method="post" enctype="multipart/form-data">
           <div class="infoAddBlock">
             <label for="titre">Titre</label>
             <div>
@@ -54,7 +55,8 @@
           <div class="infoAddBlock">
             <label for="image">Image de couverture</label>
             <div>
-              <input type="file" name="image" id="image-addFilm" accept=".png, .jpg, .jpeg">
+              <input type="file" name="fichier" id="fichier" accept=".png, .jpg, .jpeg">
+
             </div>
           </div>
           <div class="infoAddBlock">
