@@ -26,6 +26,7 @@ public class AddFilmServlet extends ServletGenerique {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         WebContext context = new WebContext(req, resp, req.getServletContext());
         context.setVariable("genres", FilmService.getInstance().listGenre());
+        System.out.println(context.toString());
         System.out.println("ok1");
         TemplateEngine engine = createTemplateEngine(req.getServletContext());
         engine.process("ajoutFilm", context, resp.getWriter());
