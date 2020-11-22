@@ -1,7 +1,11 @@
 package dao.impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import dao.FilmDao;
@@ -19,6 +23,8 @@ public class FilmDaoImpl implements FilmDao {
 			try(Statement stm = co.createStatement()) {
 				try(ResultSet rs = stm.executeQuery("SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre ORDER BY titreFilm;")) {
 					while(rs.next()) {
+						Blob blob = rs.getBlob("image");
+						String base64Image=transformBlobToBase64Image(blob);
 						listOfFilms.add(new Film(
 								rs.getInt("idFilm"),
 								rs.getString("titreFilm"),
@@ -30,11 +36,12 @@ public class FilmDaoImpl implements FilmDao {
 								rs.getString("imgFilm"),
 								rs.getString("urlBA"),
 								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
-								rs.getInt("valide")));
+								rs.getInt("valide"),
+								base64Image));;
 					}
 				}
 			}
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
 		
@@ -63,6 +70,9 @@ public class FilmDaoImpl implements FilmDao {
 			try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
 				try(ResultSet rs = pStm.executeQuery()) {
 					while(rs.next()) {
+						Blob blob = rs.getBlob("image");
+						String base64Image=transformBlobToBase64Image(blob);
+
 						listOfFilms.add(new Film(
 								rs.getInt("idFilm"),
 								rs.getString("titreFilm"),
@@ -74,11 +84,12 @@ public class FilmDaoImpl implements FilmDao {
 								rs.getString("imgFilm"),
 								rs.getString("urlBA"),
 								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
-								rs.getInt("valide")));
+								rs.getInt("valide"),
+								base64Image));
 					}
 				}
 			}
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
 		return listOfFilms;
@@ -92,6 +103,9 @@ public class FilmDaoImpl implements FilmDao {
 				pStm.setInt(1, id);
 				try(ResultSet rs = pStm.executeQuery()) {
 					while(rs.next()) {
+						Blob blob = rs.getBlob("image");
+						String base64Image=transformBlobToBase64Image(blob);
+
 						film = new Film(
 								rs.getInt("idFilm"),
 								rs.getString("titreFilm"),
@@ -103,13 +117,14 @@ public class FilmDaoImpl implements FilmDao {
 								rs.getString("imgFilm"),
 								rs.getString("urlBA"),
 								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
-								rs.getInt("valide"));
+								rs.getInt("valide"),
+								base64Image);
 					}
 					if(film == null)
 						throw new FilmNotFoundException();
 				}
 			}
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
 		return film;
@@ -227,18 +242,26 @@ public class FilmDaoImpl implements FilmDao {
 			statement.setInt(1,id);
 			int nb= statement.executeUpdate();
 			statement.close();
-			/*for(int i=id+1;i< listFilms().size()+2;i++){
-				PreparedStatement statement1= connection.prepareStatement(sqlQuery2);
-				statement1.setInt(1,(i-1));
-				statement1.setInt(2,i);
-				int nb1= statement1.executeUpdate();
-				System.out.println("J'ai décalé l'indice"+i);
-				statement1.close();
-			}*/
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return film;
+	}
+
+	public String transformBlobToBase64Image(Blob blob) throws IOException, SQLException {
+		InputStream inputStream = blob.getBinaryStream();
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		byte[] buffer = new byte[4096];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			outputStream.write(buffer, 0, bytesRead);
+		}
+		byte[] imageBytes = outputStream.toByteArray();
+		String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+		inputStream.close();
+		outputStream.close();
+		return base64Image;
 	}
 
 }

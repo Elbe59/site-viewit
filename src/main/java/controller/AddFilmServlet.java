@@ -1,11 +1,13 @@
 package controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -16,6 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import dao.impl.DataSourceProvider;
+import entity.Film;
+import exception.FilmAlreadyActiveException;
+import exception.FilmNotFoundException;
 import org.apache.logging.log4j.core.util.IOUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -63,43 +69,30 @@ public class AddFilmServlet extends ServletGenerique {
 		System.out.println("imageName : " + imageName);
 		System.out.println("urlBA : " + urlBA);
 		System.out.println("genre : " + genre);
-		
+
+
 		//FilmService.getInstance().addFilm();
 
 		Part part = req.getPart("fichier");
-
+		String cheminTemp="";
 		String nomFichier=getNomFichier((part));
 		if ( nomFichier != null && !nomFichier.isEmpty() ) {
 			String nomChamp = part.getName();
             String path = System.getProperty("user.dir");
             System.out.println(path);
-            //String chemin
-            Path root = FileSystems.getDefault().getPath("").toAbsolutePath();
-            Path filePath = Paths.get(root.toString(),"src", "main", "webapp","images","film");
-            System.out.println(filePath);
-            System.out.println(System.getenv().get("PWD"));
-
-
-            String envRootDir = System.getProperty("user.dir");
-            Path rootDir = Paths.get(".").normalize().toAbsolutePath();
-            if ( rootDir.startsWith(envRootDir) ) {
-                System.out.println(rootDir);
-            } else {
-                throw new RuntimeException("Root dir not found in user directory.");
-            }
-
-            System.out.println(System.getProperties());
-
             nomFichier = nomFichier.substring( nomFichier.lastIndexOf( '/' ) + 1 ).substring( nomFichier.lastIndexOf( '\\' ) + 1 );
-            part.write(path+nomFichier);
-            //fichierForm.write("C:\\temp\\fichier.jpg");
+            cheminTemp=path+"/" + nomFichier;
+            part.write(cheminTemp);
+            //part.write("C:\\temp\\"+nomFichier);
 			req.setAttribute( nomChamp, nomFichier );
 		}
-		/*if(nomFichier !=null && !nomFichier.isEmpty()){
-			String nomChamp = part.getName();
-			req.setAttribute(nomChamp,nomFichier);
-		}*/
-        //java.io.tmpdir=C:\Program Files\apache-tomcat-9.0.38\temp
+		try {
+			addImg(cheminTemp);
+		} catch (FilmNotFoundException e) {
+			e.printStackTrace();
+		} catch (FilmAlreadyActiveException e) {
+			e.printStackTrace();
+		}
 		resp.sendRedirect("../user/ajoutfilm");
 	}
 	
@@ -123,4 +116,20 @@ public class AddFilmServlet extends ServletGenerique {
 		return null;
 	}
 
+
+	public Film addImg(String nomFichier) throws FilmNotFoundException, FilmAlreadyActiveException {
+		Film film = null;
+		try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
+			String sqlQuery = "UPDATE `film` SET `image` = ? WHERE `film`.`idFilm` = 1";
+			PreparedStatement statement = connection.prepareStatement(sqlQuery);
+			InputStream in = new FileInputStream(nomFichier);
+			statement.setBlob(1, in);
+			int nb = statement.executeUpdate();
+			statement.close();
+
+		} catch (SQLException | FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return film;
+	}
 }
