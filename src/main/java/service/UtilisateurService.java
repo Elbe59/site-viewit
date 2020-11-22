@@ -8,6 +8,7 @@ import entity.Film;
 import entity.Utilisateur;
 import exception.UserNotFoundException;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class UtilisateurService {
@@ -35,6 +36,6 @@ public class UtilisateurService {
 
     public Utilisateur getUserByEmail(String email) throws UserNotFoundException {return utilisateurDao.getUserByEmail(email);}
 
-    //public void deleteUser(int id){utilisateurDao.deleteUser(id);}
+    public void deleteUser(int id) throws UserNotFoundException, SQLException {utilisateurDao.deleteUser(id);}
 
 }

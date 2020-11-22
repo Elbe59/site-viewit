@@ -25,7 +25,7 @@
 						</tr>
 					</thead>
 					<tbody>
-					<tr th:each="user : ${listUsers}">
+					<tr th:each="user : ${listUsers}" th:style="${user.id == utilisateurCo.id} ? 'background-color:yellow;font-weight: bold' : ''">
 						<td th:text="${userStat.index+1}">1</td>
 						<td th:text="${user.prenom}">Quentin</td>
 						<td th:text="${user.nom}">Callens</td>
@@ -37,7 +37,7 @@
 									<button  onclick="if(confirm('Etes vous sur de vouloir changer le rôle de cette utilisateur ?')){}else{return false;}" th:name="${user.admin==0} ? 'up' : 'down'" th:value="${userStat.index}" th:title="${user.admin==1} ? ${'Retrograder '+user.prenom + ' '+user.nom} : ${'Promouvoir '+user.prenom + ' '+user.nom }" class="btn-delete" type="submit" th:id="${userStat.index}"><img class="img_liste" th:src="${user.admin == 0} ? '../images/icones/up.png' : '../images/icones/down_user.png'"></button>
 								</form>
 								<a href="#"><img class="img_liste" src="../images/icones/modification.png"alt="modifier"></a>
-								<form method="post">
+								<form th:if="${user.id != utilisateurCo.id}"  method="post">
 									<button onclick="if(confirm('Etes vous sur de vouloir supprimer cette utilisateur ?')){}else{return false;}" name="supp" th:value="${userStat.index}" th:title="'Supprimer ' +${user.prenom} +' '+${user.nom}" class="btn-delete" type="submit" th:id="${userStat.index}"><img class="img_liste" src="../images/icones/supprimer.png"alt="supprimer"></button>
 								</form>
 							</div>
