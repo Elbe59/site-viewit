@@ -2,6 +2,7 @@ package service;
 
 import java.io.File;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.List;
 
 import dao.FilmDao;
@@ -10,10 +11,7 @@ import dao.impl.FilmDaoImpl;
 import dao.impl.GenreDaoImpl;
 import entity.Film;
 import entity.Genre;
-import exception.FilmAlreadyActiveException;
-import exception.FilmAlreadyDesactiveException;
-import exception.FilmAlreadyExistingException;
-import exception.FilmNotFoundException;
+import exception.*;
 
 public class FilmService {
 
@@ -64,6 +62,8 @@ public class FilmService {
 		return genreDao.listGenre();
 	}
 
+	public Genre deleteGenre(Integer id) throws GenreNotFoundException, SQLException {return genreDao.deleteGenre(id);}
+	public Genre getGenre(Integer id) {return genreDao.getGenre(id);}
 	public List<Film> getFilmByUtilisateur(Integer idUtilisateur) throws FilmNotFoundException{
 		return filmDao.getFilmByUtilisateur(idUtilisateur);
 	};
