@@ -19,8 +19,8 @@
 					<div class="ajout">
 						<h3>Ajouter un genre:</h3>
 						<form method="post">
-							<input type="text" name="name" id="name" required>
-							<input class="btn-add-genre" type="submit" name="Enregistrer" value="Valider">
+							<input type="text" name="new_genre" id="name" required>
+							<input onclick="if(confirm('Etes vous sur de vouloir supprimer ce genre ?')){}else{return false;}" class="btn-add-genre" type="submit" name="enregistrer" value="Valider">
 						</form>	
 					</div>
 

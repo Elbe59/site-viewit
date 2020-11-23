@@ -1,6 +1,7 @@
 package dao;
 
 import entity.Genre;
+import exception.GenreAlreadyExistingException;
 import exception.GenreNotFoundException;
 
 import java.sql.SQLException;
@@ -10,4 +11,6 @@ public interface GenreDao {
     public List<Genre> listGenre();
     public Genre getGenre(Integer id);
     public Genre deleteGenre(Integer id) throws GenreNotFoundException, SQLException;
+
+    public void addGenre(String name) throws GenreAlreadyExistingException;
 }

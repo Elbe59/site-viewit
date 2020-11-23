@@ -4,6 +4,7 @@ import entity.Film;
 import entity.Genre;
 import exception.FilmAlreadyDesactiveException;
 import exception.FilmNotFoundException;
+import exception.GenreAlreadyExistingException;
 import exception.GenreNotFoundException;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -32,16 +33,24 @@ public class GestionGenreServlet extends ServletGenerique {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Genre> listOfGenres = FilmService.getInstance().listGenre();
-        if(request.getParameter("supp")!=null){
+        if(request.getParameter("supp")!=null) {
             int index = Integer.parseInt(request.getParameter("supp"));
             int id = listOfGenres.get(index).getId();
             System.out.println("Supprime genre: " + (id));
             try {
                 FilmService.getInstance().deleteGenre(id);
-            } catch (SQLException throwables) {
+            } catch (SQLException | GenreNotFoundException throwables) {
                 throwables.printStackTrace();
-            } catch (GenreNotFoundException e) {
-                e.printStackTrace();
+            }
+        }
+        if(request.getParameter("enregistrer")!=null) {
+            String new_genre = request.getParameter("new_genre");
+
+            System.out.println("Ajout genre: " + new_genre);
+            try {
+                FilmService.getInstance().addGenre(new_genre);
+            } catch (GenreAlreadyExistingException throwables) {
+                throwables.printStackTrace();
             }
         }
         response.sendRedirect("gestiongenre");
