@@ -7,7 +7,7 @@
       <section id="accueil-search">
         <span id= "zoneRecherche">
           <label for="recherche">Rechercher :</label>
-          <input type="text" name="recherche" id="recherche">
+          <input type="search" name="recherche" id="recherche" onkeyup="Rechercher()">
         </span>
         <span id= "zoneTrie">
           <label for="trier">Trier par :</label>
@@ -21,7 +21,7 @@
         </span>
       </section>
       <section id="accueil-List-Film">
-        <article th:each="film : ${listFilms}" th:if="${film.valide == 1}">
+        <article th:each="film : ${listFilms}" th:if="${film.valide == 1}" th:id="${film.id}" th:title="${film.titre}">
           <p>98%</p>
           <a href="#">
             <svg width="1.5em" height="1.5em" viewBox="0 0 32 33" class="bi bi-file-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
