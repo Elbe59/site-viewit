@@ -36,7 +36,7 @@ public class GestionGenreServlet extends ServletGenerique {
         if(request.getParameter("supp")!=null) {
             int index = Integer.parseInt(request.getParameter("supp"));
             int id = listOfGenres.get(index).getId();
-            System.out.println("Supprime genre: " + (id));
+            System.out.println("Supprime genre : " + (id));
             try {
                 FilmService.getInstance().deleteGenre(id);
             } catch (SQLException | GenreNotFoundException throwables) {
