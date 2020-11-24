@@ -80,7 +80,7 @@ public class AddFilmServlet extends ServletGenerique {
 
 		try {
 			FilmService.getInstance().addFilm(film,in);
-		} catch (FilmAlreadyExistingException e) {
+		} catch (FilmAlreadyExistingException | FilmNotFoundException e) {
 			e.printStackTrace();
 		}
 		resp.sendRedirect("../user/ajoutfilm");

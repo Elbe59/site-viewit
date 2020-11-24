@@ -36,8 +36,21 @@ public class Film {
 		this.genre = genre;
 		this.valide = valide;
 		this.base64Image=base64Image;
+	}
 
-
+	public Film( String titre, String resume, LocalDate dateSortie, Integer duree, String realisateur,
+				String acteur, String imageName, String urlBA, Genre genre, Integer valide, String base64Image) throws IOException {
+		this.titre = titre;
+		this.resume = resume;
+		this.dateSortie = dateSortie;
+		this.duree = duree;
+		this.realisateur = realisateur;
+		this.acteur = acteur;
+		this.imageName = imageName;
+		this.urlBA = urlBA;
+		this.genre = genre;
+		this.valide = valide;
+		this.base64Image=base64Image;
 	}
 	
 	public Integer getId() {

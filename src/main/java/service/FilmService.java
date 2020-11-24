@@ -19,7 +19,7 @@ public class FilmService {
 	private GenreDao genreDao = new GenreDaoImpl();
 	private StockageImageService stockageService = new StockageImageService();
 
-	public Film addFilm(Film film, InputStream in) throws FilmAlreadyExistingException {
+	public Film addFilm(Film film, InputStream in) throws FilmAlreadyExistingException, FilmNotFoundException {
 		return filmDao.addFilm(film,in);
 	}
 
@@ -64,7 +64,7 @@ public class FilmService {
 
 	public Genre deleteGenre(Integer id) throws GenreNotFoundException, SQLException {return genreDao.deleteGenre(id);}
 	public Genre getGenre(Integer id) {return genreDao.getGenre(id);}
-	public List<Film> getFilmByUtilisateur(Integer idUtilisateur) throws FilmNotFoundException{
+	public List<Film> getFilmByUtilisateur(Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
 		return filmDao.getFilmByUtilisateur(idUtilisateur);
 	};
 }

@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import exception.UserNotFoundException;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -29,7 +30,7 @@ public class FavorisServlet extends ServletGenerique {
 				listOfFilms = FilmService.getInstance().getFilmByUtilisateur(utilisateur.getId());
 				context.setVariable("listUser", listOfFilms);
 
-			} catch (FilmNotFoundException e) {
+			} catch (FilmNotFoundException | UserNotFoundException e) {
 				e.printStackTrace();
 			}
 		}

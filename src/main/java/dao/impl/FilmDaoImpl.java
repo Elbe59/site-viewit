@@ -131,37 +131,44 @@ public class FilmDaoImpl implements FilmDao {
 	}
 
 	@Override
-	public List<Film> getFilmByUtilisateur(Integer idUtilisateur) throws FilmNotFoundException {
+	public List<Film> getFilmByUtilisateur(Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
 		List<Film> listOfFilms = new ArrayList<Film>();
 		Film film = null;
+		boolean notFound = true;
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(PreparedStatement pStm = co.prepareStatement("SELECT idfilm FROM PREFERER WHERE idUtilisateur=? AND favoris = 1;")) {
 				pStm.setInt(1, idUtilisateur);
 				try(ResultSet rs = pStm.executeQuery()) {
 					while(rs.next()) {
+						notFound = false;
 						Integer idFilm = rs.getInt("idFilm");
 						film = getFilm(idFilm);
 						listOfFilms.add(film);
 					}
-					if(film == null)
-						throw new FilmNotFoundException();
+					if (notFound)
+						throw new UserNotFoundException();
 				}
 			}
-		} catch (SQLException e) {
+		} catch ( SQLException e) {
 			e.printStackTrace();
 		}
 		return listOfFilms;
 	}
 	
 	@Override
-	public Film addFilm(Film film,InputStream image) throws FilmAlreadyExistingException{
+	public Film addFilm(Film film,InputStream image) throws FilmAlreadyExistingException, FilmNotFoundException {
 		List<Film> films = listFilms();
+		String sqlQuerry = "INSERT INTO FILM (titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide, image) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
 		boolean existing  = false;
 		for (int i = 0; i<films.size(); i++)
 		{
+			//System.out.println("Compare "+films.get(i).getTitre()+" avec "+film.getTitre());
 			if (films.get(i).getTitre().equals(film.getTitre()))
 			{
-				if(films.get(i).getDateSortie()==film.getDateSortie())
+				//System.out.println("Titres égales");
+				//System.out.println("compare "+films.get(i).getDateSortie()+" avec "+film.getDateSortie());
+				if(films.get(i).getDateSortie().equals(film.getDateSortie()))
+					//System.out.println("dates égales");
 					existing = true;
 			}
 		}
@@ -169,7 +176,9 @@ public class FilmDaoImpl implements FilmDao {
 			if (existing) {
 				throw new FilmAlreadyExistingException();
 			} else {
-				try (PreparedStatement pStm = co.prepareStatement("INSERT INTO FILM (titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide,image) VALUES (?,?,?,?,?,?,?,?,?,?,?);")) {
+				if(image == null)
+					sqlQuerry = "INSERT INTO FILM (titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide, image) VALUES (?,?,?,?,?,?,?,?,?,?,'');";
+				try (PreparedStatement pStm = co.prepareStatement(sqlQuerry)) {
 					pStm.setString(1, film.getTitre());
 					pStm.setString(2, film.getResume());
 					pStm.setTimestamp(3, Timestamp.valueOf(film.getDateSortie().atStartOfDay()));
@@ -177,10 +186,11 @@ public class FilmDaoImpl implements FilmDao {
 					pStm.setString(5, film.getRealisateur());
 					pStm.setString(6, film.getActeur());
 					pStm.setString(7, film.getImageName());
-					pStm.setString(8, film.getUrlBA());//mettre l'image ?
-					pStm.setInt(9, film.getGenre().getId());//besoin d'obtenir idgenre à partir de genre
+					pStm.setString(8, film.getUrlBA());
+					pStm.setInt(9, film.getGenre().getId());
 					pStm.setInt(10, film.getValide());
-					pStm.setBlob(11, image);
+					if (image != null)
+						pStm.setBlob(11, image);
 					pStm.executeUpdate();
 				} catch (SQLException throwables) {
 					throwables.printStackTrace();
@@ -189,6 +199,8 @@ public class FilmDaoImpl implements FilmDao {
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		}
+		film.setId(getSqlIdFilm(film));
+		//System.out.println("id: "+film.getId());
 		return film;
 	}
 
@@ -265,6 +277,31 @@ public class FilmDaoImpl implements FilmDao {
 		inputStream.close();
 		outputStream.close();
 		return base64Image;
+	}
+
+	public int getSqlIdFilm(Film film) throws FilmNotFoundException {
+		Integer id = null;
+		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+			try(PreparedStatement pStm = co.prepareStatement("SELECT idFilm FROM FILM WHERE titreFilm =? AND dateSortie =? AND resumeFilm =? AND acteur = ? AND realisateur = ? AND urlBA = ? ")) {
+				pStm.setString(1, film.getTitre());
+				pStm.setTimestamp(2, Timestamp.valueOf(film.getDateSortie().atStartOfDay()));
+				pStm.setString(3, film.getResume());
+				pStm.setString(4, film.getActeur());
+				pStm.setString(5, film.getRealisateur());
+				pStm.setString(6, film.getUrlBA());
+				try(ResultSet rs = pStm.executeQuery()) {
+					while(rs.next()) {
+						id = rs.getInt("idFilm");
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (id == null)
+			throw new FilmNotFoundException();
+		else
+			return id;
 	}
 
 }
