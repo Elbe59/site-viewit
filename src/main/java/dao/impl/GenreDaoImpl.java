@@ -4,11 +4,10 @@ import dao.GenreDao;
 import entity.Film;
 import entity.Genre;
 import entity.Utilisateur;
-import exception.FilmNotFoundException;
-import exception.GenreNotFoundException;
-import exception.UserNotFoundException;
+import exception.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,5 +62,30 @@ public class GenreDaoImpl implements GenreDao {
             throwables.printStackTrace();
         }
         return genre;
+    }
+
+    @Override
+    public void addGenre(String name) throws GenreAlreadyExistingException {
+        List<Genre> genres = listGenre();
+        boolean existing = false;
+        for (int i = 0; i < genres.size(); i++) {
+            if (genres.get(i).getNom().toLowerCase().equals(name.toLowerCase())) {
+                existing = true;
+            }
+        }
+        try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
+            if (existing) {
+                throw new GenreAlreadyExistingException();
+            } else {
+                try (PreparedStatement pStm = co.prepareStatement("INSERT INTO Genre (nomGenre) VALUES (?);")) {
+                    pStm.setString(1, name);
+                    pStm.executeUpdate();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }

@@ -67,4 +67,6 @@ public class FilmService {
 	public List<Film> getFilmByUtilisateur(Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
 		return filmDao.getFilmByUtilisateur(idUtilisateur);
 	};
+
+	public void addGenre(String name) throws GenreAlreadyExistingException {genreDao.addGenre(name);}
 }
