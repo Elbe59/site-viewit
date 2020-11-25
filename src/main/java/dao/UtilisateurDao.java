@@ -1,6 +1,8 @@
 package dao;
 
 import entity.Utilisateur;
+import exception.UserAlreadyAdminException;
+import exception.UserAlreadyDownException;
 import exception.UserAlreadyExistingException;
 import exception.UserNotFoundException;
 
@@ -11,8 +13,9 @@ public interface UtilisateurDao {
 
     public List<Utilisateur> listUser();
     public Utilisateur getUser(Integer id) throws UserNotFoundException;
-    public void addUser(Utilisateur user) throws UserAlreadyExistingException;
+    public Utilisateur addUser(Utilisateur user) throws UserAlreadyExistingException, UserNotFoundException;
     public Utilisateur deleteUser(Integer id) throws UserNotFoundException, SQLException;
     public Utilisateur getUserByEmail(String email) throws UserNotFoundException;
-    public Utilisateur changeRoleUser(String action,Integer id) throws SQLException;
+    public Utilisateur changeRoleUser(String action,Integer id) throws SQLException, UserAlreadyAdminException, UserAlreadyDownException;
+    public int getSqlIdUser(Utilisateur user) throws UserNotFoundException;
 }

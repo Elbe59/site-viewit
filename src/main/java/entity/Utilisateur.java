@@ -20,6 +20,32 @@ public class Utilisateur {
 		this.mdpHash=mdpHash;
 		this.admin = admin;
 	}
+
+	public Utilisateur(Integer id, String prenom, String nom, String email, String mdp, boolean admin) {
+		this.id = id;
+		this.prenom = prenom;
+		this.nom = nom;
+		this.email = email;
+		this.mdp = mdp;
+		this.admin = admin;
+	}
+
+	public Utilisateur( String prenom, String nom, String email, String mdp, boolean admin) {
+		this.prenom = prenom;
+		this.nom = nom;
+		this.email = email;
+		this.mdp = mdp;
+		this.admin = admin;
+	}
+
+	public Utilisateur(String prenom, String nom, String email, String mdp,String mdpHash, boolean admin) {
+		this.prenom = prenom;
+		this.nom = nom;
+		this.email = email;
+		this.mdp = mdp;
+		this.mdpHash=mdpHash;
+		this.admin = admin;
+	}
 	
 	public Integer getId() {
 		return id;

@@ -63,7 +63,7 @@ public class FilmService {
 	}
 
 	public Genre deleteGenre(Integer id) throws GenreNotFoundException, SQLException {return genreDao.deleteGenre(id);}
-	public Genre getGenre(Integer id) {return genreDao.getGenre(id);}
+	public Genre getGenre(Integer id) throws GenreNotFoundException {return genreDao.getGenre(id);}
 	public List<Film> getFilmByUtilisateur(Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
 		return filmDao.getFilmByUtilisateur(idUtilisateur);
 	};

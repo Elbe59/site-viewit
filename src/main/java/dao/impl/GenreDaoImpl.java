@@ -31,7 +31,7 @@ public class GenreDaoImpl implements GenreDao {
     }
 
     @Override
-    public Genre getGenre(Integer id) {
+    public Genre getGenre(Integer id) throws GenreNotFoundException {
         Genre genre = null;
         try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
             try (PreparedStatement pStm = co.prepareStatement("SELECT * FROM GENRE WHERE idGenre =?;")) {
@@ -44,13 +44,13 @@ public class GenreDaoImpl implements GenreDao {
                         throw new GenreNotFoundException();
                 }
             }
-        } catch (SQLException | GenreNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return genre;
     }
 
-    public Genre deleteGenre(Integer id) {
+    public Genre deleteGenre(Integer id) throws GenreNotFoundException {
         Genre genre = null;
         genre = getGenre(id);
         try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
