@@ -20,7 +20,7 @@
 						<h3>Ajouter un genre:</h3>
 						<form method="post">
 							<input type="text" name="new_genre" id="name" required>
-							<input onclick="if(confirm('Etes vous sur de vouloir supprimer ce genre ?')){}else{return false;}" class="btn-add-genre" type="submit" name="enregistrer" value="Valider">
+							<input onclick="if(confirm('Etes vous sur de vouloir ajouter ce genre ?')){}else{return false;}" class="btn-add-genre" type="submit" name="enregistrer" value="Valider">
 						</form>	
 					</div>
 
@@ -40,7 +40,7 @@
 							<td th:text="${genre.nom}">Art Martiaux</td>
 							<td class="small_column">
 								<form method="post">
-									<button onclick="if(confirm('Etes vous sur de vouloir supprimer ce genre ?')){}else{return false;}" name="supp" th:value="${genreStat.index}" th:title="'Supprimer ' +${genre.nom}" class="btn-delete" type="submit" th:id="${genreStat.index}"><img class="img_liste" src="../images/icones/supprimer.png"alt="supprimer"></button>
+									<button onclick="if(confirm('Etes vous sur de vouloir supprimer ce genre ?')){}else{return false;}" name="supp" th:value="${genreStat.index}" th:title="'Supprimer ' +${genre.nom}" class="btn-delete" type="submit" th:id="${genreStat.index}" th:disabled="${genre.nbFilmLie>0}"><img th:if="${genre.nbFilmLie==0}" class="img_liste" src="../images/icones/supprimer.png"alt="supprimer" ></button>
 								</form>
 								
 							</td>
