@@ -9,6 +9,10 @@ public class Genre {
 		this.id = id;
 		this.nom = nom;
 	}
+
+	public Genre(String nom) {
+		this.nom = nom;
+	}
 	
 	public Integer getId() {
 		return id;

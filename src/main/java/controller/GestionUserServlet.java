@@ -2,10 +2,7 @@ package controller;
 
 import entity.Film;
 import entity.Utilisateur;
-import exception.FilmAlreadyActiveException;
-import exception.FilmAlreadyDesactiveException;
-import exception.FilmNotFoundException;
-import exception.UserNotFoundException;
+import exception.*;
 import jdk.jshell.execution.Util;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -31,8 +28,12 @@ public class GestionUserServlet extends ServletGenerique {
         List<Utilisateur> listUser = UtilisateurService.getInstance().listUser();
         context.setVariable("listUsers", listUser);
         context.setVariable("utilisateurCo", utilisateur);
-        TemplateEngine engine = createTemplateEngine(req.getServletContext());
-        engine.process("listuser", context, resp.getWriter());
+        if(utilisateur!=null){
+            TemplateEngine engine = createTemplateEngine(req.getServletContext());
+            engine.process("listuser", context, resp.getWriter());
+        }
+
+
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -53,7 +54,7 @@ public class GestionUserServlet extends ServletGenerique {
             System.out.println("Retrograde: " + (id));
             try {
                 UtilisateurService.getInstance().changeRoleUser("down",id);
-            } catch (SQLException e) {
+            } catch (SQLException | UserAlreadyDownException | UserAlreadyAdminException e) {
                 e.printStackTrace();
             }
         }
@@ -63,7 +64,7 @@ public class GestionUserServlet extends ServletGenerique {
             System.out.println("Promouvoir: " + (id));
             try {
                 UtilisateurService.getInstance().changeRoleUser("up",id);
-            } catch (SQLException e) {
+            } catch (SQLException | UserAlreadyDownException | UserAlreadyAdminException e) {
                 e.printStackTrace();
             }
         }

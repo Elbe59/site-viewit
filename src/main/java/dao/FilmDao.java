@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import entity.Film;
+import entity.FilmDto;
 import exception.*;
 
 public interface FilmDao {
@@ -15,7 +16,9 @@ public interface FilmDao {
 	public Film deleteFilm(Integer id) throws FilmNotFoundException;
 	public Film activeFilm(Integer id) throws FilmNotFoundException, FilmAlreadyActiveException;
 	public Film desactiveFilm(Integer id) throws FilmNotFoundException, FilmAlreadyDesactiveException;
-	public List<Film> getFilmByUtilisateur(Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException;
 	public int getSqlIdFilm(Film film) throws FilmNotFoundException;
-	
+	public Film suppFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException;
+	public Film addFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException;
+	public List<FilmDto> listFilmsDto(Integer idUtilisateur);
+	public List<Film> listFavorisFilm(Integer idUtilisateur) throws UserNotFoundException;
 }

@@ -3,13 +3,14 @@ package dao.impl;
 import dao.FilmDao;
 import dao.UtilisateurDao;
 import entity.Film;
+import entity.Genre;
 import entity.Utilisateur;
-import exception.UserAlreadyExistingException;
-import exception.UserNotFoundException;
+import exception.*;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -31,9 +32,9 @@ public class UtilisateurDaoTestCase {
             stm.executeUpdate("DELETE FROM preferer");
             stm.executeUpdate("DELETE FROM UTILISATEUR");
             stm.executeUpdate(
-                    "INSERT INTO UTILISATEUR ( idUtilisateur, prenomUtilisateur, nomUtilisateur, email, mdp, admin) "
-                            + "VALUES (1,'prenom1', 'nom1', 'email1@gmail.com', 'mdp1', 0),"
-                            + "(2,'prenom2', 'nom2', 'email2@gmail.com', 'mdp2', 0);");
+                    "INSERT INTO UTILISATEUR ( idUtilisateur, prenomUtilisateur, nomUtilisateur, email, mdp, mdpHash, admin) "
+                            + "VALUES (1,'prenom1', 'nom1', 'email1@gmail.com', 'mdp1', 'mdpHash1', 0),"
+                            + "(2,'prenom2', 'nom2', 'email2@gmail.com', 'mdp2', 'mdpHash2', 1);");
         }
     }
 
@@ -48,9 +49,10 @@ public class UtilisateurDaoTestCase {
                 Utilisateur::getNom,
                 Utilisateur::getEmail,
                 Utilisateur::getMdp,
+                Utilisateur::getMdpHash,
                 Utilisateur::isAdmin).containsOnly(
-                tuple("prenom1", "nom1", "email1@gmail.com", "mdp1", false),
-                tuple("prenom2", "nom2", "email2@gmail.com", "mdp2", false));
+                tuple("prenom1", "nom1", "email1@gmail.com", "mdp1", "mdpHash1", false),
+                tuple("prenom2", "nom2", "email2@gmail.com", "mdp2", "mdpHash2", true));
     }
 
     @Test
@@ -63,6 +65,8 @@ public class UtilisateurDaoTestCase {
         assertThat(user.getPrenom()).isEqualTo("prenom1");
         assertThat(user.getNom()).isEqualTo("nom1");
         assertThat(user.getEmail()).isEqualTo("email1@gmail.com");
+        assertThat(user.getMdp()).isEqualTo("mdp1");
+        assertThat(user.getMdpHash()).isEqualTo("mdpHash1");
         assertThat(user.isAdmin()).isEqualTo(false);
     }
 
@@ -76,11 +80,47 @@ public class UtilisateurDaoTestCase {
         fail("userNotFound not Throw as expected");
     }
 
-    @Test (expected = UserAlreadyExistingException.class)
-    public void shouldAddUserThrowUserAlreadyExistingException() throws UserAlreadyExistingException
-    {
+    @Test
+    public void shouldAddUser() throws UserAlreadyExistingException, UserNotFoundException {
         //given
-        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","$argon2i$v=19$m=65536,t=5,p=1$zFnaINNvYeCrC75OYuuZEl9al5weOMnSXcOUoIWhUdIMRbNvXF1ipU5aMaU0HVXtsotzpepy/LxIHtd7SJMgFpk7T4T6eE24y3CxyiuG1woN5vMrPCnl4ldjtAmWQ/iEsL0JRXuthPrbFO1GkA+k4D2s7E9SNF9JA8sJaSHURU8$U5xfj0Qz7+T3sr05PxuUhEgAKU2+WxhcrFMUUS2yVGi2egf4rSsxZ9FSXYliBnx03aXgNEvtPrZ7zWq2TQdw9LA+gWS4+IOrKk", false);
+        Utilisateur verif = null;
+        Utilisateur user = new Utilisateur("prenom3","nom3","email3@gmail.com","mdp3","mdpHash3",false);
+        //when
+        Utilisateur res = userDao.addUser(user);
+        //then
+        Assertions.assertThat(res).isNotNull();
+        try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+            try(PreparedStatement pStm = co.prepareStatement("SELECT * FROM UTILISATEUR WHERE idUtilisateur=?;")) {
+                pStm.setInt(1, res.getId());
+                try(ResultSet rs = pStm.executeQuery()) {
+                    while(rs.next()) {
+
+                        verif = new Utilisateur(
+                                rs.getInt("idUtilisateur"),
+                                rs.getString("prenomUtilisateur"),
+                                rs.getString("nomUtilisateur"),
+                                rs.getString("email"),
+                                rs.getString("mdp"),
+                                rs.getString("mdpHash"),
+                                rs.getInt("admin")==1?true:false);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); }
+        Assertions.assertThat(verif).isNotNull();
+        Assertions.assertThat(verif.getPrenom()).isEqualTo(user.getPrenom());
+        Assertions.assertThat(verif.getNom()).isEqualTo(user.getNom());
+        Assertions.assertThat(verif.getEmail()).isEqualTo(user.getEmail());
+        Assertions.assertThat(verif.getMdp()).isEqualTo(user.getMdp());
+        Assertions.assertThat(verif.getMdpHash()).isEqualTo(user.getMdpHash());
+        Assertions.assertThat(verif.isAdmin()).isEqualTo(user.isAdmin());
+    }
+
+    @Test (expected = UserAlreadyExistingException.class)
+    public void shouldAddUserThrowUserAlreadyExistingException() throws UserAlreadyExistingException, UserNotFoundException {
+        //given
+        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", false);
         //when
         userDao.addUser(user);
         //then
@@ -90,17 +130,24 @@ public class UtilisateurDaoTestCase {
     @Test
     public void shouldDeleteUser() throws UserNotFoundException, SQLException {
         //given
-        Utilisateur user4 = new Utilisateur(4,"prenom4", "nom4", "email4@gmail.com", "mdp4","$argon2i$v=19$m=65536,t=5,p=1$zFnaINNvYeCrC75OYuuZEl9al5weOMnSXcOUoIWhUdIMRbNvXF1ipU5aMaU0HVXtsotzpepy/LxIHtd7SJMgFpk7T4T6eE24y3CxyiuG1woN5vMrPCnl4ldjtAmWQ/iEsL0JRXuthPrbFO1GkA+k4D2s7E9SNF9JA8sJaSHURU8$U5xfj0Qz7+T3sr05PxuUhEgAKU2+WxhcrFMUUS2yVGi2egf4rSsxZ9FSXYliBnx03aXgNEvtPrZ7zWq2TQdw9LA+gWS4+IOrKk", false);
+        Utilisateur user4 = new Utilisateur(4,"prenom4", "nom4", "email4@gmail.com", "mdp4","mdpHash4", false);
         try (Connection co = DataSourceProvider.getDataSource().getConnection();
              Statement stm = co.createStatement()) {
             stm.executeUpdate(
-                    "INSERT INTO UTILISATEUR ( idUtilisateur, prenomUtilisateur, nomUtilisateur, email, mdp, admin) "
-                            + "VALUES (4,'prenom4', 'nom4', 'email4@gmail.com', 'mdp4','$argon2i$v=19$m=65536,t=5,p=1$zFnaINNvYeCrC75OYuuZEl9al5weOMnSXcOUoIWhUdIMRbNvXF1ipU5aMaU0HVXtsotzpepy/LxIHtd7SJMgFpk7T4T6eE24y3CxyiuG1woN5vMrPCnl4ldjtAmWQ/iEsL0JRXuthPrbFO1GkA+k4D2s7E9SNF9JA8sJaSHURU8$U5xfj0Qz7+T3sr05PxuUhEgAKU2+WxhcrFMUUS2yVGi2egf4rSsxZ9FSXYliBnx03aXgNEvtPrZ7zWq2TQdw9LA+gWS4+IOrKk', 0);");
+                    "INSERT INTO UTILISATEUR ( idUtilisateur, prenomUtilisateur, nomUtilisateur, email, mdp, mdpHash, admin) "
+                            + "VALUES (4,'prenom4', 'nom4', 'email4@gmail.com', 'mdp4','mdpHash4', 0);");
         } catch (SQLException e) { }
         //when
         Utilisateur userDelete = userDao.deleteUser(4);
         //then
         Assertions.assertThat(userDelete.getEmail()).isEqualTo(user4.getEmail());
+        try (Connection connection = DataSourceProvider.getDataSource().getConnection();
+             Statement stmt = connection.createStatement()) {
+            try (ResultSet rs = stmt.executeQuery("SELECT * FROM Utilisateur WHERE email = 'email4@gmail.com'")) {
+                assertThat(rs.next()).isFalse();
+            } catch (SQLException e) {
+            }
+        }
     }
 
     @Test
@@ -111,5 +158,88 @@ public class UtilisateurDaoTestCase {
         Utilisateur res = userDao.deleteUser(id);
         //then
         Assertions.assertThat(res).isNull();
+    }
+
+    @Test
+    public void shouldGetSqlIdUser() throws IOException, UserNotFoundException {
+        //given
+        Utilisateur user = new Utilisateur("prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", false);
+        //when
+        int id = userDao.getSqlIdUser(user);
+        //then
+        Assertions.assertThat(id).isEqualTo(1);
+    }
+
+    @Test (expected = UserNotFoundException.class)
+    public void shouldGetSqlIdFilmThrowFilmNotFoundException() throws IOException, UserNotFoundException{
+        //given
+        Utilisateur user = new Utilisateur("prenom4", "nom4", "email4@gmail.com", "mdp4","mdpHash4", false);
+        //when
+        int id = userDao.getSqlIdUser(user);
+        //then
+        Assertions.fail("User not found not throw as expected");
+    }
+
+    @Test
+    public void shouldChangeRoleUser() throws SQLException, UserAlreadyDownException, UserAlreadyAdminException {
+        //given
+        String up = "up";
+        String down = "down";
+        //when
+        Utilisateur res1 = userDao.changeRoleUser(up,1);
+        Utilisateur res2 = userDao.changeRoleUser(down, 2);
+        //then
+        assertThat(res1.isAdmin()).isEqualTo(true);
+        assertThat(res2.isAdmin()).isEqualTo(false);
+    }
+
+    @Test
+    public void shouldChangeRoleUserThrowUserNotFoundException() throws SQLException, UserAlreadyDownException, UserAlreadyAdminException {
+        //given
+        String down = "down";
+        //when
+        Utilisateur res = userDao.changeRoleUser(down, 3);
+        //then
+        Assertions.assertThat(res).isNull();
+    }
+
+    @Test (expected = UserAlreadyAdminException.class)
+    public void shouldChangeRoleUserThrowUserAlreadyAdminException() throws UserAlreadyAdminException, SQLException, UserAlreadyDownException {
+        //given
+        String up = "up";
+        //when
+        Utilisateur res = userDao.changeRoleUser(up,2);
+        //then
+        fail("User already admin not throw as expected");
+    }
+
+    @Test (expected = UserAlreadyDownException.class)
+    public void shouldChangeRoleUserThrowUserAlreadyDownException() throws UserAlreadyAdminException, SQLException, UserAlreadyDownException {
+        //given
+        String down = "down";
+        //when
+        Utilisateur res = userDao.changeRoleUser(down,1);
+        //then
+        fail("User already down not throw as expected");
+    }
+
+    @Test
+    public void shouldGetUserByEmail() throws UserNotFoundException {
+        //given
+        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", false);
+        //when
+        Utilisateur res = userDao.getUserByEmail("email1@gmail.com");
+        //then
+        Assertions.assertThat(res).isEqualToComparingFieldByField(user);
+    }
+
+    @Test (expected = UserNotFoundException.class)
+    public void shouldGetUserByEmailThrowUserNotFoundException() throws UserNotFoundException {
+        //given
+        String email = "email6@gmail.com";
+        //when
+        Utilisateur res = userDao.getUserByEmail(email);
+        //then
+        fail("User not found not throw as expected");
     }
 }

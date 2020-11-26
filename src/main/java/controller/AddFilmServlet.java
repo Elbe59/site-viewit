@@ -35,11 +35,12 @@ import service.FilmService;
 @WebServlet("/user/ajoutfilm")
 public class AddFilmServlet extends ServletGenerique {
 	private static final long serialVersionUID = 1L;
+	private FilmService filmService = FilmService.getInstance();
  
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         WebContext context = new WebContext(req, resp, req.getServletContext());
-        context.setVariable("genres", FilmService.getInstance().listGenre());
+        context.setVariable("genres", filmService.listGenre());
         System.out.println(context.toString());
         System.out.println("ok1");
         TemplateEngine engine = createTemplateEngine(req.getServletContext());
@@ -61,24 +62,33 @@ public class AddFilmServlet extends ServletGenerique {
 		InputStream in=part.getInputStream();
 		String urlBA = req.getParameter("url");
 		int genreIndex = Integer.parseInt(req.getParameter("genre"));
-
 		Genre genre1=listGenre.get(genreIndex);
+<<<<<<< HEAD
 
 		LocalDate dateSortie = formaterDate(dateSortieStr);
 		urlBA = urlBA.substring( urlBA.lastIndexOf( '=' ) + 1 );
 		
 		Film film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,0,"rien");
 
+=======
+		urlBA = urlBA.substring( urlBA.lastIndexOf( '=' ) + 1 );
+		//System.out.println("urlBA : " + urlBA);
+		/*System.out.println("Titre : " + titre);
+		System.out.println("resume : " + resume);
+		System.out.println("dateSortieStr : " + dateSortieStr);
+		System.out.println("dateSortie : " + dateSortie);
+		System.out.println("duree : " + duree);
+		System.out.println("realisateur : " + realisateur);
+		System.out.println("acteur : " + acteur);
+		System.out.println("imageName : " + imageName);
+		System.out.println("urlBA : " + urlBA);
+		System.out.println("genre : " + genre);*/
+>>>>>>> 35b7672b205d44619d816941df13d5e37b56fc3e
 		try {
-			FilmService.getInstance().addFilm(film,in);
+			FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,imageName,urlBA,genre1,in);
 		} catch (FilmAlreadyExistingException | FilmNotFoundException e) {
 			e.printStackTrace();
 		}
 		resp.sendRedirect("../user/ajoutfilm");
 	}
-	
-	private LocalDate formaterDate(String date) {
-		return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-	}
-
 }
