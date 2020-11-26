@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.FilmDao;
@@ -14,6 +15,7 @@ import dao.impl.FilmDaoImpl;
 import dao.impl.GenreDaoImpl;
 import entity.Film;
 import entity.Genre;
+import entity.GenreDto;
 import exception.*;
 
 public class FilmService {
@@ -101,13 +103,20 @@ public class FilmService {
 	{
 		return genreDao.listGenre();
 	}
+	public List<GenreDto> listGenreDto(){
+		List<Genre> list=FilmService.getInstance().listGenre();
+		return genreDao.listGenreDto(list);
+	}
 
-	public Genre deleteGenre(Integer id) throws GenreNotFoundException, SQLException
-	{
-		try{
-			return genreDao.deleteGenre(id);
-		}catch (GenreNotFoundException e){
-			return null;
+	public Genre deleteGenre(Integer id,int nbFilmLie) throws GenreNotFoundException, SQLException, GenreLinkToFilmException {
+		if (nbFilmLie > 0) {
+			throw new GenreLinkToFilmException();
+		} else {
+			try {
+				return genreDao.deleteGenre(id);
+			} catch (GenreNotFoundException e) {
+				return null;
+			}
 		}
 	}
 

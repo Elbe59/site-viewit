@@ -3,6 +3,7 @@ package dao.impl;
 import dao.GenreDao;
 import entity.Film;
 import entity.Genre;
+import entity.GenreDto;
 import entity.Utilisateur;
 import exception.*;
 
@@ -28,6 +29,25 @@ public class GenreDaoImpl implements GenreDao {
             e.printStackTrace();
         }
         return listOfGenres;
+    }
+
+    public List<GenreDto> listGenreDto(List<Genre> genreList) {
+        List<GenreDto> listOfGenresDto = new ArrayList<GenreDto>();
+        try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
+            try (Statement stm = co.createStatement()) {
+                for (Genre genre: genreList) {
+                    try (ResultSet rs = stm.executeQuery("SELECT COUNT(*) from film join genre on genre.idGenre=film.idGenre WHERE film.idGenre="+genre.getId())) {
+                        while (rs.next()) {
+                            listOfGenresDto.add(new GenreDto(genre.getId(), genre.getNom(), rs.getInt(1)));
+                        }
+                    }
+                }
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listOfGenresDto;
     }
 
     @Override

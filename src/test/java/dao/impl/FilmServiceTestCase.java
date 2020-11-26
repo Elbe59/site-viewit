@@ -294,23 +294,23 @@ public class FilmServiceTestCase {
     }
 
     @Test
-    public void shouldDelteGenre() throws GenreNotFoundException, SQLException {
+    public void shouldDelteGenre() throws GenreNotFoundException, SQLException, GenreLinkToFilmException {
         //given
         Genre genre = new Genre(1,"Aventure");
         int id = 1;
         //when
-        Genre res = filmService.getInstance().deleteGenre(id);
+        Genre res = filmService.getInstance().deleteGenre(id,0);
         //then
         Assertions.assertThat(res).isEqualToComparingFieldByField(genre);
     }
 
     @Test
-    public void shouldDelteGenreThrowGenreNotFoundException() throws GenreNotFoundException, SQLException {
+    public void shouldDelteGenreThrowGenreNotFoundException() throws GenreNotFoundException, SQLException, GenreLinkToFilmException {
         //given
         int id = 3;
         //Mockito.when(genreDao.getGenre(id)).thenThrow(GenreNotFoundException.class);
         //when
-        Genre res = filmService.getInstance().deleteGenre(id);
+        Genre res = filmService.getInstance().deleteGenre(id, 0);
         //then
         Assertions.assertThat(res).isNull();
     }
