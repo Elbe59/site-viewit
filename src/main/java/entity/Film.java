@@ -21,7 +21,8 @@ public class Film {
 	private String base64Image;
 
 
-
+	public Film() {};
+	
 	public Film(Integer id, String titre, String resume, LocalDate dateSortie, Integer duree, String realisateur,
 				String acteur, String imageName, String urlBA, Genre genre, Integer valide, String base64Image) throws IOException {
 		this.id = id;

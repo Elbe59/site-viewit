@@ -11,13 +11,14 @@
         </span>
         <span id= "zoneTrie">
           <label for="trier">Trier par :</label>
-          <select id="trier" name="trier">
-            <option value="alphabethique">Alphabéthique</option>
-            <option value="popularite">Popularité</option>
-            <option value="genre">Genre</option>
-            <option value="recent">Plus récent</option>
-            <option value="ancien">Plus ancien</option>
+          <select id="trier" name="trier" onchange="Trier()">
+            <option value="Alphabetique" selected>Alphabéthique</option>
+            <option value="Popularite">Popularité</option>
+            <option value="Genre">Genre</option>
+            <option value="Recent">Plus récent</option>
+            <option value="Ancien">Plus ancien</option>
           </select>
+          <button type="submit" class="btn-validate-trie" name="button">Go</button>
         </span>
       </section>
       <section id="accueil-List-Film">

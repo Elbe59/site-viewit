@@ -42,7 +42,9 @@ public class FilmService {
 		return filmDao.listFilms(colonne);
 	}
 
-	public Film activeFilm(Integer id) throws FilmNotFoundException, FilmAlreadyActiveException {return filmDao.activeFilm(id);}
+	public Film activeFilm(Integer id) throws FilmNotFoundException, FilmAlreadyActiveException {
+		return filmDao.activeFilm(id);
+	}
 
 	public Film desactiveFilm(Integer id) throws FilmNotFoundException, FilmAlreadyDesactiveException {return filmDao.desactiveFilm(id);}
 	

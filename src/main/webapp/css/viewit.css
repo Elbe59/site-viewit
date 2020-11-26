@@ -167,6 +167,11 @@ li:hover .sous{
   #zoneTrie {
     display: inline-block;  
   }
+  #trier {
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    height: 1.5vw;
+  }
 }
 
 @media only screen and (min-width: 750px) {
@@ -175,6 +180,28 @@ li:hover .sous{
     right: 1em;
     margin-right: 5em;
   }
+  #trier {
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    height: 1.5vw;
+  }
+}
+.btn-validate-trie {
+  text-align: center;
+  font-size: 1vw;
+  cursor: pointer;
+  border-radius: 20px;
+  background-color: lightgrey;
+  color: grey;
+}
+.btn-validate-trie:hover {
+  text-align: center;
+  font-size: 1vw;
+  cursor: pointer;
+  border-radius: 20px;
+  background-color: #7DCEA0;
+  color: black;
+  transition: background-color 0.5s, color 0.5s;
 }
 
 /* Liste des films */

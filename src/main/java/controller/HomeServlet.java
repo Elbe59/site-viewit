@@ -45,8 +45,10 @@ public class HomeServlet extends ServletGenerique {
         engine.process("accueil", context, resp.getWriter());
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String trie = req.getParameter("trier");
+		System.out.println(trie);
+		doGet(req, resp);
 	}
 
 }

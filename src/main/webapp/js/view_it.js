@@ -13,7 +13,7 @@ function ListOfFilms () {
 	let doc = document.getElementsByTagName("article");
 	let list = [];
 	for (i=0;i<doc.length;i++) {
-		list.push([doc[i]["title"],doc[i]["id"],doc[i]]);
+		list.push([doc[i]["title"],doc[i]["id"],doc[i],doc[i]["genre"]]);
 	}
 	return list;
 };
@@ -29,14 +29,31 @@ function ListOfFilms_Recherche (listOfFilms, recherche) {
 		}
 	}
 	return new_list;
-}
+};
+
+function ListOfFilms_Trier (listOfFilms, trier) {
+	console.log(trier);
+	let new_list = [];
+	if(trier == "Genre") {
+		new_list.push(listOfFilms.sort());
+	}
+	return new_list;
+};
 
 function Rechercher () {
 	let input = document.getElementById("recherche").value.toLowerCase();
 	let listOfFilms = ListOfFilms();
 	let newList = ListOfFilms_Recherche(listOfFilms, input);
 	console.log(newList);
-};
+}
+
+function Trier() {
+	let listOfFilms = ListOfFilms();
+	let select = document.getElementById("trier");
+	let selectOption = select.options[select.selectedIndex].value;
+	let newList = ListOfFilms_Trier(listOfFilms, selectOption);
+	console.log(newList);
+}
 
 window.onload = function() {
 	let listOfFilms = ListOfFilms();

@@ -63,19 +63,10 @@ public class AddFilmServlet extends ServletGenerique {
 		int genreIndex = Integer.parseInt(req.getParameter("genre"));
 
 		Genre genre1=listGenre.get(genreIndex);
-		//System.out.println("urlBA : " + urlBA);
+
 		LocalDate dateSortie = formaterDate(dateSortieStr);
 		urlBA = urlBA.substring( urlBA.lastIndexOf( '=' ) + 1 );
-		/*System.out.println("Titre : " + titre);
-		System.out.println("resume : " + resume);
-		System.out.println("dateSortieStr : " + dateSortieStr);
-		System.out.println("dateSortie : " + dateSortie);
-		System.out.println("duree : " + duree);
-		System.out.println("realisateur : " + realisateur);
-		System.out.println("acteur : " + acteur);
-		System.out.println("imageName : " + imageName);
-		System.out.println("urlBA : " + urlBA);
-		System.out.println("genre : " + genre);*/
+		
 		Film film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,0,"rien");
 
 		try {
