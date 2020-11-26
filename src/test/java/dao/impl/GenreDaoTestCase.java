@@ -102,7 +102,7 @@ public class GenreDaoTestCase {
     }
 
     @Test
-    public void shouldAddGenre() throws GenreAlreadyExistingException {
+    public void shouldAddGenre() throws GenreAlreadyExistingException, GenreNotFoundException {
         //given
         String name = "genre3";
         //when
@@ -125,8 +125,7 @@ public class GenreDaoTestCase {
     }
 
     @Test (expected = GenreAlreadyExistingException.class)
-    public void shouldAddGenreThrowGenreAlreadyExistingException() throws GenreAlreadyExistingException
-    {
+    public void shouldAddGenreThrowGenreAlreadyExistingException() throws GenreAlreadyExistingException, GenreNotFoundException {
         //given
         String name = "genre1";
         //when

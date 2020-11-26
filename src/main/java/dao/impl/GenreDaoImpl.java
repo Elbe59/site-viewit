@@ -65,9 +65,10 @@ public class GenreDaoImpl implements GenreDao {
     }
 
     @Override
-    public void addGenre(String name) throws GenreAlreadyExistingException {
+    public Genre addGenre(String name) throws GenreAlreadyExistingException, GenreNotFoundException {
         List<Genre> genres = listGenre();
         boolean existing = false;
+        Genre res = new Genre(name);
         for (int i = 0; i < genres.size(); i++) {
             if (genres.get(i).getNom().toLowerCase().equals(name.toLowerCase())) {
                 existing = true;
@@ -87,5 +88,27 @@ public class GenreDaoImpl implements GenreDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        res.setId(getSqlIdGenre(res));
+        return res;
+    }
+
+    public int getSqlIdGenre(Genre genre) throws GenreNotFoundException {
+        Integer id = null;
+        try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+            try(PreparedStatement pStm = co.prepareStatement("SELECT idGenre FROM Genre WHERE nomGenre =? ")) {
+                pStm.setString(1, genre.getNom());
+                try(ResultSet rs = pStm.executeQuery()) {
+                    while(rs.next()) {
+                        id = rs.getInt("idGenre");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (id == null)
+            throw new GenreNotFoundException();
+        else
+            return id;
     }
 }

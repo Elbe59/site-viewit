@@ -9,16 +9,18 @@ import java.util.Base64;
 import java.util.List;
 
 import dao.FilmDao;
+import dao.UtilisateurDao;
 import entity.Film;
 import entity.Genre;
 import exception.*;
 
 public class FilmDaoImpl implements FilmDao {
 
+	private UtilisateurDao userDao = new UtilisateurDaoImpl();
+
 	@Override
 	public List<Film> listFilms() {
 		List<Film> listOfFilms = new ArrayList<Film>();
-		
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(Statement stm = co.createStatement()) {
 				try(ResultSet rs = stm.executeQuery("SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre ORDER BY titreFilm;")) {
@@ -134,19 +136,20 @@ public class FilmDaoImpl implements FilmDao {
 	public List<Film> getFilmByUtilisateur(Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
 		List<Film> listOfFilms = new ArrayList<Film>();
 		Film film = null;
-		boolean notFound = true;
+		//boolean notFound = true;
+		userDao.getUser(idUtilisateur);
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(PreparedStatement pStm = co.prepareStatement("SELECT idfilm FROM PREFERER WHERE idUtilisateur=? AND favoris = 1;")) {
 				pStm.setInt(1, idUtilisateur);
 				try(ResultSet rs = pStm.executeQuery()) {
 					while(rs.next()) {
-						notFound = false;
+						//notFound = false;
 						Integer idFilm = rs.getInt("idFilm");
 						film = getFilm(idFilm);
 						listOfFilms.add(film);
 					}
-					if (notFound)
-						throw new UserNotFoundException();
+					//if (notFound)
+						//throw new UserNotFoundException();
 				}
 			}
 		} catch ( SQLException e) {
@@ -192,12 +195,12 @@ public class FilmDaoImpl implements FilmDao {
 					if (image != null)
 						pStm.setBlob(11, image);
 					pStm.executeUpdate();
-				} catch (SQLException throwables) {
-					throwables.printStackTrace();
+				} catch (SQLException e) {
+					e.printStackTrace();
 				}
 			}
-		} catch (SQLException throwables) {
-			throwables.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		film.setId(getSqlIdFilm(film));
 		//System.out.println("id: "+film.getId());
@@ -219,9 +222,7 @@ public class FilmDaoImpl implements FilmDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		try{
-			film=getFilm(id);
-		}catch (FilmNotFoundException e){}
+		film=getFilm(id);
 		return film;
 	}
 
