@@ -8,7 +8,9 @@ import entity.Film;
 import entity.Utilisateur;
 import exception.UserAlreadyAdminException;
 import exception.UserAlreadyDownException;
+import exception.UserAlreadyExistingException;
 import exception.UserNotFoundException;
+import utils.MotDePasseUtils;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -27,6 +29,14 @@ public class UtilisateurService {
     private UtilisateurService() {
 
     }
+    public Utilisateur addUser(Utilisateur user) throws UserAlreadyExistingException {
+        String password=user.getMdpHash();
+        String passwordHash= MotDePasseUtils.genererMotDePasse(password);
+        user.setMdpHash(passwordHash);
+        utilisateurDao.addUser(user);
+        return user;
+    }
+
 
     public List<Utilisateur> listUser() {
         return utilisateurDao.listUser();

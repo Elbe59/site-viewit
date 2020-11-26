@@ -1,7 +1,6 @@
 package dao.impl;
 
 import dao.UtilisateurDao;
-import entity.Film;
 import entity.Utilisateur;
 import exception.*;
 
@@ -63,11 +62,9 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
         return user;
     }
 
-    public Utilisateur addUser(Utilisateur user) throws UserAlreadyExistingException, UserNotFoundException {
+    public Utilisateur addUser(Utilisateur user) throws UserAlreadyExistingException {
         List<Utilisateur> users = listUser();
-        Utilisateur res = user;
         boolean existing  = false;
-        String sqlQuerry = "INSERT INTO UTILISATEUR ( prenomUtilisateur, nomUtilisateur, email, mdp, admin, mdpHash) VALUES (?,?,?,?,?,?);";
         for (int i = 0; i<users.size(); i++)
         {
             if (users.get(i).getEmail().equals(user.getEmail()))
@@ -76,23 +73,19 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
         try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
             if (existing)
                 throw new UserAlreadyExistingException();
-            if (user.getMdpHash() == null)
-                sqlQuerry = "INSERT INTO UTILISATEUR ( prenomUtilisateur, nomUtilisateur, email, mdp, admin, mdpHash) VALUES (?,?,?,?,?,'');";
-            try (PreparedStatement pStm = co.prepareStatement(sqlQuerry)) {
+            try (PreparedStatement pStm = co.prepareStatement("INSERT INTO UTILISATEUR ( prenomUtilisateur, nomUtilisateur, email, mdp,mdpHash, admin) VALUES (?,?,?,?,?,?);")) {
                 pStm.setString(1, user.getPrenom());
                 pStm.setString(2, user.getNom());
                 pStm.setString(3, user.getEmail());
                 pStm.setString(4, user.getMdp());
-                pStm.setInt(5, user.isAdmin()?1:0);
-                if (user.getMdpHash()!=null)
-                    pStm.setString(6, user.getMdpHash());
+                pStm.setString(5, user.getMdpHash());
+                pStm.setInt(6, user.isAdmin()?1:0);
                 pStm.executeUpdate();
             }
         }catch (SQLException e) {
             e.printStackTrace();
         }
-        res.setId(getSqlIdUser(res));
-        return res;
+        return user;
     }
 
     public Utilisateur deleteUser(Integer id) throws UserNotFoundException, SQLException {

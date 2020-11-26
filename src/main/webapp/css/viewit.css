@@ -282,6 +282,8 @@ article img {
 }
 
 .ajout_utilisateur input {
+	padding-left: 5px;
+	padding-right: 5px;
 	border-style: solid;
 	border-color: black;
 	border-radius: 5px;

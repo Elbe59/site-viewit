@@ -28,8 +28,12 @@ public class GestionUserServlet extends ServletGenerique {
         List<Utilisateur> listUser = UtilisateurService.getInstance().listUser();
         context.setVariable("listUsers", listUser);
         context.setVariable("utilisateurCo", utilisateur);
-        TemplateEngine engine = createTemplateEngine(req.getServletContext());
-        engine.process("listuser", context, resp.getWriter());
+        if(utilisateur!=null){
+            TemplateEngine engine = createTemplateEngine(req.getServletContext());
+            engine.process("listuser", context, resp.getWriter());
+        }
+
+
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

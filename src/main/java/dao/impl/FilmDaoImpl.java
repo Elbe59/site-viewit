@@ -11,6 +11,7 @@ import java.util.List;
 import dao.FilmDao;
 import dao.UtilisateurDao;
 import entity.Film;
+import entity.FilmDto;
 import entity.Genre;
 import exception.*;
 
@@ -133,11 +134,10 @@ public class FilmDaoImpl implements FilmDao {
 	}
 
 	@Override
-	public List<Film> getFilmByUtilisateur(Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
+	public List<Film> listFavorisFilm(Integer idUtilisateur) {
 		List<Film> listOfFilms = new ArrayList<Film>();
 		Film film = null;
 		//boolean notFound = true;
-		userDao.getUser(idUtilisateur);
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(PreparedStatement pStm = co.prepareStatement("SELECT idfilm FROM PREFERER WHERE idUtilisateur=? AND favoris = 1;")) {
 				pStm.setInt(1, idUtilisateur);
@@ -148,11 +148,9 @@ public class FilmDaoImpl implements FilmDao {
 						film = getFilm(idFilm);
 						listOfFilms.add(film);
 					}
-					//if (notFound)
-						//throw new UserNotFoundException();
 				}
 			}
-		} catch ( SQLException e) {
+		} catch (SQLException | FilmNotFoundException e) {
 			e.printStackTrace();
 		}
 		return listOfFilms;
@@ -304,4 +302,80 @@ public class FilmDaoImpl implements FilmDao {
 		else
 			return id;
 	}
+
+	public List<FilmDto> listFilmsDto(Integer idUtilisateur) {
+		List<Film> listOfFilms = listFilms();
+		List<FilmDto> listOfFilmsCo = new ArrayList<FilmDto>();
+
+		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+			String sqlQuery = "SELECT film.idFilm,film.titreFilm,preferer.idUtilisateur FROM FILM JOIN PREFERER ON film.idFilm = preferer.idFilm WHERE preferer.idUtilisateur=? AND preferer.favoris=1;";
+			try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
+				pStm.setInt(1, idUtilisateur);
+				for (int i=0;i<listOfFilms.size();i++) {
+					FilmDto filmDto = new FilmDto(
+							listOfFilms.get(i).getId(),
+							listOfFilms.get(i).getTitre(),
+							false);
+					try(ResultSet rs = pStm.executeQuery()) {
+						while(rs.next()) {
+							if (rs.getInt("idFilm") == listOfFilms.get(i).getId()) {
+								filmDto.setFavori(true);
+							}
+						}
+					}
+					listOfFilmsCo.add(filmDto);
+				}
+			}
+		} catch (SQLException | IOException e) {
+			e.printStackTrace();
+		}
+
+		return listOfFilmsCo;
+	}
+
+	public Film addFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException {
+		Film film = null;
+		try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
+			film=getFilm(idFilm);
+			String sqlQuery = "INSERT INTO preferer (idFilm,idUtilisateur,liker,favoris) VALUES (?,?,0,1)";
+			PreparedStatement statement = connection.prepareStatement(sqlQuery);
+			statement.setInt(1, idFilm);
+			statement.setInt(2, idUtilisateur);
+			statement.executeUpdate();
+			statement.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
+				film=getFilm(idFilm);
+				String sqlQuery = "UPDATE preferer SET favoris=1 WHERE preferer.idFilm=? AND preferer.idUtilisateur=?";
+				PreparedStatement statement = connection.prepareStatement(sqlQuery);
+				statement.setInt(1, idFilm);
+				statement.setInt(2, idUtilisateur);
+				statement.executeUpdate();
+				statement.close();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+		return film;
+	}
+
+	public Film suppFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException {
+		Film film = null;
+		try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
+			film=getFilm(idFilm);
+			String sqlQuery = "UPDATE preferer SET favoris=0 WHERE preferer.idFilm=? AND preferer.idUtilisateur=?";
+			PreparedStatement statement = connection.prepareStatement(sqlQuery);
+			statement.setInt(1, idFilm);
+			statement.setInt(2, idUtilisateur);
+			statement.executeUpdate();
+			statement.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return film;
+	}
+
 }

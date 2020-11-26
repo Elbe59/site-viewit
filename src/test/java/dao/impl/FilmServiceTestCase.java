@@ -341,7 +341,7 @@ public class FilmServiceTestCase {
         //given
         int id = 1;
         //when
-        List<Film> res = filmService.getInstance().getFilmByUtilisateur(id);
+        List<Film> res = filmService.getInstance().listFavorisFilm(id);
         //then
         assertThat(res).hasSize(2);
         assertThat(res).extracting(
@@ -368,7 +368,7 @@ public class FilmServiceTestCase {
         int id = 3;
         //Mockito.when(userDao.getUser(id)).thenThrow(UserNotFoundException.class);
         //when
-        List<Film> res = filmService.getInstance().getFilmByUtilisateur(id);
+        List<Film> res = filmService.getInstance().listFavorisFilm(id);
         //then
         Assertions.assertThat(res).isNull();
     }

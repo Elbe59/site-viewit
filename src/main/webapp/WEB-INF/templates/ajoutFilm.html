@@ -6,45 +6,45 @@
   <body>
     <main class="main-AddFilm">
       <section class="addFilmSection">
-        <form class="addFilmForm" action="../user/ajoutfilm" method="post" enctype="multipart/form-data">
+        <form class="addFilmForm" action="../user/ajoutfilm" method="post" enctype="multipart/form-data" >
           <div class="infoAddBlock">
-            <label for="titre">Titre</label>
+            <label for="titreFilm">Titre</label>
             <div>
-              <input type="text" name="titre">
+              <input type="text" name="titre" id="titreFilm" required>
             </div>
           </div>
           <div class="infoAddBlock">
-            <label for="resume">Synopsis</label>
+            <label for="resumeFilm">Synopsis</label>
             <div>
-              <textarea name="resume" rows="8" cols="80" placeholder="Synopsis du film ..."></textarea>
+              <textarea name="resume" id="resumeFilm" rows="8" cols="80" placeholder="Synopsis du film ..." required></textarea>
             </div>
           </div>
           <div class="infoAddBlock">
-            <label for="realisateur">Réalisateur</label>
+            <label for="realisateurFilm">Réalisateur</label>
             <div>
-              <input type="text" name="realisateur">
+              <input type="text" id="realisateurFilm"name="realisateur" required>
             </div>
           </div>
           <div class="infoAddBlock">
-            <label for="acteur">Acteur</label>
+            <label for="acteurFilm">Acteur</label>
             <div>
-              <input type="text" name="acteur">
+              <input type="text" id="acteurFilm"name="acteur" required>
             </div>
           </div>
           <div class="infoAddBlock">
-            <label for="duree">Durée</label>
+            <label for="dureeFilm">Durée</label>
             <div>
-              <input type="number" name="duree" min="0" step="1">
+              <input type="number" id="dureeFilm" name="duree" min="0" step="1" required>
             </div>
           </div>
           <div class="infoAddBlock">
-            <label for="date">Date de sortie</label>
+            <label for="dateFilm">Date de sortie</label>
             <div>
-              <input type="date" name="dateSortie">
+              <input type="date" id="dateFilm" name="dateSortie" required>
             </div>
           </div>
           <div class="infoAddBlock">
-            <label for="genre">Genre</label>
+            <label for="genre-addFilm">Genre</label>
             <div>
               <select id="genre-addFilm" name="genre" onfocus="this.size=5;" onblur="this.size=1;" 
         onchange="this.size=1; this.blur();">
@@ -52,22 +52,22 @@
               </select>
             </div>
           </div>
-          <div class="infoAddBlock">
-            <label for="image">Image de couverture</label>
+          <div th:if="${role_value==2}" class="infoAddBlock">
+            <label for="fichier">Image de couverture</label>
             <div>
               <input type="file" name="fichier" id="fichier" accept=".png, .jpg, .jpeg">
             </div>
           </div>
-          <div class="infoAddBlock">
-            <label for="url">Lien vers la bande annonce (Youtube)</label>
+          <div th:if="${role_value==2}" class="infoAddBlock">
+            <label for="urlFilm">Lien vers la bande annonce (Youtube)</label>
             <div>
-              <input type="url" name="url">
+              <input type="url" id="urlFilm" name="url">
             </div>
           </div>
 
           <div class="div-btn-addFilm">
             <div>
-              <input id="btn-addFilm" type="submit" value="Enregistrer">
+              <input id="btn-addFilm" type="submit" value="Enregistrer" onclick="addFilmForm()">
             </div>
           </div>
         </form>

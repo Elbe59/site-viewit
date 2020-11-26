@@ -10,6 +10,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import entity.Utilisateur;
+import exception.FilmNotFoundException;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -26,27 +28,36 @@ public class HomeServlet extends ServletGenerique {
 
 		List<Film> listOfFilms = FilmService.getInstance().listFilms();
         WebContext context = new WebContext(req, resp, req.getServletContext());
-		/*Film film= null;
-		try {
-			film = FilmService.getInstance().getFilm(1);
-		} catch (FilmNotFoundException e) {
-			e.printStackTrace();
-		}*/
-		//assert film != null;
-		//byte[] fileContent = FileUtils.readFileToByteArray(new File(film.getImageFile(), "filename"));
-		//String encodedString = Base64.getEncoder().encodeToString(fileContent);
 
-		//byte[] decode = Base64.getDecoder().decode(film.getImageFile());
-		//byte[] encode = Base64.getEncoder().encode(film.getImageFile());
-		//String encodeString = Base64.getEncoder().encodeToString(film.getImageFile());
 		context.setVariable("listFilms", listOfFilms);
-		//context.setVariable("test", film);
         TemplateEngine engine = createTemplateEngine(req.getServletContext());
         engine.process("accueil", context, resp.getWriter());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+		Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("utilisateurConnecte");
+		List<Film> listOfFilms = FilmService.getInstance().listFilms();
+		if(utilisateur != null){
+			if(request.getParameter("addfavori")!=null) {
+				int index = Integer.parseInt(request.getParameter("addfavori"));
+				int idFilm = listOfFilms.get(index).getId();
+				try {
+					FilmService.getInstance().addFavori(idFilm, utilisateur.getId());
+				} catch (FilmNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+			if(request.getParameter("suppfavori")!=null) {
+				int index = Integer.parseInt(request.getParameter("suppfavori"));
+				int idFilm = listOfFilms.get(index).getId();
+				try {
+					FilmService.getInstance().suppFavori(idFilm, utilisateur.getId());
+				} catch (FilmNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		response.sendRedirect("accueil");
 	}
 
 }

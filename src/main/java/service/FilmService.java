@@ -14,6 +14,7 @@ import dao.GenreDao;
 import dao.impl.FilmDaoImpl;
 import dao.impl.GenreDaoImpl;
 import entity.Film;
+import entity.FilmDto;
 import entity.Genre;
 import entity.GenreDto;
 import exception.*;
@@ -128,14 +129,18 @@ public class FilmService {
 			return null;
 		}
 	}
+	public void addFavori(int idFilm, Integer idUtilisateur) throws FilmNotFoundException {filmDao.addFavori(idFilm,idUtilisateur);}
 
-	public List<Film> getFilmByUtilisateur(Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException
+	public void suppFavori(int idFilm, Integer idUtilisateur) throws FilmNotFoundException {filmDao.suppFavori(idFilm,idUtilisateur);}
+
+
+	public List<FilmDto> listFilmsDto(Integer idUtilisateur) {
+		return filmDao.listFilmsDto(idUtilisateur);
+	}
+
+	public List<Film> listFavorisFilm(Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException
 	{
-		try{
-			return filmDao.getFilmByUtilisateur(idUtilisateur);
-		}catch (UserNotFoundException e){
-			return null;
-		}
+		return filmDao.listFavorisFilm(idUtilisateur);
 	}
 
 	public Genre addGenre(String name) throws GenreAlreadyExistingException, GenreNotFoundException {
