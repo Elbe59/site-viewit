@@ -18,7 +18,7 @@ function Lecture(jsonFile) {
 				if (jsonFile[j].favori == true) {
 					listOfFilms[i][2].querySelector("input").name = "suppfavori";
 					listOfFilms[i][2].querySelector("svg").style.color = "red";
-					listOfFilms[i][2].querySelector("svg").style.opacity = 1;
+					listOfFilms[i][2].querySelector("svg").style.opacity = 0.8;
 				} else {
 					listOfFilms[i][2].querySelector("input").name = "addfavori";
 				}

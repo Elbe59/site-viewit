@@ -1,6 +1,7 @@
 package dao;
 
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.List;
 
 import entity.Film;
@@ -18,7 +19,7 @@ public interface FilmDao {
 	public Film desactiveFilm(Integer id) throws FilmNotFoundException, FilmAlreadyDesactiveException;
 	public int getSqlIdFilm(Film film) throws FilmNotFoundException;
 	public Film suppFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException;
-	public Film addFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException;
+	public Film addFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, SQLException;
 	public List<FilmDto> listFilmsDto(Integer idUtilisateur);
 	public List<Film> listFavorisFilm(Integer idUtilisateur) throws UserNotFoundException;
 }

@@ -45,10 +45,7 @@ public class FilmService {
 		return filmDao.listFilms(colonne);
 	}
 
-<<<<<<< HEAD
-	public Film activeFilm(Integer id) throws FilmNotFoundException, FilmAlreadyActiveException {
-		return filmDao.activeFilm(id);
-=======
+
 	public Film addFilm(String titre,String resume,String dateSortieStr,int duree,String realisateur,String acteur,String imageName,String urlBA,Genre genre1, InputStream in) throws FilmAlreadyExistingException, FilmNotFoundException, IOException {
 		Film res = null;
 		LocalDate dateSortie = formaterDate(dateSortieStr);
@@ -62,7 +59,6 @@ public class FilmService {
 		finally {
 			return res;
 		}
->>>>>>> 35b7672b205d44619d816941df13d5e37b56fc3e
 	}
 
 	public Film activeFilm(Integer id) throws FilmNotFoundException, FilmAlreadyActiveException
@@ -134,7 +130,7 @@ public class FilmService {
 			return null;
 		}
 	}
-	public void addFavori(int idFilm, Integer idUtilisateur) throws FilmNotFoundException {filmDao.addFavori(idFilm,idUtilisateur);}
+	public void addFavori(int idFilm, Integer idUtilisateur) throws FilmNotFoundException, SQLException {filmDao.addFavori(idFilm,idUtilisateur);}
 
 	public void suppFavori(int idFilm, Integer idUtilisateur) throws FilmNotFoundException {filmDao.suppFavori(idFilm,idUtilisateur);}
 

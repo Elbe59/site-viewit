@@ -55,7 +55,10 @@ public class FilmDaoImpl implements FilmDao {
 	public List<Film> listFilms(String colonne) {
 		List<Film> listOfFilms = new ArrayList<Film>();
 		String param = "";
-		if(colonne.equals("alpha"))
+		
+		if(colonne == null)
+			param = "titreFilm";
+		else if(colonne.equals("alpha"))
 			param = "titreFilm";
 		else if (colonne.equals("recent"))
 			param = "dateSortie DESC";
@@ -335,27 +338,47 @@ public class FilmDaoImpl implements FilmDao {
 
 	public Film addFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException {
 		Film film = null;
-		try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
-			film=getFilm(idFilm);
-			String sqlQuery = "INSERT INTO preferer (idFilm,idUtilisateur,liker,favoris) VALUES (?,?,0,1)";
-			PreparedStatement statement = connection.prepareStatement(sqlQuery);
-			statement.setInt(1, idFilm);
-			statement.setInt(2, idUtilisateur);
-			statement.executeUpdate();
-			statement.close();
-
-		} catch (SQLException e) {
+		boolean verification = false;
+		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+			try(PreparedStatement pstm = co.prepareStatement("SELECT * FROM preferer WHERE preferer.idFilm=? AND preferer.idUtilisateur=?;")) {
+				pstm.setInt(1, idFilm);
+				pstm.setInt(2, idUtilisateur);
+				try(ResultSet rs = pstm.executeQuery()) {
+					if(rs.next()) {
+						verification = true;
+					}
+				}
+			} 
+			co.close();
+		}
+		catch (Exception e) {
 			e.printStackTrace();
-			try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
-				film=getFilm(idFilm);
-				String sqlQuery = "UPDATE preferer SET favoris=1 WHERE preferer.idFilm=? AND preferer.idUtilisateur=?";
-				PreparedStatement statement = connection.prepareStatement(sqlQuery);
-				statement.setInt(1, idFilm);
-				statement.setInt(2, idUtilisateur);
-				statement.executeUpdate();
-				statement.close();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
+		}
+		
+		if(verification == true) {
+			try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+				try(PreparedStatement pstm = co.prepareStatement("UPDATE preferer SET favoris=1 WHERE preferer.idFilm=? AND preferer.idUtilisateur=?;")) {
+					pstm.setInt(1, idFilm);
+					pstm.setInt(2, idUtilisateur);
+					pstm.executeUpdate();
+				}
+				co.close();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+				try(PreparedStatement pstm = co.prepareStatement("INSERT INTO preferer (idFilm,idUtilisateur,liker,favoris) VALUES (?,?,0,1);")) {
+					pstm.setInt(1, idFilm);
+					pstm.setInt(2, idUtilisateur);
+					pstm.executeUpdate();
+				}
+				co.close();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		return film;
@@ -363,15 +386,16 @@ public class FilmDaoImpl implements FilmDao {
 
 	public Film suppFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException {
 		Film film = null;
-		try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
+		try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
 			film=getFilm(idFilm);
 			String sqlQuery = "UPDATE preferer SET favoris=0 WHERE preferer.idFilm=? AND preferer.idUtilisateur=?";
-			PreparedStatement statement = connection.prepareStatement(sqlQuery);
-			statement.setInt(1, idFilm);
-			statement.setInt(2, idUtilisateur);
-			statement.executeUpdate();
-			statement.close();
-
+			try(PreparedStatement pstm = co.prepareStatement(sqlQuery)){
+				pstm.setInt(1, idFilm);
+				pstm.setInt(2, idUtilisateur);
+				pstm.executeUpdate();
+				pstm.close();
+			}
+			co.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

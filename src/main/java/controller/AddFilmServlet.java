@@ -63,14 +63,14 @@ public class AddFilmServlet extends ServletGenerique {
 		String urlBA = req.getParameter("url");
 		int genreIndex = Integer.parseInt(req.getParameter("genre"));
 		Genre genre1=listGenre.get(genreIndex);
-<<<<<<< HEAD
 
-		LocalDate dateSortie = formaterDate(dateSortieStr);
-		urlBA = urlBA.substring( urlBA.lastIndexOf( '=' ) + 1 );
+
+		//LocalDate dateSortie = formaterDate(dateSortieStr);
+		//urlBA = urlBA.substring( urlBA.lastIndexOf( '=' ) + 1 );
 		
-		Film film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,0,"rien");
+		//Film film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,0,"rien");
 
-=======
+
 		urlBA = urlBA.substring( urlBA.lastIndexOf( '=' ) + 1 );
 		//System.out.println("urlBA : " + urlBA);
 		/*System.out.println("Titre : " + titre);
@@ -83,7 +83,6 @@ public class AddFilmServlet extends ServletGenerique {
 		System.out.println("imageName : " + imageName);
 		System.out.println("urlBA : " + urlBA);
 		System.out.println("genre : " + genre);*/
->>>>>>> 35b7672b205d44619d816941df13d5e37b56fc3e
 		try {
 			FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,imageName,urlBA,genre1,in);
 		} catch (FilmAlreadyExistingException | FilmNotFoundException e) {

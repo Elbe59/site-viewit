@@ -9,17 +9,20 @@
           <label for="recherche">Rechercher :</label>
           <input type="search" name="recherche" id="recherche" onkeyup="Rechercher()">
         </span>
-        <span id= "zoneTrie">
-          <label for="trier">Trier par :</label>
-          <select id="trier" name="trier" onchange="Trier()">
-            <option value="Alphabetique" selected>Alphabéthique</option>
-            <option value="Popularite">Popularité</option>
-            <option value="Genre">Genre</option>
-            <option value="Recent">Plus récent</option>
-            <option value="Ancien">Plus ancien</option>
-          </select>
-          <button type="submit" class="btn-validate-trie" name="button">Go</button>
-        </span>
+        <form method="post">
+	        <span id= "zoneTrie">
+	          <label for="trier">Trier par :</label>
+	          
+		      <select id="trier" name="trier" onchange="Trier()">
+		        <option value="alpha">Alphabéthique</option>
+		        <option value="Popularite">Popularité</option>
+		        <option value="recent">Plus récent</option>
+		        <option value="ancien">Plus ancien</option>
+		      </select>
+	          
+	          <button type="submit" class="btn-validate-trie" name="button">Go</button>
+	        </span>
+        </form>
       </section>
       <section id="accueil-List-Film">
         <article th:each="film : ${listFilms}" th:if="${film.valide == 1}" th:id="${film.id}" th:title="${film.titre}">

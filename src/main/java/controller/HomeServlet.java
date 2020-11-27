@@ -2,6 +2,7 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Base64;
 import java.util.List;
 
@@ -24,26 +25,30 @@ public class HomeServlet extends ServletGenerique {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HttpServletRequest httpRequest = (HttpServletRequest) req;
-
-		List<Film> listOfFilms = FilmService.getInstance().listFilms();
+		//HttpServletRequest httpRequest = (HttpServletRequest) req;
+		
+		String trier = req.getParameter("trier");
+		List<Film> listOfFilms = FilmService.getInstance().listFilms(trier);
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
 		context.setVariable("listFilms", listOfFilms);
+		context.setVariable("trieSelect", trier);
         TemplateEngine engine = createTemplateEngine(req.getServletContext());
         engine.process("accueil", context, resp.getWriter());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//System.out.println(request.getParameter("trier"));
+		String trie = request.getParameter("trier");
 		Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("utilisateurConnecte");
-		List<Film> listOfFilms = FilmService.getInstance().listFilms();
+		List<Film> listOfFilms = FilmService.getInstance().listFilms(trie);
 		if(utilisateur != null){
 			if(request.getParameter("addfavori")!=null) {
 				int index = Integer.parseInt(request.getParameter("addfavori"));
 				int idFilm = listOfFilms.get(index).getId();
 				try {
 					FilmService.getInstance().addFavori(idFilm, utilisateur.getId());
-				} catch (FilmNotFoundException e) {
+				} catch (FilmNotFoundException | SQLException e) {
 					e.printStackTrace();
 				}
 			}
@@ -57,7 +62,9 @@ public class HomeServlet extends ServletGenerique {
 				}
 			}
 		}
-		response.sendRedirect("accueil");
+		
+		//response.sendRedirect("accueil");
+		doGet(request,response);
 	}
 
 }
