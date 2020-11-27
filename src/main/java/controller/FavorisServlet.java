@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -51,7 +52,7 @@ public class FavorisServlet extends ServletGenerique {
 					FilmService.getInstance().suppFavori(idFilm, utilisateur.getId());
 				}
 			}
-		} catch (UserNotFoundException | FilmNotFoundException e) {
+		} catch (UserNotFoundException | FilmNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
 		response.sendRedirect("favoris");

@@ -339,8 +339,8 @@ public class FilmDaoImpl implements FilmDao {
 	}
 
 	public Film addFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
-		Film film = null;
-
+		Film film = getFilm(idFilm);
+		System.out.println("ds add favoris");
 		boolean verification = false;
 		userDao.getUser(idUtilisateur);
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
@@ -350,6 +350,7 @@ public class FilmDaoImpl implements FilmDao {
 				try(ResultSet rs = pstm.executeQuery()) {
 					if(rs.next()) {
 						verification = true;
+						System.out.println("verif ) true");
 					}
 				}
 			} 

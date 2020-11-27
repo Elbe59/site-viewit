@@ -137,6 +137,7 @@ public class FilmService {
 			return filmDao.addFavori(idFilm,idUtilisateur);
 		}catch (FilmNotFoundException | UserNotFoundException e)
 		{
+			//e.printStackTrace();
 			return null;
 		}
 	}
