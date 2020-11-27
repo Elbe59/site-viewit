@@ -90,7 +90,6 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
 
     public Utilisateur deleteUser(Integer id) throws UserNotFoundException, SQLException {
         Utilisateur user = null;
-        try{
             user = getUser(id);
             try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
                 try (PreparedStatement pStm = co.prepareStatement("DELETE FROM UTILISATEUR WHERE idUtilisateur = ?;")) {
@@ -98,8 +97,6 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
                     pStm.executeUpdate();
                 } catch (SQLException e) { }
             }
-        }catch(UserNotFoundException e){
-        }
         return user;
     }
 

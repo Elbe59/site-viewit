@@ -130,9 +130,26 @@ public class FilmService {
 			return null;
 		}
 	}
-	public void addFavori(int idFilm, Integer idUtilisateur) throws FilmNotFoundException, SQLException {filmDao.addFavori(idFilm,idUtilisateur);}
 
-	public void suppFavori(int idFilm, Integer idUtilisateur) throws FilmNotFoundException {filmDao.suppFavori(idFilm,idUtilisateur);}
+	public Film addFavori(int idFilm, Integer idUtilisateur) throws FilmNotFoundException
+	{
+		try{
+			return filmDao.addFavori(idFilm,idUtilisateur);
+		}catch (FilmNotFoundException | UserNotFoundException e)
+		{
+			return null;
+		}
+	}
+
+	public Film suppFavori(int idFilm, Integer idUtilisateur) throws FilmNotFoundException, SQLException
+	{
+		try{
+			return filmDao.suppFavori(idFilm,idUtilisateur);
+		}catch (FilmNotFoundException | UserNotFoundException e)
+		{
+			return null;
+		}
+	}
 
 
 	public List<FilmDto> listFilmsDto(Integer idUtilisateur) {
@@ -141,7 +158,11 @@ public class FilmService {
 
 	public List<Film> listFavorisFilm(Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException
 	{
-		return filmDao.listFavorisFilm(idUtilisateur);
+		try{
+			return filmDao.listFavorisFilm(idUtilisateur);
+		}catch(UserNotFoundException e){
+			return null;
+		}
 	}
 
 	public Genre addGenre(String name) throws GenreAlreadyExistingException, GenreNotFoundException {

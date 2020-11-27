@@ -13,6 +13,7 @@ import dao.UtilisateurDao;
 import entity.Film;
 import entity.FilmDto;
 import entity.Genre;
+import entity.Utilisateur;
 import exception.*;
 
 public class FilmDaoImpl implements FilmDao {
@@ -137,9 +138,10 @@ public class FilmDaoImpl implements FilmDao {
 	}
 
 	@Override
-	public List<Film> listFavorisFilm(Integer idUtilisateur) {
+	public List<Film> listFavorisFilm(Integer idUtilisateur) throws UserNotFoundException {
 		List<Film> listOfFilms = new ArrayList<Film>();
 		Film film = null;
+		userDao.getUser(idUtilisateur);
 		//boolean notFound = true;
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(PreparedStatement pStm = co.prepareStatement("SELECT idfilm FROM PREFERER WHERE idUtilisateur=? AND favoris = 1;")) {
@@ -336,9 +338,11 @@ public class FilmDaoImpl implements FilmDao {
 		return listOfFilmsCo;
 	}
 
-	public Film addFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException {
+	public Film addFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
 		Film film = null;
+
 		boolean verification = false;
+		userDao.getUser(idUtilisateur);
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(PreparedStatement pstm = co.prepareStatement("SELECT * FROM preferer WHERE preferer.idFilm=? AND preferer.idUtilisateur=?;")) {
 				pstm.setInt(1, idFilm);
@@ -384,8 +388,9 @@ public class FilmDaoImpl implements FilmDao {
 		return film;
 	}
 
-	public Film suppFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException {
+	public Film suppFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
 		Film film = null;
+		userDao.getUser(idUtilisateur);
 		try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
 			film=getFilm(idFilm);
 			String sqlQuery = "UPDATE preferer SET favoris=0 WHERE preferer.idFilm=? AND preferer.idUtilisateur=?";

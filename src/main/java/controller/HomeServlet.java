@@ -48,7 +48,7 @@ public class HomeServlet extends ServletGenerique {
 				int idFilm = listOfFilms.get(index).getId();
 				try {
 					FilmService.getInstance().addFavori(idFilm, utilisateur.getId());
-				} catch (FilmNotFoundException | SQLException e) {
+				} catch (FilmNotFoundException e) {
 					e.printStackTrace();
 				}
 			}
@@ -58,6 +58,8 @@ public class HomeServlet extends ServletGenerique {
 				try {
 					FilmService.getInstance().suppFavori(idFilm, utilisateur.getId());
 				} catch (FilmNotFoundException e) {
+					e.printStackTrace();
+				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 			}

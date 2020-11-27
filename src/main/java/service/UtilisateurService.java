@@ -33,7 +33,11 @@ public class UtilisateurService {
         String password=user.getMdpHash();
         String passwordHash= MotDePasseUtils.genererMotDePasse(password);
         user.setMdpHash(passwordHash);
-        utilisateurDao.addUser(user);
+        try{
+            utilisateurDao.addUser(user);
+        }catch (UserAlreadyExistingException e){
+            user = null;
+        }
         return user;
     }
 
@@ -43,11 +47,37 @@ public class UtilisateurService {
     }
 
     public Utilisateur getUser(int id) throws UserNotFoundException {
-        return utilisateurDao.getUser(id);
+        try{
+            return utilisateurDao.getUser(id);
+        }catch (UserNotFoundException e){
+            return null;
+        }
     }
 
-    public Utilisateur getUserByEmail(String email) throws UserNotFoundException {return utilisateurDao.getUserByEmail(email);}
+    public Utilisateur getUserByEmail(String email) throws UserNotFoundException
+    {
+        try{
+            return utilisateurDao.getUserByEmail(email);
+        }catch (UserNotFoundException e){
+            return null;
+        }
+    }
 
-    public Utilisateur deleteUser(Integer id) throws UserNotFoundException, SQLException {return utilisateurDao.deleteUser(id);}
-    public Utilisateur changeRoleUser(String action,Integer id) throws SQLException, UserAlreadyDownException, UserAlreadyAdminException {return utilisateurDao.changeRoleUser(action,id);}
+    public Utilisateur deleteUser(Integer id) throws UserNotFoundException, SQLException
+    {
+        try{
+            return utilisateurDao.deleteUser(id);
+        }catch (UserNotFoundException e){
+            return null;
+        }
+    }
+
+    public Utilisateur changeRoleUser(String action,Integer id) throws SQLException, UserAlreadyDownException, UserAlreadyAdminException
+    {
+        try{
+            return utilisateurDao.changeRoleUser(action,id);
+        }catch(UserAlreadyDownException | UserAlreadyAdminException e){
+            return null;
+        }
+    }
 }

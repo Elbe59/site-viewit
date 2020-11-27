@@ -18,8 +18,10 @@ public interface FilmDao {
 	public Film activeFilm(Integer id) throws FilmNotFoundException, FilmAlreadyActiveException;
 	public Film desactiveFilm(Integer id) throws FilmNotFoundException, FilmAlreadyDesactiveException;
 	public int getSqlIdFilm(Film film) throws FilmNotFoundException;
-	public Film suppFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException;
-	public Film addFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, SQLException;
+
+	public Film suppFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException;
+	public Film addFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException;
+
 	public List<FilmDto> listFilmsDto(Integer idUtilisateur);
 	public List<Film> listFavorisFilm(Integer idUtilisateur) throws UserNotFoundException;
 }
