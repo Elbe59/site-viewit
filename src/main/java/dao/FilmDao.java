@@ -1,9 +1,13 @@
 package dao;
 
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import dao.impl.DataSourceProvider;
 import entity.Film;
 import entity.FilmDto;
 import exception.*;
@@ -21,6 +25,9 @@ public interface FilmDao {
 
 	public Film suppFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException;
 	public Film addFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException;
+	public Film addLike (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException;
+	public Film addDislike (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException;
+	public Film removeAvis (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException;
 
 	public List<FilmDto> listFilmsDto(Integer idUtilisateur);
 	public List<Film> listFavorisFilm(Integer idUtilisateur) throws UserNotFoundException;

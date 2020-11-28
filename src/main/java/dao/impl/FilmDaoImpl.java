@@ -415,5 +415,127 @@ public class FilmDaoImpl implements FilmDao {
 		}
 		return film;
 	}
-
+	
+	public Film addLike (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
+		Film film = getFilm(idFilm);
+		System.out.println("ds add like");
+		boolean verification = false;
+		userDao.getUser(idUtilisateur);
+		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+			try(PreparedStatement pstm = co.prepareStatement("SELECT * FROM preferer WHERE preferer.idFilm=? AND preferer.idUtilisateur=?;")) {
+				pstm.setInt(1, idFilm);
+				pstm.setInt(2, idUtilisateur);
+				try(ResultSet rs = pstm.executeQuery()) {
+					if(rs.next()) {
+						verification = true;
+						System.out.println("verif ) true");
+					}
+				}
+			} 
+			co.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(verification == true) {
+			try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+				try(PreparedStatement pstm = co.prepareStatement("UPDATE preferer SET liker=1 WHERE preferer.idFilm=? AND preferer.idUtilisateur=?;")) {
+					pstm.setInt(1, idFilm);
+					pstm.setInt(2, idUtilisateur);
+					pstm.executeUpdate();
+				}
+				co.close();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+				try(PreparedStatement pstm = co.prepareStatement("INSERT INTO preferer (idFilm,idUtilisateur,liker,favoris) VALUES (?,?,1,0);")) {
+					pstm.setInt(1, idFilm);
+					pstm.setInt(2, idUtilisateur);
+					pstm.executeUpdate();
+				}
+				co.close();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return film;
+	}
+	
+	public Film addDislike (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
+		Film film = getFilm(idFilm);
+		System.out.println("ds add like");
+		boolean verification = false;
+		userDao.getUser(idUtilisateur);
+		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+			try(PreparedStatement pstm = co.prepareStatement("SELECT * FROM preferer WHERE preferer.idFilm=? AND preferer.idUtilisateur=?;")) {
+				pstm.setInt(1, idFilm);
+				pstm.setInt(2, idUtilisateur);
+				try(ResultSet rs = pstm.executeQuery()) {
+					if(rs.next()) {
+						verification = true;
+						System.out.println("verif ) true");
+					}
+				}
+			} 
+			co.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(verification == true) {
+			try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+				try(PreparedStatement pstm = co.prepareStatement("UPDATE preferer SET liker=-1 WHERE preferer.idFilm=? AND preferer.idUtilisateur=?;")) {
+					pstm.setInt(1, idFilm);
+					pstm.setInt(2, idUtilisateur);
+					pstm.executeUpdate();
+				}
+				co.close();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+				try(PreparedStatement pstm = co.prepareStatement("INSERT INTO preferer (idFilm,idUtilisateur,liker,favoris) VALUES (?,?,-1,0);")) {
+					pstm.setInt(1, idFilm);
+					pstm.setInt(2, idUtilisateur);
+					pstm.executeUpdate();
+				}
+				co.close();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return film;
+	}
+	
+	public Film removeAvis (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
+		Film film = null;
+		userDao.getUser(idUtilisateur);
+		try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
+			film=getFilm(idFilm);
+			String sqlQuery = "UPDATE preferer SET liker=0 WHERE preferer.idFilm=? AND preferer.idUtilisateur=?";
+			try(PreparedStatement pstm = co.prepareStatement(sqlQuery)){
+				pstm.setInt(1, idFilm);
+				pstm.setInt(2, idUtilisateur);
+				pstm.executeUpdate();
+				pstm.close();
+			}
+			co.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return film;
+	}
+	
+	
 }

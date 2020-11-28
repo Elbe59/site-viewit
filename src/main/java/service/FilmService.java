@@ -151,8 +151,39 @@ public class FilmService {
 			return null;
 		}
 	}
+	
+	public Film addLike(int idFilm, Integer idUtilisateur) throws FilmNotFoundException
+	{
+		try{
+			return filmDao.addLike(idFilm,idUtilisateur);
+		}catch (FilmNotFoundException | UserNotFoundException e)
+		{
+			//e.printStackTrace();
+			return null;
+		}
+	}
 
-
+	public Film addDislike(int idFilm, Integer idUtilisateur) throws FilmNotFoundException
+	{
+		try{
+			return filmDao.addDislike(idFilm,idUtilisateur);
+		}catch (FilmNotFoundException | UserNotFoundException e)
+		{
+			//e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Film removeAvis(int idFilm, Integer idUtilisateur) throws FilmNotFoundException, SQLException
+	{
+		try{
+			return filmDao.removeAvis(idFilm,idUtilisateur);
+		}catch (FilmNotFoundException | UserNotFoundException e)
+		{
+			return null;
+		}
+	}
+	
 	public List<FilmDto> listFilmsDto(Integer idUtilisateur) {
 		return filmDao.listFilmsDto(idUtilisateur);
 	}

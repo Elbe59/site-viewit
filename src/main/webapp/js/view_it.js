@@ -22,15 +22,21 @@ function Lecture(jsonFile) {
 				} else {
 					listOfFilms[i][2].querySelector("input").name = "addfavori";
 				}
-				if (listOfFilms[i][3] != null && listOfFilms[i][3] != null) {
+				if (listOfFilms[i][3] != null && listOfFilms[i][4] != null) {
 					if (jsonFile[j].avis == "like") {
+						listOfFilms[i][3].querySelector("input").name = "remove";
 						listOfFilms[i][3].querySelector("svg").style.color = "green";
+						listOfFilms[i][4].querySelector("input").name = "adddislike";
 						listOfFilms[i][4].querySelector("svg").style.color = "grey";
 					} else if (jsonFile[j].avis == "dislike") {
+						listOfFilms[i][3].querySelector("input").name = "addlike";
 						listOfFilms[i][3].querySelector("svg").style.color = "grey";
+						listOfFilms[i][4].querySelector("input").name = "remove";
 						listOfFilms[i][4].querySelector("svg").style.color = "red";
 					} else {
+						listOfFilms[i][3].querySelector("input").name = "addlike";
 						listOfFilms[i][3].querySelector("svg").style.color = "grey";
+						listOfFilms[i][4].querySelector("input").name = "adddislike";
 						listOfFilms[i][4].querySelector("svg").style.color = "grey";
 					}
 				}

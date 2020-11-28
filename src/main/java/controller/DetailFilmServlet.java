@@ -71,6 +71,35 @@ public class DetailFilmServlet extends ServletGenerique {
 					e.printStackTrace();
 				}
 			}
+			if(req.getParameter("addlike")!=null) {
+				int index = Integer.parseInt(req.getParameter("addlike"));
+				int idFilm = listOfFilms.get(index).getId();
+				try {
+					FilmService.getInstance().addLike(idFilm, utilisateur.getId());
+				} catch (FilmNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+			if(req.getParameter("adddislike")!=null) {
+				int index = Integer.parseInt(req.getParameter("adddislike"));
+				int idFilm = listOfFilms.get(index).getId();
+				try {
+					FilmService.getInstance().addDislike(idFilm, utilisateur.getId());
+				} catch (FilmNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+			if(req.getParameter("remove")!=null) {
+				int index = Integer.parseInt(req.getParameter("remove"));
+				int idFilm = listOfFilms.get(index).getId();
+				try {
+					FilmService.getInstance().removeAvis(idFilm, utilisateur.getId());
+				} catch (FilmNotFoundException e) {
+					e.printStackTrace();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		doGet(req,resp);
 	}
