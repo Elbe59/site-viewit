@@ -313,18 +313,26 @@ public class FilmDaoImpl implements FilmDao {
 		List<FilmDto> listOfFilmsCo = new ArrayList<FilmDto>();
 
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-			String sqlQuery = "SELECT film.idFilm,film.titreFilm,preferer.idUtilisateur FROM FILM JOIN PREFERER ON film.idFilm = preferer.idFilm WHERE preferer.idUtilisateur=? AND preferer.favoris=1;";
+			String sqlQuery = "SELECT film.idFilm,film.titreFilm,preferer.idUtilisateur,preferer.favoris,preferer.liker FROM FILM JOIN PREFERER ON film.idFilm = preferer.idFilm WHERE preferer.idUtilisateur=?;";
 			try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
 				pStm.setInt(1, idUtilisateur);
 				for (int i=0;i<listOfFilms.size();i++) {
 					FilmDto filmDto = new FilmDto(
 							listOfFilms.get(i).getId(),
 							listOfFilms.get(i).getTitre(),
+							"aucun",
 							false);
 					try(ResultSet rs = pStm.executeQuery()) {
 						while(rs.next()) {
 							if (rs.getInt("idFilm") == listOfFilms.get(i).getId()) {
-								filmDto.setFavori(true);
+								if (rs.getInt("favoris") == 1) {
+									filmDto.setFavori(true);
+								}
+								if (rs.getInt("liker") == 1) {
+									filmDto.setAvis("like");
+								} else if (rs.getInt("liker") == -1) {
+									filmDto.setAvis("dislike");
+								}
 							}
 						}
 					}

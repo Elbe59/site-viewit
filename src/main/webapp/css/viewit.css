@@ -249,11 +249,26 @@ article img {
 	margin-right : 10%;
 }
 
+.icones {
+	float : left;
+	margin-left : 0.5em;
+	width : 100%;
+}
+
 .note {
 	color : lightgreen;
 	margin-left : 0.5em;
+	margin-right : 0.5em;
 	text-align : left;
 	font-size : 200%;
+	float : left;
+}
+
+.favori, .like, .dislike {
+	margin-left : 0.5em;
+	margin-right : 0.5em;
+	float : left;
+	color : grey;
 }
 
 #imgDetail {

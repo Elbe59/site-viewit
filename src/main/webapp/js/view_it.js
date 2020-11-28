@@ -18,11 +18,22 @@ function Lecture(jsonFile) {
 				if (jsonFile[j].favori == true) {
 					listOfFilms[i][2].querySelector("input").name = "suppfavori";
 					listOfFilms[i][2].querySelector("svg").style.color = "red";
-					listOfFilms[i][2].querySelector("svg").style.opacity = 0.8;
+					listOfFilms[i][2].querySelector("svg").style.opacity = 1;
 				} else {
 					listOfFilms[i][2].querySelector("input").name = "addfavori";
 				}
-				console.log(listOfFilms[i][0],listOfFilms[i][2].querySelector("input").name)
+				if (listOfFilms[i][3] != null && listOfFilms[i][3] != null) {
+					if (jsonFile[j].avis == "like") {
+						listOfFilms[i][3].querySelector("svg").style.color = "green";
+						listOfFilms[i][4].querySelector("svg").style.color = "grey";
+					} else if (jsonFile[j].avis == "dislike") {
+						listOfFilms[i][3].querySelector("svg").style.color = "grey";
+						listOfFilms[i][4].querySelector("svg").style.color = "red";
+					} else {
+						listOfFilms[i][3].querySelector("svg").style.color = "grey";
+						listOfFilms[i][4].querySelector("svg").style.color = "grey";
+					}
+				}
 			}
 		}
 	}
@@ -32,7 +43,11 @@ function ListOfFilms () {
 	let doc = document.getElementsByTagName("article");
 	let list = [];
 	for (i=0;i<doc.length;i++) {
-		list.push([doc[i]["title"],doc[i]["id"],doc[i],doc[i]["genre"]]);
+		list.push([doc[i]["title"],doc[i]["id"],doc[i],null,null]);
+	}
+	if (list.length == 0) {
+		doc = document.getElementsByClassName("filmDetail")[0];
+		list.push([doc.title,doc.id,doc.getElementsByClassName("favori")[0],doc.getElementsByClassName("like")[0],doc.getElementsByClassName("dislike")[0]]);
 	}
 	return list;
 };
