@@ -16,7 +16,7 @@
                 <li id="header_ajoutfilm" th:class="${role_value==0} ? hidden : ''"><a href="../user/ajoutfilm" th:text="${role_value==1} ? 'Demande de Film' : 'Ajout de Film'">Demande de Film</a></li>
                 <li id="header_gestion" class="deroulant" th:classappend="${role_value!=2} ? hidden : ''"><a href="#">Gestion ...</a>
                     <ul class="sous">
-                        <li><a href="../admin/gestionuser">Gestion Utilisateur</a></li>
+                        <li><a  href="../admin/gestionuser" id="header_gestion_user">Gestion Utilisateur</a></li>
                         <li><a href="../admin/gestionfilm">Gestion Film</a></li>
                         <li><a href="../admin/gestiongenre">Gestion Genre</a></li>
                        <!-- <li><a href="../user/ajoutfilm">Ajout de Film</a></li> -->
@@ -37,7 +37,7 @@
         </div>
         <div class="conteneur_deco" th:style="${role_value == 0} ? 'display : none' : ''">
             <form method="post" action="../deconnection" class="formulaire_deco">
-                <label th:text="${utilisateur}"></label>
+                <label th:text="${utilisateur}" th:id="'userCo='+${userCoId}"></label>
                 <div class="btn_center">
                     <button class="btn_deco" type="Submit">Se déconnecter</button>
                 </div>
@@ -55,7 +55,12 @@
             <li>Emile Mongenet</li>
             <li>Pierre Sanchez</li>
         </ul>
-
+        <script type="text/javascript">
+            function getSessionName(){
+                var name=session.getAttribute("utilisateur");
+                alert(name);
+            }
+        </script>
     </footer>
 </body>
 </html>
