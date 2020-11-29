@@ -317,6 +317,10 @@ article img {
 	border-width: 2px;
 }
 
+.ajout_utilisateur_btn{
+	background-color: brown;
+	color: lightblue;
+}
 .ajout_utilisateur form {
 	border: solid black;
 	border: 0.05em;

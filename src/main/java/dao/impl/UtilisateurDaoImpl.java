@@ -2,6 +2,7 @@ package dao.impl;
 
 import dao.UtilisateurDao;
 import entity.Utilisateur;
+import entity.UtilisateurDto;
 import exception.*;
 
 import java.sql.*;
@@ -95,7 +96,9 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
                 try (PreparedStatement pStm = co.prepareStatement("DELETE FROM UTILISATEUR WHERE idUtilisateur = ?;")) {
                     pStm.setInt(1, id);
                     pStm.executeUpdate();
-                } catch (SQLException e) { }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         return user;
     }
@@ -124,6 +127,28 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
             }
             user = getUser(id);
         }catch(UserNotFoundException e){
+        }
+        return user;
+    }
+
+    @Override
+    public Utilisateur modifyUser(Utilisateur user) throws SQLException {
+        try {
+            getUser(user.getId());
+
+            try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
+                String sqlQuery = "UPDATE `utilisateur` SET email = ?, prenomUtilisateur = ?, nomUtilisateur = ?, mdpHash = ? WHERE idUtilisateur = ?";
+                try (PreparedStatement pStm = connection.prepareStatement(sqlQuery)) {
+                    pStm.setString(1, user.getEmail());
+                    pStm.setString(2, user.getPrenom());
+                    pStm.setString(3, user.getNom());
+                    pStm.setString(4, user.getMdpHash());
+                    pStm.setInt(5, user.getId());
+                    pStm.executeUpdate();
+                }
+            }
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
         }
         return user;
     }

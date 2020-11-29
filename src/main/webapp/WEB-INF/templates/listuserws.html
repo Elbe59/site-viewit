@@ -15,36 +15,18 @@
 						<label for="recherche">Rechercher :</label>
 						<input type="text" name="recherche" id="recherche">
 					</div>
-					<div id="bloc_modif_utilisateur" hidden>
-						<h3>Modifier un Utilisateur</h3>
-						<form id="modif_utilisateur" style="color: white" >
-							<label for="modif_mail">E-mail</label>
-							<input type="email" name = "mail" id = "modif_mail" class="ajout_utilisateur">
-							<br>
-							<label for="modif_nom">Nom</label>
-							<input type="text" name = "nom" id = "modif_nom" class="ajout_utilisateur">
-							<br>
-							<label for="modif_prenom">Prenom</label>
-							<input type="text" name = "prenom" id = "modif_prenom" class="ajout_utilisateur">
-							<br>
-							<label for="modif_mdp">Nouveau Mot de passe</label>
-							<input type="password" name = "mdp" id = "modif_mdp" class="ajout_utilisateur">
-							<br>
-							<input type="button" name = "send" id = "modif_send" value="Modifier l'utilisateur" class="ajout_utilisateur_btn">
-						</form>
-					</div>
 				</div>
 				<div>
-					<form id="ajout_utilisateur" style="color: white">
-						<label for="ajout_mail">E-mail</label>
-						<input type="text" name = "mail" id = "ajout_mail" class="ajout_utilisateur" required>
-						<label for="ajout_nom">Nom</label>
-						<input type="text" name = "nom" id = "ajout_nom" class="ajout_utilisateur" required>
-						<label for="ajout_prenom">Prenom</label>
-						<input type="text" name = "prenom" id = "ajout_prenom" class="ajout_utilisateur" required>
-						<label for="ajout_mdp">Mot de passe</label>
-						<input type="password" name = "mdp" id = "ajout_mdp" class="ajout_utilisateur" required>
-						<input type="button" name = "send" id = "ajout_user_send" value="Ajouter un utilisateur" class="ajout_utilisateur_btn">
+					<form  method="post" action="../admin/ajoutuser" id="ajout_utilisateur" style="color: white">
+						<label for="mail">E-mail</label>
+						<input type="text" name = "mail" id = "mail" class="ajout_utilisateur" required>
+						<label for="nom">Nom</label>
+						<input type="text" name = "nom" id = "nom" class="ajout_utilisateur" required>
+						<label for="prenom">Prenom</label>
+						<input type="text" name = "prenom" id = "prenom" class="ajout_utilisateur" required>
+						<label for="mdp">Mot de passe</label>
+						<input type="password" name = "mdp" id = "mdp" class="ajout_utilisateur" required>
+						<input type="submit" name = "send" id = "send" value="Ajouter un utilisateur" class="ajout_utilisateur" onclick="addUserForm()">
 					</form>
 				</div>
 			</div>

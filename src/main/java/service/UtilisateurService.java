@@ -1,11 +1,9 @@
 package service;
 
-import dao.FilmDao;
 import dao.UtilisateurDao;
-import dao.impl.FilmDaoImpl;
 import dao.impl.UtilisateurDaoImpl;
-import entity.Film;
 import entity.Utilisateur;
+import entity.UtilisateurDto;
 import exception.UserAlreadyAdminException;
 import exception.UserAlreadyDownException;
 import exception.UserAlreadyExistingException;
@@ -13,6 +11,7 @@ import exception.UserNotFoundException;
 import utils.MotDePasseUtils;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UtilisateurService {
@@ -41,7 +40,24 @@ public class UtilisateurService {
         return user;
     }
 
+    public Utilisateur modifyUser(Utilisateur user) throws SQLException {
+        String password=user.getMdpHash();
+        String passwordHash= MotDePasseUtils.genererMotDePasse(password);
+        user.setMdpHash(passwordHash);
+        utilisateurDao.modifyUser(user);
+        return user;
+    }
 
+    public List<UtilisateurDto>  listUsersDto(){
+        List<Utilisateur> utilisateurs=utilisateurDao.listUser();
+
+        List<UtilisateurDto> listUserDto= new ArrayList<>();
+        for (Utilisateur utilisateur: utilisateurs) {
+            UtilisateurDto userDto=new UtilisateurDto(utilisateur.getId(),utilisateur.getPrenom(),utilisateur.getNom(),utilisateur.getEmail(),utilisateur.isAdmin());
+            listUserDto.add(userDto);
+        }
+        return listUserDto;
+    }
     public List<Utilisateur> listUser() {
         return utilisateurDao.listUser();
     }
