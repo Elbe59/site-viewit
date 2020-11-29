@@ -105,26 +105,27 @@ function addFilmForm(){
 
 window.onload = function() {
 	ACTUAL_USER_ID=document.querySelector(".conteneur_deco > form > label").getAttribute("id").substring(7);
-	let listOfFilms = ListOfFilms();
-	addFilmForm();
 
-	listFilmJSON();
-	console.log(listOfFilms);
+
+	if(window.location.pathname==="/accueil" || window.location.pathname==="/" || window.location.pathname==="/user/favoris"){
+		listFilmJSON();
+		let listOfFilms = ListOfFilms();
+		addFilmForm();
+		console.log(listOfFilms);
+	}
+
 	/*let element=document.getElementById("header_gestion_user");
 	element.addEventListener("click",function(){
 		console.log("cc");
 		listUsers();
 	});*/
 	if(window.location.pathname==="/admin/gestionuser"){
-		/*document.getElementById("ajout_mail").value = "";
-		document.getElementById("ajout_nom").value = "";
-		document.getElementById("ajout_prenom").value = "";
-		document.getElementById("ajout_mdp").value = "";*/
 		listUsers();
 	}
 };
 
 let listUsers = function () {
+
 	let usersRequest = new XMLHttpRequest();
 	let url = "../ws/admin/gestionuser/listuser";
 	usersRequest.open("GET", url, true);
@@ -170,14 +171,36 @@ let modifUser = function (user){
 let validModifUser = function (user){
 	let new_email=document.getElementById("modif_mail").value;
 	let new_name=document.getElementById("modif_prenom").value;
+	new_name = new_name.charAt(0).toLocaleUpperCase() + new_name.substring(1);
 	let new_surname=document.getElementById("modif_nom").value;
+	new_surname = new_surname.charAt(0).toLocaleUpperCase() + new_surname.substring(1);
 	let new_password=document.getElementById("modif_mdp").value;
 	// A compléter pour vérifier les champs du formulaire.
-	if(new_password.length <7){
-		console.log("Mot de passe < 7");
-		return false;
+	let booleanVerif = true;
+	// A compléter pour vérifier les champs du formulaire.
+	if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(new_email)) {
+
+		/*let error = document.createElement("p");
+		error.value = "Vous avez rentré une mauvaise adresse email."
+		error.style.color = "red";
+		email.appendChild(error)*/
+	} else {
+		booleanVerif = false;
+		alert("Vous avez rentré une mauvaise adresse email.");
 	}
-	else{
+	if (new_password.length < 7) {
+		booleanVerif = false;
+		alert("Votre mot de passe doit contenir au minimum 7 caractères.")
+	}
+	if (new_name.length ===0) {
+		booleanVerif = false;
+		alert("Vous n'avez pas rentré de prénom.")
+	}
+	if (new_surname.length ===0) {
+		booleanVerif = false;
+		alert("Vous n'avez pas rentré de nom de famille.")
+	}
+	if (booleanVerif) {
 		if(confirm('Etes vous sur de vouloir modifier cet utilisateur ?')) {
 			let modifUserRequest = new XMLHttpRequest();
 			let url = "../ws/admin/gestionuser/"+user.id+"/modif";
@@ -242,13 +265,21 @@ let verifyAjoutForm = function (user) {
 		booleanVerif = false;
 		alert("Votre mot de passe doit contenir au minimum 7 caractères.")
 	}
+	if (name.length ===0) {
+		booleanVerif = false;
+		alert("Vous n'avez pas rentré de prénom.")
+	}
+	if (surname.length ===0) {
+		booleanVerif = false;
+		alert("Vous n'avez pas rentré de nom de famille.")
+	}
 	if (booleanVerif) {
 		if (confirm('Etes vous sur de vouloir ajouter cet utilisateur ?')) {
 			let ajoutUserRequest = new XMLHttpRequest();
 			let url = "../ws/admin/gestionuser";
 			ajoutUserRequest.open("POST", url, true);
 			ajoutUserRequest.onload = function () {
-				if(this.status===409){
+				if(this.status== 409){
 					alert("Vous ne pouvez pas ajouter deux utilisateur avec la même adresse e-mail.")
 				}
 				else{
@@ -267,6 +298,10 @@ let verifyAjoutForm = function (user) {
 }
 //-----------Création du tableau des utilisateurs--------------
 let refreshTable = function (users) {
+	document.getElementById("ajout_mail").value = "";
+	document.getElementById("ajout_nom").value = "";
+	document.getElementById("ajout_prenom").value = "";
+	document.getElementById("ajout_mdp").value = "";
 	document.getElementById("ajout_user_send").onclick = function (){
 		verifyAjoutForm()
 	}

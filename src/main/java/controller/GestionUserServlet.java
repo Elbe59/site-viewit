@@ -36,7 +36,7 @@ public class GestionUserServlet extends ServletGenerique {
 
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    /*protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Utilisateur> listOfUsers = UtilisateurService.getInstance().listUser();
         if(request.getParameter("supp")!=null) {
             int index = Integer.parseInt(request.getParameter("supp"));
@@ -69,5 +69,5 @@ public class GestionUserServlet extends ServletGenerique {
             }
         }
         response.sendRedirect("gestionuser");
-    }
+    }*/
 }

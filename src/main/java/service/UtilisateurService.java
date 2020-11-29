@@ -32,11 +32,7 @@ public class UtilisateurService {
         String password=user.getMdpHash();
         String passwordHash= MotDePasseUtils.genererMotDePasse(password);
         user.setMdpHash(passwordHash);
-        try{
-            utilisateurDao.addUser(user);
-        }catch (UserAlreadyExistingException e){
-            user = null;
-        }
+        utilisateurDao.addUser(user);
         return user;
     }
 
@@ -63,11 +59,7 @@ public class UtilisateurService {
     }
 
     public Utilisateur getUser(int id) throws UserNotFoundException {
-        try{
-            return utilisateurDao.getUser(id);
-        }catch (UserNotFoundException e){
-            return null;
-        }
+        return utilisateurDao.getUser(id);
     }
 
     public Utilisateur getUserByEmail(String email) throws UserNotFoundException
@@ -81,19 +73,11 @@ public class UtilisateurService {
 
     public Utilisateur deleteUser(Integer id) throws UserNotFoundException, SQLException
     {
-        try{
-            return utilisateurDao.deleteUser(id);
-        }catch (UserNotFoundException e){
-            return null;
-        }
+        return utilisateurDao.deleteUser(id);
     }
 
     public Utilisateur changeRoleUser(String action,Integer id) throws SQLException, UserAlreadyDownException, UserAlreadyAdminException
     {
-        try{
-            return utilisateurDao.changeRoleUser(action,id);
-        }catch(UserAlreadyDownException | UserAlreadyAdminException e){
-            return null;
-        }
+        return utilisateurDao.changeRoleUser(action,id);
     }
 }
