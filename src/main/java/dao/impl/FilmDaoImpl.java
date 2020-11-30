@@ -317,11 +317,13 @@ public class FilmDaoImpl implements FilmDao {
 			try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
 				pStm.setInt(1, idUtilisateur);
 				for (int i=0;i<listOfFilms.size();i++) {
+					Integer pourcentage = getPourcentageFilm(listOfFilms.get(i).getId());
 					FilmDto filmDto = new FilmDto(
 							listOfFilms.get(i).getId(),
 							listOfFilms.get(i).getTitre(),
 							"aucun",
-							false);
+							false,
+							pourcentage);
 					try(ResultSet rs = pStm.executeQuery()) {
 						while(rs.next()) {
 							if (rs.getInt("idFilm") == listOfFilms.get(i).getId()) {
@@ -338,6 +340,8 @@ public class FilmDaoImpl implements FilmDao {
 					}
 					listOfFilmsCo.add(filmDto);
 				}
+			} catch (FilmNotFoundException e) {
+				e.printStackTrace();
 			}
 		} catch (SQLException | IOException e) {
 			e.printStackTrace();
@@ -537,5 +541,29 @@ public class FilmDaoImpl implements FilmDao {
 		return film;
 	}
 	
-	
+	public Integer getPourcentageFilm (Integer id) throws FilmNotFoundException {
+		Integer pourcentage = 0;
+		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+			try(PreparedStatement pStm = co.prepareStatement("SELECT"
+					+ "	(SELECT idFilm FROM PREFERER WHERE idFilm=? GROUP BY idFilm) AS idFilm,"
+					+ "	IFNULL((SELECT count(liker) FROM PREFERER WHERE idFilm=? AND liker=1 GROUP BY idFilm),0) AS likes,"
+					+ " IFNULL((SELECT count(liker) FROM PREFERER WHERE idFilm=? AND liker!=0 GROUP BY idFilm),0) AS total;")) {
+				pStm.setInt(1, id);
+				pStm.setInt(2, id);
+				pStm.setInt(3, id);
+				try(ResultSet rs = pStm.executeQuery()) {
+					while (rs.next()) {
+						if (rs.getInt("total") != 0) {
+							pourcentage = (int) ((rs.getFloat("likes")/rs.getFloat("total"))*100);
+						} else {
+							pourcentage = 0;
+						}	
+					}	
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return pourcentage;
+	}
 }

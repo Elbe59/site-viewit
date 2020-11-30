@@ -209,4 +209,8 @@ public class FilmService {
 	{
 		return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 	}
+	
+	public Integer getPourcentageFilm (Integer id) throws FilmNotFoundException {
+		return filmDao.getPourcentageFilm(id);
+	}
 }

@@ -26,7 +26,7 @@
       </section>
       <section id="accueil-List-Film">
         <article th:each="film : ${listFilms}" th:if="${film.valide == 1}" th:id="${film.id}" th:title="${film.titre}">
-          <p>98%</p>
+          <p id="pourcentage">98%</p>
           <form method="post" th:style="${role_value==0} ? 'visibility:hidden'">
             <label>
               <input type="submit" th:value="${filmStat.index}" th:id="${filmStat.index}" style="display:none"/>

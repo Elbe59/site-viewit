@@ -7,12 +7,14 @@ public class FilmDto {
 	private String titre;
 	private String avis;
 	private Boolean favori;
+	private Integer pourcentage;
 
-	public FilmDto(Integer id, String titre, String avis, Boolean favori) throws IOException {
+	public FilmDto(Integer id, String titre, String avis, Boolean favori, Integer pourcentage) throws IOException {
 		this.id = id;
 		this.titre = titre;
 		this.avis = avis;
 		this.favori = favori;
+		this.pourcentage = pourcentage;
 	}
 	
 	public Integer getId() {
@@ -41,5 +43,13 @@ public class FilmDto {
 	}
 	public void setAvis(String avis) {
 		this.avis = avis;
+	}
+
+	public Integer getPourcentage() {
+		return pourcentage;
+	}
+
+	public void setPourcentage(Integer pourcentage) {
+		this.pourcentage = pourcentage;
 	}
 }
