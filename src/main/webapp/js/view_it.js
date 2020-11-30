@@ -17,7 +17,7 @@ function Lecture(jsonFile) {
 	for (i=0;i<listOfFilms.length;i++) {
 		for (j=0;j<jsonFile.length;j++) {
 			if (listOfFilms[i][1] == jsonFile[j].id) {
-				if (jsonFile[j].favori === true) {
+				if (jsonFile[j].favori == true) {
 					listOfFilms[i][2].querySelector("input").name = "suppfavori";
 					listOfFilms[i][2].querySelector("svg").style.color = "red";
 					listOfFilms[i][2].querySelector("svg").style.opacity = 1;
@@ -25,12 +25,12 @@ function Lecture(jsonFile) {
 					listOfFilms[i][2].querySelector("input").name = "addfavori";
 				}
 				if (listOfFilms[i][3] != null && listOfFilms[i][4] != null) {
-					if (jsonFile[j].avis === "like") {
+					if (jsonFile[j].avis == "like") {
 						listOfFilms[i][3].querySelector("input").name = "remove";
 						listOfFilms[i][3].querySelector("svg").style.color = "green";
 						listOfFilms[i][4].querySelector("input").name = "adddislike";
 						listOfFilms[i][4].querySelector("svg").style.color = "grey";
-					} else if (jsonFile[j].avis === "dislike") {
+					} else if (jsonFile[j].avis == "dislike") {
 						listOfFilms[i][3].querySelector("input").name = "addlike";
 						listOfFilms[i][3].querySelector("svg").style.color = "grey";
 						listOfFilms[i][4].querySelector("input").name = "remove";
@@ -54,8 +54,10 @@ function ListOfFilms () {
 		list.push([doc[i]["title"],doc[i]["id"],doc[i],null,null]);
 	}
 	if (list.length == 0) {
-		doc = document.getElementsByClassName("filmDetail")[0];
-		list.push([doc.title,doc.id,doc.getElementsByClassName("favori")[0],doc.getElementsByClassName("like")[0],doc.getElementsByClassName("dislike")[0]]);
+		doc = document.getElementsByClassName("filmDetail");
+		for (i=0;i<doc.length;i++) {
+			list.push([doc[i].title,doc[i].id,doc[i].getElementsByClassName("favori")[0],doc[i].getElementsByClassName("like")[0],doc[i].getElementsByClassName("dislike")[0]]);
+		}
 	}
 	return list;
 };
