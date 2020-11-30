@@ -29,7 +29,7 @@ CREATE TABLE GENRE(
 #--- valide = 0 : Non affiché, valide = 1 : Affiche
 CREATE TABLE FILM(
     idFilm      Int(5)  Auto_increment  NOT NULL ,
-    titreFilm   Varchar (50) NOT NULL ,
+    titreFilm   Varchar (100) NOT NULL ,
     resumeFilm  Varchar (500) NOT NULL ,
     dateSortie  Date NOT NULL ,
 	dureeFilm   Int(3) NOT NULL,
