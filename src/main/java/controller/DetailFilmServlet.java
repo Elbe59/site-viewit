@@ -37,7 +37,7 @@ public class DetailFilmServlet extends ServletGenerique {
 		try {
 			if(filmId != -1 && service.getFilm(filmId) != null) {
 				context.setVariable("film", service.getFilm(filmId));
-				engine.process("film", context, resp.getWriter());
+				engine.process("detailFilmws", context, resp.getWriter());
 			} else {
 				System.out.println("Film non trouve: "+ filmId);
 				resp.sendRedirect("/accueil");
@@ -47,7 +47,7 @@ public class DetailFilmServlet extends ServletGenerique {
 		}
 	}
 	
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	/*protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Utilisateur utilisateur = (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
 		if(utilisateur != null){
 			if(req.getParameter("addfavori")!=null) {
@@ -97,5 +97,6 @@ public class DetailFilmServlet extends ServletGenerique {
 		}
 		doGet(req,resp);
 	}
+	*/
 
 }
