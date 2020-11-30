@@ -110,7 +110,7 @@ window.onload = function() {
 	ACTUAL_USER_ID=document.querySelector(".conteneur_deco > form > label").getAttribute("id").substring(7);
 
 
-	if(window.location.pathname==="/accueil" || window.location.pathname==="/" || window.location.pathname==="/user/favoris" || window.location.pathname==="/film"){
+	if(window.location.pathname==="/accueil" || window.location.pathname==="/" || window.location.pathname==="/user/favoris"){
 		listFilmJSON();
 		let listOfFilms = ListOfFilms();
 		addFilmForm();
@@ -122,10 +122,110 @@ window.onload = function() {
 		console.log("cc");
 		listUsers();
 	});*/
+	if(window.location.pathname==="/film"){
+		let filmId = parseInt(document.getElementsByClassName('filmDetail')[0].getAttribute('id'))
+		if(ACTUAL_USER_ID !== "0"){
+			getFilmInfo(filmId);
+		}
+	}
 	if(window.location.pathname==="/admin/gestionuser"){
 		listUsers();
 	}
 };
+
+//---- PAGE DETAIL FILM AJAX + WS ----//
+
+let getFilmInfo = function (filmId){
+	let infoFilmRequest = new XMLHttpRequest();
+	let url = "../ws/"+ACTUAL_USER_ID+"/filmdetail/"+filmId;
+	infoFilmRequest.open("GET", url, true);
+	infoFilmRequest.responseType = "json";
+
+	infoFilmRequest.onload = function () {
+		let filmDetail = this.response;
+		remplirFilmIcone(filmDetail);
+		console.log(filmDetail);
+	};
+	infoFilmRequest.send();
+}
+
+let remplirFilmIcone = function (filmDetail){
+	let iconesBloc=document.getElementById("bloc_icones");
+	let pourcentageValue=iconesBloc.querySelector("#pourcentage_film");
+	let favori=iconesBloc.querySelector("#favori_film");
+	let like=iconesBloc.querySelector("#like_film");
+	let dislike=iconesBloc.querySelector("#dislike_film");
+	if (filmDetail.favori === true) {
+		favori.style.color="red";
+		favori.style.opacity=1;
+		favori.onclick = function (){
+			removeAvis(filmDetail.id,"favori");
+		}
+	} else {
+		favori.style.color="grey";
+		favori.onclick = function (){
+			addAvis(filmDetail.id,"favori");
+		}
+	}
+	if (filmDetail.avis === "like") {
+		like.style.color = "green";
+		dislike.style.color = "grey";
+		like.onclick = function (){
+			removeAvis(filmDetail.id,"like");
+		}
+		dislike.onclick = function (){
+			addAvis(filmDetail.id,"dislike");
+		}
+	} else if (filmDetail.avis === "dislike") {
+		like.style.color = "grey";
+		dislike.style.color = "red";
+		like.onclick = function (){
+			addAvis(filmDetail.id,"like");
+		}
+		dislike.onclick = function(){
+			removeAvis(filmDetail.id,"dislike");
+		}
+	} else {
+		like.style.color = "grey";
+		dislike.style.color = "grey";
+		like.onclick = function (){
+			addAvis(filmDetail.id,"like");
+		}
+		dislike.onclick = function (){
+			addAvis(filmDetail.id,"dislike");
+		}
+	}
+	pourcentageValue.innerText = filmDetail.pourcentage + " %";
+}
+
+let removeAvis = function (filmId,action){
+	let removeAvisRequest = new XMLHttpRequest();
+	let url = "../ws/"+ACTUAL_USER_ID+"/filmdetail/"+filmId+"/remove/"+action;
+	removeAvisRequest.open("PATCH", url, true);
+	removeAvisRequest.onload = function () {
+		if(this.status===409){
+			alert("Vous essayez d'effectuer une action inexistante");
+		}
+		else{
+			getFilmInfo(filmId);
+		}
+	};
+	removeAvisRequest.send();
+}
+let addAvis = function (filmId,action){
+	let addAvisRequest = new XMLHttpRequest();
+	let url = "../ws/"+ACTUAL_USER_ID+"/filmdetail/"+filmId+"/add/"+action;
+	addAvisRequest.open("PATCH", url, true);
+	addAvisRequest.onload = function () {
+		if(this.status===409){
+			alert("Vous essayez d'effectuer une action inexistante");
+		}
+		else{
+			getFilmInfo(filmId);
+		}
+	};
+	addAvisRequest.send();
+}
 
 //----  GESTION DES UTILISATEURS EN UTILISANT LES WEB SERVICES A PARTIR DE REQUETES AJAX----//
 let listUsers = function () {
@@ -138,7 +238,6 @@ let listUsers = function () {
 		let users = this.response;
 		console.log(users)
 		refreshTable(users);
-		return users;
 	};
 	usersRequest.send();
 };
