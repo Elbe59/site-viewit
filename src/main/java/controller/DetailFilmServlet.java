@@ -49,22 +49,19 @@ public class DetailFilmServlet extends ServletGenerique {
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Utilisateur utilisateur = (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
-		List<Film> listOfFilms = FilmService.getInstance().listFilms();
 		if(utilisateur != null){
 			if(req.getParameter("addfavori")!=null) {
 				int index = Integer.parseInt(req.getParameter("addfavori"));
-				int idFilm = listOfFilms.get(index).getId();
 				try {
-					FilmService.getInstance().addFavori(idFilm, utilisateur.getId());
+					FilmService.getInstance().addFavori(index, utilisateur.getId());
 				} catch (FilmNotFoundException e) {
 					e.printStackTrace();
 				}
 			}
 			if(req.getParameter("suppfavori")!=null) {
 				int index = Integer.parseInt(req.getParameter("suppfavori"));
-				int idFilm = listOfFilms.get(index).getId();
 				try {
-					FilmService.getInstance().suppFavori(idFilm, utilisateur.getId());
+					FilmService.getInstance().suppFavori(index, utilisateur.getId());
 				} catch (FilmNotFoundException e) {
 					e.printStackTrace();
 				} catch (SQLException e) {
@@ -73,27 +70,24 @@ public class DetailFilmServlet extends ServletGenerique {
 			}
 			if(req.getParameter("addlike")!=null) {
 				int index = Integer.parseInt(req.getParameter("addlike"));
-				int idFilm = listOfFilms.get(index).getId();
 				try {
-					FilmService.getInstance().addLike(idFilm, utilisateur.getId());
+					FilmService.getInstance().addLike(index, utilisateur.getId());
 				} catch (FilmNotFoundException e) {
 					e.printStackTrace();
 				}
 			}
 			if(req.getParameter("adddislike")!=null) {
 				int index = Integer.parseInt(req.getParameter("adddislike"));
-				int idFilm = listOfFilms.get(index).getId();
 				try {
-					FilmService.getInstance().addDislike(idFilm, utilisateur.getId());
+					FilmService.getInstance().addDislike(index, utilisateur.getId());
 				} catch (FilmNotFoundException e) {
 					e.printStackTrace();
 				}
 			}
 			if(req.getParameter("remove")!=null) {
 				int index = Integer.parseInt(req.getParameter("remove"));
-				int idFilm = listOfFilms.get(index).getId();
 				try {
-					FilmService.getInstance().removeAvis(idFilm, utilisateur.getId());
+					FilmService.getInstance().removeAvis(index, utilisateur.getId());
 				} catch (FilmNotFoundException e) {
 					e.printStackTrace();
 				} catch (SQLException e) {
