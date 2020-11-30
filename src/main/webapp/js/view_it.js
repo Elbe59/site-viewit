@@ -107,7 +107,7 @@ window.onload = function() {
 	ACTUAL_USER_ID=document.querySelector(".conteneur_deco > form > label").getAttribute("id").substring(7);
 
 
-	if(window.location.pathname==="/accueil" || window.location.pathname==="/" || window.location.pathname==="/user/favoris"){
+	if(window.location.pathname==="/accueil" || window.location.pathname==="/" || window.location.pathname==="/user/favoris" || window.location.pathname==="/film"){
 		listFilmJSON();
 		let listOfFilms = ListOfFilms();
 		addFilmForm();
