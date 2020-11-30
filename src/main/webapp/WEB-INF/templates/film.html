@@ -6,7 +6,7 @@
 		<h1 class="titreDetail" th:text="${film.titre}">Avengers : Infinity War</h1>
 		<div class="filmDetail" th:id="${film.id}" th:title="${film.titre}">
 			<div class="icones">
-				<div class="note" id="pourcentage">98%</div>
+				<div class="note" id="pourcentage"></div>
 				<form method="post" th:style="${role_value==0} ? 'visibility:hidden'" class="favori">
 	            <label>
 	              <input type="submit" th:value="${film.id}" th:id="${film.id}" style="display:none"/>
