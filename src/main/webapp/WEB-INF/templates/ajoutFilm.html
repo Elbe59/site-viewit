@@ -52,13 +52,13 @@
               </select>
             </div>
           </div>
-          <div th:if="${role_value==2}" class="infoAddBlock">
+          <div th:if="${role_value==2}" class="infoAddBlock" required >
             <label for="fichier">Image de couverture</label>
             <div>
               <input type="file" name="fichier" id="fichier" accept=".png, .jpg, .jpeg">
             </div>
           </div>
-          <div th:if="${role_value==2}" class="infoAddBlock">
+          <div th:if="${role_value==2}" class="infoAddBlock" required>
             <label for="urlFilm">Lien vers la bande annonce (Youtube)</label>
             <div>
               <input type="url" id="urlFilm" name="url">

@@ -21,6 +21,7 @@ import javax.servlet.http.Part;
 
 import dao.impl.DataSourceProvider;
 import entity.Film;
+import entity.Utilisateur;
 import exception.FilmAlreadyActiveException;
 import exception.FilmAlreadyExistingException;
 import exception.FilmNotFoundException;
@@ -57,12 +58,30 @@ public class AddFilmServlet extends ServletGenerique {
 		int duree = Integer.parseInt(req.getParameter("duree"));
 		String realisateur = req.getParameter("realisateur");
 		String acteur = req.getParameter("acteur");
-		String imageName = req.getPart("fichier").getName();
-		Part part = req.getPart("fichier");
-		InputStream in=part.getInputStream();
-		String urlBA = req.getParameter("url");
 		int genreIndex = Integer.parseInt(req.getParameter("genre"));
 		Genre genre1=listGenre.get(genreIndex);
+		Utilisateur utilisateur= (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
+		if(utilisateur.isAdmin()){
+			String imageName = req.getPart("fichier").getName();
+			Part part = req.getPart("fichier");
+			InputStream in=part.getInputStream();
+			String urlBA = req.getParameter("url");
+			urlBA = urlBA.substring( urlBA.lastIndexOf( '=' ) + 1 );
+			try {
+				FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,imageName,urlBA,genre1,in);
+			} catch (FilmAlreadyExistingException | FilmNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			try {
+				FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,null,null,genre1,null);
+			} catch (FilmAlreadyExistingException | FilmNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+
+
 
 
 		//LocalDate dateSortie = formaterDate(dateSortieStr);
@@ -71,7 +90,7 @@ public class AddFilmServlet extends ServletGenerique {
 		//Film film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,0,"rien");
 
 
-		urlBA = urlBA.substring( urlBA.lastIndexOf( '=' ) + 1 );
+
 		//System.out.println("urlBA : " + urlBA);
 		/*System.out.println("Titre : " + titre);
 		System.out.println("resume : " + resume);
@@ -83,11 +102,7 @@ public class AddFilmServlet extends ServletGenerique {
 		System.out.println("imageName : " + imageName);
 		System.out.println("urlBA : " + urlBA);
 		System.out.println("genre : " + genre);*/
-		try {
-			FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,imageName,urlBA,genre1,in);
-		} catch (FilmAlreadyExistingException | FilmNotFoundException e) {
-			e.printStackTrace();
-		}
+
 		resp.sendRedirect("../user/ajoutfilm");
 	}
 }
