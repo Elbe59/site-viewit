@@ -63,6 +63,15 @@ function ListOfFilms () {
 	return list;
 };
 
+function ListOfFilms_search () {
+	let doc = document.getElementsByTagName("article");
+	let list = [];
+	for (i=0;i<doc.length;i++) {
+		list.push([doc[i]["title"],doc[i]["id"],doc[i],"true"]);
+	}
+	return list;
+};
+
 function ListOfFilms_Recherche (listOfFilms, recherche) {
 	let new_list = [];
 	for (i=0;i<listOfFilms.length;i++){
@@ -87,7 +96,7 @@ function ListOfFilms_Trier (listOfFilms, trier) {
 
 function Rechercher () {
 	let input = document.getElementById("recherche").value.toLowerCase();
-	let listOfFilms = ListOfFilms();
+	let listOfFilms = ListOfFilms_search();
 	let newList = ListOfFilms_Recherche(listOfFilms, input);
 	console.log(newList);
 }
