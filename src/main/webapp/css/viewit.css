@@ -304,38 +304,33 @@ article img {
 
 /*ajout utilisateur*/
 
-#ajout_utilisateur form {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	margin: 10% 40%;
+#ajout_utilisateur, #modif_utilisateur{
 	background-color: darkgrey;
 	border-style: solid;
+	padding: 1em;
 	border-color: black;
-	border-radius: 5px;
+	border-radius: 10px;
 	border-width: 2px;
+	margin-bottom: 1em;
 }
 
 .ajout_utilisateur_btn{
+	border-radius: 10px;
+	padding: 5px;
 	background-color: brown;
-	color: lightblue;
-}
-.ajout_utilisateur form {
-	border: solid black;
-	border: 0.05em;
-	background-color: darkgrey;
-}
-
-.ajout_utilisateur input {
-	padding-left: 5px;
-	padding-right: 5px;
-	border-style: solid;
-	border-color: black;
-	border-radius: 5px;
 	border-width: 2px;
+	border-style: solid;
+	color: white;
+	margin-left: 2em;
 }
 
+.btn_add_user{
+	margin-left: 1em;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	background-color: lightblue;
+	color: black;
+}
 /* -------------Page Ajout Film------------ */
 
 .main-AddFilm {

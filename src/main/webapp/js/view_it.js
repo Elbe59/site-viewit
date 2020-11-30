@@ -124,8 +124,8 @@ window.onload = function() {
 	}
 };
 
+//----  GESTION DES UTILISATEURS EN UTILISANT LES WEB SERVICES A PARTIR DE REQUETES AJAX----//
 let listUsers = function () {
-
 	let usersRequest = new XMLHttpRequest();
 	let url = "../ws/admin/gestionuser/listuser";
 	usersRequest.open("GET", url, true);
@@ -135,6 +135,7 @@ let listUsers = function () {
 		let users = this.response;
 		console.log(users)
 		refreshTable(users);
+		return users;
 	};
 	usersRequest.send();
 };
@@ -175,39 +176,18 @@ let validModifUser = function (user){
 	let new_surname=document.getElementById("modif_nom").value;
 	new_surname = new_surname.charAt(0).toLocaleUpperCase() + new_surname.substring(1);
 	let new_password=document.getElementById("modif_mdp").value;
-	// A compléter pour vérifier les champs du formulaire.
-	let booleanVerif = true;
-	// A compléter pour vérifier les champs du formulaire.
-	if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(new_email)) {
-
-		/*let error = document.createElement("p");
-		error.value = "Vous avez rentré une mauvaise adresse email."
-		error.style.color = "red";
-		email.appendChild(error)*/
-	} else {
-		booleanVerif = false;
-		alert("Vous avez rentré une mauvaise adresse email.");
-	}
-	if (new_password.length < 7) {
-		booleanVerif = false;
-		alert("Votre mot de passe doit contenir au minimum 7 caractères.")
-	}
-	if (new_name.length ===0) {
-		booleanVerif = false;
-		alert("Vous n'avez pas rentré de prénom.")
-	}
-	if (new_surname.length ===0) {
-		booleanVerif = false;
-		alert("Vous n'avez pas rentré de nom de famille.")
-	}
-	if (booleanVerif) {
+	let previous_password=document.getElementById("previous_mdp").value;
+	if (verifEntry(new_email,new_name,new_surname,new_password)){
 		if(confirm('Etes vous sur de vouloir modifier cet utilisateur ?')) {
 			let modifUserRequest = new XMLHttpRequest();
 			let url = "../ws/admin/gestionuser/"+user.id+"/modif";
 			modifUserRequest.open("PATCH", url, true);
 			modifUserRequest.onload = function () {
 				if(this.status===409){
-					alert("Vous essayez de modifier un utilisateur inexistant");
+					alert("Vous ne pouvez pas modifier un utilisateur inexistant");
+				}
+				else if(this.status===405){
+					alert("Le Mot de Passe actuel saisi n'est pas correct");
 				}
 				else{
 					document.getElementById("bloc_modif_utilisateur").hidden=true;
@@ -215,7 +195,7 @@ let validModifUser = function (user){
 				}
 			};
 			modifUserRequest.setRequestHeader("content-type", "application/x-www-form-urlencoded");
-			modifUserRequest.send("new_email="+new_email+"&new_name="+new_name+"&new_surname="+new_surname+"&new_password="+new_password);
+			modifUserRequest.send("new_email="+new_email+"&new_name="+new_name+"&new_surname="+new_surname+"&new_password="+new_password+"&previous_password="+previous_password);
 		}
 		else{
 			document.getElementById("bloc_modif_utilisateur").hidden = true;
@@ -249,31 +229,7 @@ let verifyAjoutForm = function (user) {
 	surname = surname = surname.charAt(0).toLocaleUpperCase() + surname.substring(1);
 	let password = document.getElementById("ajout_mdp").value;
 
-	let booleanVerif = true;
-	// A compléter pour vérifier les champs du formulaire.
-	if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
-
-		/*let error = document.createElement("p");
-		error.value = "Vous avez rentré une mauvaise adresse email."
-		error.style.color = "red";
-		email.appendChild(error)*/
-	} else {
-		booleanVerif = false;
-		alert("Vous avez rentré une mauvaise adresse email.");
-	}
-	if (password.length < 7) {
-		booleanVerif = false;
-		alert("Votre mot de passe doit contenir au minimum 7 caractères.")
-	}
-	if (name.length ===0) {
-		booleanVerif = false;
-		alert("Vous n'avez pas rentré de prénom.")
-	}
-	if (surname.length ===0) {
-		booleanVerif = false;
-		alert("Vous n'avez pas rentré de nom de famille.")
-	}
-	if (booleanVerif) {
+	if (verifEntry(email,name,surname,password)) {
 		if (confirm('Etes vous sur de vouloir ajouter cet utilisateur ?')) {
 			let ajoutUserRequest = new XMLHttpRequest();
 			let url = "../ws/admin/gestionuser";
@@ -293,11 +249,35 @@ let verifyAjoutForm = function (user) {
 		}
 
 	}
-
-
 }
+
+let verifEntry = function (email,name,surname,password){
+	let booleanVerif = true;
+	// A compléter pour vérifier les champs du formulaire.
+	if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
+	} else {
+		booleanVerif = false;
+		alert("Vous avez rentré une mauvaise adresse email.");
+	}
+	if (password.length < 5) {
+		booleanVerif = false;
+		alert("Votre mot de passe doit contenir au minimum 7 caractères.")
+	}
+	if (name.length ===0) {
+		booleanVerif = false;
+		alert("Vous n'avez pas rentré de prénom.")
+	}
+	if (surname.length ===0) {
+		booleanVerif = false;
+		alert("Vous n'avez pas rentré de nom de famille.")
+	}
+	return booleanVerif;
+}
+
 //-----------Création du tableau des utilisateurs--------------
 let refreshTable = function (users) {
+	document.getElementById("bloc_modif_utilisateur").hidden=true;
+	document.getElementById("ajout_utilisateur").hidden=true;
 	document.getElementById("ajout_mail").value = "";
 	document.getElementById("ajout_nom").value = "";
 	document.getElementById("ajout_prenom").value = "";

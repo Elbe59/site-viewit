@@ -17,7 +17,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
 
         try(Connection co = DataSourceProvider.getDataSource().getConnection()){
             try(Statement stm = co.createStatement()) {
-                try(ResultSet rs = stm.executeQuery("SELECT * FROM UTILISATEUR ORDER BY idUtilisateur;")) {
+                try(ResultSet rs = stm.executeQuery("SELECT * FROM UTILISATEUR ORDER BY nomUtilisateur;")) {
                     while(rs.next()) {
                         listUser.add(new Utilisateur(
                                 rs.getInt("idUtilisateur"),
