@@ -320,9 +320,7 @@ let validModifUser = function (user){
 		else{
 			document.getElementById("bloc_modif_utilisateur").hidden = true;
 			return false;}
-
 	}
-
 }
 
 let deleteUser = function (user){
@@ -503,6 +501,11 @@ let buildUserTableLine = function (user,compteur) {
 		lineElement.style.fontWeight = "bold";
 	}
 	lineElement.appendChild(actionCell);
+	if (user.id == ACTUAL_USER_ID) {
+		let nomUser = document.getElementById("userCo="+ACTUAL_USER_ID);
+		nomUser.innerText = user.prenom + " " + user.nom;
+		console.log(nomUser.innerText)
+	}
 	return lineElement;
 };
 
