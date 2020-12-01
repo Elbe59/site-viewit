@@ -8,82 +8,63 @@
 <div class="container">
 	<div>
 		<div>
-			<div class="conteneur-genre">
-				<div>
-					<h3>Utilisateurs</h3>
-					<div class="zone-recherche-film-genre-user">
-						<label for="recherche">Rechercher :</label>
-						<input type="text" name="recherche" id="recherche">
+			<div>
+				<h3>Utilisateurs</h3>
+				<div id="bloc_ajout_utilisateur">
+					<div style="display: flex">
+						<h3>Ajouter un Utilisateur ?</h3>
+						<button class="btn_add_user" onclick="let actual = document.getElementById('ajout_utilisateur');if(actual.hidden===false){actual.hidden=true;}else{actual.hidden=false;}">+</button>
 					</div>
-					<div id="bloc_modif_utilisateur" hidden>
-						<h3>Modifier un Utilisateur</h3>
-						<form id="modif_utilisateur" style="color: white" >
-							<label for="modif_mail">E-mail</label>
-							<input type="email" name = "mail" id = "modif_mail" class="ajout_utilisateur">
-							<br>
-							<label for="modif_nom">Nom</label>
-							<input type="text" name = "nom" id = "modif_nom" class="ajout_utilisateur">
-							<br>
-							<label for="modif_prenom">Prenom</label>
-							<input type="text" name = "prenom" id = "modif_prenom" class="ajout_utilisateur">
-							<br>
-							<label for="modif_mdp">Nouveau Mot de passe</label>
-							<input type="password" name = "mdp" id = "modif_mdp" class="ajout_utilisateur">
-							<br>
-							<input type="button" name = "send" id = "modif_send" value="Modifier l'utilisateur" class="ajout_utilisateur_btn">
-						</form>
-					</div>
-				</div>
-				<div>
-					<form id="ajout_utilisateur" style="color: white">
+					<form id="ajout_utilisateur" style="color: white" hidden>
 						<label for="ajout_mail">E-mail</label>
 						<input type="text" name = "mail" id = "ajout_mail" class="ajout_utilisateur" required>
 						<label for="ajout_nom">Nom</label>
 						<input type="text" name = "nom" id = "ajout_nom" class="ajout_utilisateur" required>
 						<label for="ajout_prenom">Prenom</label>
 						<input type="text" name = "prenom" id = "ajout_prenom" class="ajout_utilisateur" required>
+						<br><br>
 						<label for="ajout_mdp">Mot de passe</label>
 						<input type="password" name = "mdp" id = "ajout_mdp" class="ajout_utilisateur" required>
 						<input type="button" name = "send" id = "ajout_user_send" value="Ajouter un utilisateur" class="ajout_utilisateur_btn">
 					</form>
 				</div>
-			</div>
-			<table class="tablelist">
-				<thead>
-				<tr class="user">
-					<th>#</th>
-					<th>Prénom</th>
-					<th>Nom</th>
-					<th>Email</th>
-					<th>Admin</th>
-					<th>Gestion</th>
-				</tr>
-				</thead>
-				<tbody>
-				<!--<tr th:each="user : ${listUsers}" th:style="${user.id == utilisateurCo.id} ? 'background-color:yellow;font-weight: bold' : ''">
-					<td th:text="${userStat.index+1}">1</td>
-					<td th:text="${user.prenom}">Quentin</td>
-					<td th:text="${user.nom}">Callens</td>
-					<td th:text="${user.email}">quentin.callens@hei.yncrea.fr</td>
-					<td th:text="${user.admin == 1}? 'Oui' : 'Non'" class="small_column">Oui</td>
-					<td class="small_column">
-						<div class="column-gestion">
-							<form method="post" >
-								<button   onclick="if(confirm('Etes vous sur de vouloir changer le rôle de cet utilisateur ?')){}else{return false;}" th:if="${user.id != utilisateurCo.id}" th:name="${user.admin==0} ? 'up' : 'down'" th:value="${userStat.index}" th:title="${user.admin==1} ? ${'Retrograder '+user.prenom + ' '+user.nom} : ${'Promouvoir '+user.prenom + ' '+user.nom }" class="btn-delete" type="submit" th:id="${user.admin==1} ? ${'userDown'+user.id} : ${'userUp'+user.id}"><img class="img_liste" th:src="${user.admin == 0} ? '../images/icones/up.png' : '../images/icones/down_user.png'"></button>
-							</form>
-							<a th:href="${'../admin/modifuser?id='+user.id}"><img class="img_liste" src="../images/icones/modification.png"alt="modifier"></a>
-							<form th:if="${user.id != utilisateurCo.id}"  method="post">
-								<button onclick="if(confirm('Etes vous sur de vouloir supprimer cet utilisateur ?')){}else{return false;}" name="supp" th:value="${userStat.index}" th:title="'Supprimer ' +${user.prenom} +' '+${user.nom}" class="btn-delete" type="submit" th:id="${'userDel'+user.id}"><img class="img_liste" src="../images/icones/supprimer.png"alt="supprimer"></button>
-							</form>
-						</div>
+				<div id="bloc_modif_utilisateur"  hidden>
+					<h3>Modifier un Utilisateur</h3>
+					<form id="modif_utilisateur" style="color: white" >
+						<label for="modif_mail">E-mail: </label>
+						<input type="email" name = "mail" id = "modif_mail" class="ajout_utilisateur">
+						<label for="modif_nom">Nom: </label>
+						<input type="text" name = "nom" id = "modif_nom" class="ajout_utilisateur">
+						<label for="modif_prenom">Prenom: </label>
+						<input type="text" name = "prenom" id = "modif_prenom" class="ajout_utilisateur">
+						<br><br>
+						<label for="previous_mdp">Mot de passe Actuel: </label>
+						<input type="password" name = "previous_mdp" id = "previous_mdp" class="ajout_utilisateur">
+						<label for="modif_mdp">Nouveau Mot de passe: </label>
+						<input type="password" name = "new_mdp" id = "modif_mdp" class="ajout_utilisateur">
+						<input type="button" name = "send" id = "modif_send" value="Modifier l'utilisateur" class="ajout_utilisateur_btn">
+					</form>
+				</div>
 
-					</td>
-				</tr>-->
-				</tbody>
-			</table>
+				<table class="tablelist">
+					<thead>
+					<tr class="user">
+						<th>#</th>
+						<th>Prénom</th>
+						<th>Nom</th>
+						<th>Email</th>
+						<th>Admin</th>
+						<th>Gestion</th>
+					</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 </div>
+
 </body>
 <footer th:replace="~{fragments :: footer}"></footer>
 </html>

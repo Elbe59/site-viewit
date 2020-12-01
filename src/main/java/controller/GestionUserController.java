@@ -53,17 +53,22 @@ public class GestionUserController {
     @PATCH
     @Path("/{userid}/modif")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response listUsers(@PathParam("userid") Integer userId,@FormParam("new_email") String email,@FormParam("new_name") String prenom,@FormParam("new_surname") String nom,@FormParam("new_password") String password){
+    public Response listUsers(@PathParam("userid") Integer userId,@FormParam("new_email") String email,@FormParam("new_name") String prenom,@FormParam("new_surname") String nom,@FormParam("new_password") String new_password,@FormParam("previous_password") String previous_password){
         System.out.println("cc je suis rentré");
         try {
             Utilisateur utilisateur = UtilisateurService.getInstance().getUser(userId);
-            utilisateur.setMdp(password);
-            utilisateur.setMdpHash(password);
-            utilisateur.setEmail(email);
-            utilisateur.setNom(nom);
-            utilisateur.setPrenom(prenom);
-            UtilisateurService.getInstance().modifyUser(utilisateur);
-            return Response.status(201).entity("").build();
+            if(!MotDePasseUtils.validerMotDePasse(previous_password,utilisateur.getMdpHash())){
+                return Response.status(405).entity("").build();
+            }
+            else{
+                utilisateur.setMdp(new_password);
+                utilisateur.setMdpHash(new_password);
+                utilisateur.setEmail(email);
+                utilisateur.setNom(nom);
+                utilisateur.setPrenom(prenom);
+                UtilisateurService.getInstance().modifyUser(utilisateur);
+                return Response.status(201).entity("").build();
+            }
         } catch (UserNotFoundException  | SQLException  e) {
             return Response.status(409).entity("").build();
         }

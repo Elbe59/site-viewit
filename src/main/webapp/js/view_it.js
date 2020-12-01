@@ -34,31 +34,32 @@ function Lecture(jsonFile) {
 	for (i=0;i<listOfFilms.length;i++) {
 		for (j=0;j<jsonFile.length;j++) {
 			if (listOfFilms[i][1] == jsonFile[j].id) {
-				if (jsonFile[j].favori === true) {
-					listOfFilms[i][2].querySelector("input").name = "suppfavori";
-					listOfFilms[i][2].querySelector("svg").style.color = "red";
-					listOfFilms[i][2].querySelector("svg").style.opacity = 1;
+				if (jsonFile[j].favori == true) {
+					listOfFilms[i][3].querySelector("input").name = "suppfavori";
+					listOfFilms[i][3].querySelector("svg").style.color = "red";
+					listOfFilms[i][3].querySelector("svg").style.opacity = 1;
 				} else {
-					listOfFilms[i][2].querySelector("input").name = "addfavori";
+					listOfFilms[i][3].querySelector("input").name = "addfavori";
 				}
-				if (listOfFilms[i][3] != null && listOfFilms[i][4] != null) {
-					if (jsonFile[j].avis === "like") {
-						listOfFilms[i][3].querySelector("input").name = "remove";
-						listOfFilms[i][3].querySelector("svg").style.color = "green";
-						listOfFilms[i][4].querySelector("input").name = "adddislike";
-						listOfFilms[i][4].querySelector("svg").style.color = "grey";
-					} else if (jsonFile[j].avis === "dislike") {
-						listOfFilms[i][3].querySelector("input").name = "addlike";
-						listOfFilms[i][3].querySelector("svg").style.color = "grey";
+				if (listOfFilms[i][4] != null && listOfFilms[i][5] != null) {
+					if (jsonFile[j].avis == "like") {
 						listOfFilms[i][4].querySelector("input").name = "remove";
-						listOfFilms[i][4].querySelector("svg").style.color = "red";
-					} else {
-						listOfFilms[i][3].querySelector("input").name = "addlike";
-						listOfFilms[i][3].querySelector("svg").style.color = "grey";
-						listOfFilms[i][4].querySelector("input").name = "adddislike";
+						listOfFilms[i][4].querySelector("svg").style.color = "green";
+						listOfFilms[i][5].querySelector("input").name = "adddislike";
+						listOfFilms[i][5].querySelector("svg").style.color = "grey";
+					} else if (jsonFile[j].avis == "dislike") {
+						listOfFilms[i][4].querySelector("input").name = "addlike";
 						listOfFilms[i][4].querySelector("svg").style.color = "grey";
+						listOfFilms[i][5].querySelector("input").name = "remove";
+						listOfFilms[i][5].querySelector("svg").style.color = "red";
+					} else {
+						listOfFilms[i][4].querySelector("input").name = "addlike";
+						listOfFilms[i][4].querySelector("svg").style.color = "grey";
+						listOfFilms[i][5].querySelector("input").name = "adddislike";
+						listOfFilms[i][5].querySelector("svg").style.color = "grey";
 					}
 				}
+				listOfFilms[i][2].innerText = jsonFile[j].pourcentage+"%";
 			}
 		}
 	}
@@ -68,26 +69,46 @@ function ListOfFilms () {
 	let doc = document.getElementsByTagName("article");
 	let list = [];
 	for (i=0;i<doc.length;i++) {
-		list.push([doc[i]["title"],doc[i]["id"],doc[i],null,null]);
+		list.push([doc[i]["title"],doc[i]["id"],doc[i].querySelector("p"),doc[i].getElementsByTagName("form")[0],null,null]);
 	}
 	if (list.length == 0) {
-		doc = document.getElementsByClassName("filmDetail")[0];
-		list.push([doc.title,doc.id,doc.getElementsByClassName("favori")[0],doc.getElementsByClassName("like")[0],doc.getElementsByClassName("dislike")[0]]);
+		doc = document.getElementsByClassName("filmDetail");
+		for (i=0;i<doc.length;i++) {
+			list.push([doc[i].title,doc[i].id,doc[i].querySelector("div#pourcentage"),doc[i].getElementsByClassName("favori")[0],doc[i].getElementsByClassName("like")[0],doc[i].getElementsByClassName("dislike")[0]]);
+		}
+	}
+	return list;
+};
+
+function ListOfFilms_search () {
+	let doc = document.getElementsByTagName("article");
+	let list = [];
+	for (i=0;i<doc.length;i++) {
+		list.push([doc[i]["title"],doc[i]["id"],doc[i],false]);
 	}
 	return list;
 };
 
 function ListOfFilms_Recherche (listOfFilms, recherche) {
 	let new_list = [];
+	let nb = 0;
 	for (i=0;i<listOfFilms.length;i++){
 		if (listOfFilms[i][0].toLowerCase().search(recherche.toLowerCase()) >= 0) {
-			new_list.push(listOfFilms[i]);
-			listOfFilms[i][2].hidden = false;
+			listOfFilms[i][3] = false;
+			nb = nb + 1;
 		} else {
-			listOfFilms[i][2].hidden = true;
+			listOfFilms[i][3] = true;
 		}
+		new_list.push(listOfFilms[i]);
 	}
-	return new_list;
+	if (nb >= 1) {
+		for (i=0;i<listOfFilms.length;i++){
+			listOfFilms[i][2].hidden = listOfFilms[i][3];
+		}
+		return new_list;
+	} else {
+		return listOfFilms;
+	}
 };
 
 function ListOfFilms_Trier (listOfFilms, trier) {
@@ -101,7 +122,7 @@ function ListOfFilms_Trier (listOfFilms, trier) {
 
 function Rechercher () {
 	let input = document.getElementById("recherche").value.toLowerCase();
-	let listOfFilms = ListOfFilms();
+	let listOfFilms = ListOfFilms_search();
 	let newList = ListOfFilms_Recherche(listOfFilms, input);
 	console.log(newList);
 }
@@ -124,7 +145,7 @@ window.onload = function() {
 	ACTUAL_USER_ID=document.querySelector(".conteneur_deco > form > label").getAttribute("id").substring(7);
 
 
-	if(window.location.pathname==="/accueil" || window.location.pathname==="/" || window.location.pathname==="/user/favoris" || window.location.pathname==="/film"){
+	if(window.location.pathname==="/accueil" || window.location.pathname==="/" || window.location.pathname==="/user/favoris"){
 		listFilmJSON();
 		let listOfFilms = ListOfFilms();
 		addFilmForm();
@@ -136,6 +157,12 @@ window.onload = function() {
 		console.log("cc");
 		listUsers();
 	});*/
+	if(window.location.pathname==="/film"){
+		let filmId = parseInt(document.getElementsByClassName('filmDetail')[0].getAttribute('id'))
+		if(ACTUAL_USER_ID !== "0"){
+			getFilmInfo(filmId);
+		}
+	}
 	if(window.location.pathname==="/admin/gestionuser"){
 		listUsers();
 	}
@@ -146,8 +173,102 @@ window.onload = function() {
 	}
 };
 
-let listUsers = function () {
+//---- PAGE DETAIL FILM AJAX + WS ----//
 
+let getFilmInfo = function (filmId){
+	let infoFilmRequest = new XMLHttpRequest();
+	let url = "../ws/"+ACTUAL_USER_ID+"/filmdetail/"+filmId;
+	infoFilmRequest.open("GET", url, true);
+	infoFilmRequest.responseType = "json";
+
+	infoFilmRequest.onload = function () {
+		let filmDetail = this.response;
+		remplirFilmIcone(filmDetail);
+		console.log(filmDetail);
+	};
+	infoFilmRequest.send();
+}
+
+let remplirFilmIcone = function (filmDetail){
+	let iconesBloc=document.getElementById("bloc_icones");
+	let pourcentageValue=iconesBloc.querySelector("#pourcentage_film");
+	let favori=iconesBloc.querySelector("#favori_film");
+	let like=iconesBloc.querySelector("#like_film");
+	let dislike=iconesBloc.querySelector("#dislike_film");
+	if (filmDetail.favori === true) {
+		favori.style.color="red";
+		favori.style.opacity=1;
+		favori.onclick = function (){
+			removeAvis(filmDetail.id,"favori");
+		}
+	} else {
+		favori.style.color="grey";
+		favori.onclick = function (){
+			addAvis(filmDetail.id,"favori");
+		}
+	}
+	if (filmDetail.avis === "like") {
+		like.style.color = "green";
+		dislike.style.color = "grey";
+		like.onclick = function (){
+			removeAvis(filmDetail.id,"like");
+		}
+		dislike.onclick = function (){
+			addAvis(filmDetail.id,"dislike");
+		}
+	} else if (filmDetail.avis === "dislike") {
+		like.style.color = "grey";
+		dislike.style.color = "red";
+		like.onclick = function (){
+			addAvis(filmDetail.id,"like");
+		}
+		dislike.onclick = function(){
+			removeAvis(filmDetail.id,"dislike");
+		}
+	} else {
+		like.style.color = "grey";
+		dislike.style.color = "grey";
+		like.onclick = function (){
+			addAvis(filmDetail.id,"like");
+		}
+		dislike.onclick = function (){
+			addAvis(filmDetail.id,"dislike");
+		}
+	}
+	pourcentageValue.innerText = filmDetail.pourcentage + " %";
+}
+
+let removeAvis = function (filmId,action){
+	let removeAvisRequest = new XMLHttpRequest();
+	let url = "../ws/"+ACTUAL_USER_ID+"/filmdetail/"+filmId+"/remove/"+action;
+	removeAvisRequest.open("PATCH", url, true);
+	removeAvisRequest.onload = function () {
+		if(this.status===409){
+			alert("Vous essayez d'effectuer une action inexistante");
+		}
+		else{
+			getFilmInfo(filmId);
+		}
+	};
+	removeAvisRequest.send();
+}
+let addAvis = function (filmId,action){
+	let addAvisRequest = new XMLHttpRequest();
+	let url = "../ws/"+ACTUAL_USER_ID+"/filmdetail/"+filmId+"/add/"+action;
+	addAvisRequest.open("PATCH", url, true);
+	addAvisRequest.onload = function () {
+		if(this.status===409){
+			alert("Vous essayez d'effectuer une action inexistante");
+		}
+		else{
+			getFilmInfo(filmId);
+		}
+	};
+	addAvisRequest.send();
+}
+
+//----  GESTION DES UTILISATEURS EN UTILISANT LES WEB SERVICES A PARTIR DE REQUETES AJAX----//
+let listUsers = function () {
 	let usersRequest = new XMLHttpRequest();
 	let url = "../ws/admin/gestionuser/listuser";
 	usersRequest.open("GET", url, true);
@@ -197,39 +318,18 @@ let validModifUser = function (user){
 	let new_surname=document.getElementById("modif_nom").value;
 	new_surname = new_surname.charAt(0).toLocaleUpperCase() + new_surname.substring(1);
 	let new_password=document.getElementById("modif_mdp").value;
-	// A compléter pour vérifier les champs du formulaire.
-	let booleanVerif = true;
-	// A compléter pour vérifier les champs du formulaire.
-	if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(new_email)) {
-
-		/*let error = document.createElement("p");
-		error.value = "Vous avez rentré une mauvaise adresse email."
-		error.style.color = "red";
-		email.appendChild(error)*/
-	} else {
-		booleanVerif = false;
-		alert("Vous avez rentré une mauvaise adresse email.");
-	}
-	if (new_password.length < 7) {
-		booleanVerif = false;
-		alert("Votre mot de passe doit contenir au minimum 7 caractères.")
-	}
-	if (new_name.length ===0) {
-		booleanVerif = false;
-		alert("Vous n'avez pas rentré de prénom.")
-	}
-	if (new_surname.length ===0) {
-		booleanVerif = false;
-		alert("Vous n'avez pas rentré de nom de famille.")
-	}
-	if (booleanVerif) {
+	let previous_password=document.getElementById("previous_mdp").value;
+	if (verifEntry(new_email,new_name,new_surname,new_password)){
 		if(confirm('Etes vous sur de vouloir modifier cet utilisateur ?')) {
 			let modifUserRequest = new XMLHttpRequest();
 			let url = "../ws/admin/gestionuser/"+user.id+"/modif";
 			modifUserRequest.open("PATCH", url, true);
 			modifUserRequest.onload = function () {
 				if(this.status===409){
-					alert("Vous essayez de modifier un utilisateur inexistant");
+					alert("Vous ne pouvez pas modifier un utilisateur inexistant");
+				}
+				else if(this.status===405){
+					alert("Le Mot de Passe actuel saisi n'est pas correct");
 				}
 				else{
 					document.getElementById("bloc_modif_utilisateur").hidden=true;
@@ -237,7 +337,7 @@ let validModifUser = function (user){
 				}
 			};
 			modifUserRequest.setRequestHeader("content-type", "application/x-www-form-urlencoded");
-			modifUserRequest.send("new_email="+new_email+"&new_name="+new_name+"&new_surname="+new_surname+"&new_password="+new_password);
+			modifUserRequest.send("new_email="+new_email+"&new_name="+new_name+"&new_surname="+new_surname+"&new_password="+new_password+"&previous_password="+previous_password);
 		}
 		else{
 			document.getElementById("bloc_modif_utilisateur").hidden = true;
@@ -271,31 +371,7 @@ let verifyAjoutForm = function (user) {
 	surname = surname = surname.charAt(0).toLocaleUpperCase() + surname.substring(1);
 	let password = document.getElementById("ajout_mdp").value;
 
-	let booleanVerif = true;
-	// A compléter pour vérifier les champs du formulaire.
-	if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
-
-		/*let error = document.createElement("p");
-		error.value = "Vous avez rentré une mauvaise adresse email."
-		error.style.color = "red";
-		email.appendChild(error)*/
-	} else {
-		booleanVerif = false;
-		alert("Vous avez rentré une mauvaise adresse email.");
-	}
-	if (password.length < 7) {
-		booleanVerif = false;
-		alert("Votre mot de passe doit contenir au minimum 7 caractères.")
-	}
-	if (name.length ===0) {
-		booleanVerif = false;
-		alert("Vous n'avez pas rentré de prénom.")
-	}
-	if (surname.length ===0) {
-		booleanVerif = false;
-		alert("Vous n'avez pas rentré de nom de famille.")
-	}
-	if (booleanVerif) {
+	if (verifEntry(email,name,surname,password)) {
 		if (confirm('Etes vous sur de vouloir ajouter cet utilisateur ?')) {
 			let ajoutUserRequest = new XMLHttpRequest();
 			let url = "../ws/admin/gestionuser";
@@ -315,11 +391,35 @@ let verifyAjoutForm = function (user) {
 		}
 
 	}
-
-
 }
+
+let verifEntry = function (email,name,surname,password){
+	let booleanVerif = true;
+	// A compléter pour vérifier les champs du formulaire.
+	if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
+	} else {
+		booleanVerif = false;
+		alert("Vous avez rentré une mauvaise adresse email.");
+	}
+	if (password.length < 5) {
+		booleanVerif = false;
+		alert("Votre mot de passe doit contenir au minimum 7 caractères.")
+	}
+	if (name.length ===0) {
+		booleanVerif = false;
+		alert("Vous n'avez pas rentré de prénom.")
+	}
+	if (surname.length ===0) {
+		booleanVerif = false;
+		alert("Vous n'avez pas rentré de nom de famille.")
+	}
+	return booleanVerif;
+}
+
 //-----------Création du tableau des utilisateurs--------------
 let refreshTable = function (users) {
+	document.getElementById("bloc_modif_utilisateur").hidden=true;
+	document.getElementById("ajout_utilisateur").hidden=true;
 	document.getElementById("ajout_mail").value = "";
 	document.getElementById("ajout_nom").value = "";
 	document.getElementById("ajout_prenom").value = "";
