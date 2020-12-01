@@ -297,7 +297,7 @@ let validModifUser = function (user){
 	new_surname = new_surname.charAt(0).toLocaleUpperCase() + new_surname.substring(1);
 	let new_password=document.getElementById("modif_mdp").value;
 	let previous_password=document.getElementById("previous_mdp").value;
-	if (verifEntry(new_email,new_name,new_surname,new_password)){
+	if (verifEntry(new_email,new_name,new_surname,new_password,previous_password)){
 		if(confirm('Etes vous sur de vouloir modifier cet utilisateur ?')) {
 			let modifUserRequest = new XMLHttpRequest();
 			let url = "../ws/admin/gestionuser/"+user.id+"/modif";
@@ -371,7 +371,7 @@ let verifyAjoutForm = function (user) {
 	}
 }
 
-let verifEntry = function (email,name,surname,password){
+let verifEntry = function (email,name,surname,password,previous_password){
 	let booleanVerif = true;
 	// A compléter pour vérifier les champs du formulaire.
 	if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
@@ -379,9 +379,15 @@ let verifEntry = function (email,name,surname,password){
 		booleanVerif = false;
 		alert("Vous avez rentré une mauvaise adresse email.");
 	}
-	if (password.length < 5) {
+	if(password.length ===0 && previous_password ===0){
+
+	}
+	else if (password.length < 5) {
 		booleanVerif = false;
 		alert("Votre mot de passe doit contenir au minimum 7 caractères.")
+	}
+	else{
+
 	}
 	if (name.length ===0) {
 		booleanVerif = false;

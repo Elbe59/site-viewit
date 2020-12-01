@@ -23,7 +23,7 @@
 					</svg>
 	         	 </label>
 			</div>
-			<img id="imgDetail" th:src="*{'data:image/png;base64,'+film.base64Image}" th:alt-title="${film.titre}"/>
+			<img id="imgDetail" th:src="@{'../filmimage?id='+${film.id}}" th:alt-title="${film.titre}"/>
 			<div id="resumeDetail">
 				<div>Synopsis</div>
 				<p>

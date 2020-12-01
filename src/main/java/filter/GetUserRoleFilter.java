@@ -1,5 +1,6 @@
 package filter;
 
+import dao.impl.FileStorageProvider;
 import entity.Utilisateur;
 import org.thymeleaf.context.WebContext;
 

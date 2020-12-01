@@ -23,7 +23,6 @@ public class FilmService {
 
 	private FilmDao filmDao = new FilmDaoImpl();
 	private GenreDao genreDao = new GenreDaoImpl();
-	private StockageImageService stockageService = new StockageImageService();
 
 	private static class FilmHolder {
 		private final static FilmService instance = new FilmService();
