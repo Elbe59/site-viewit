@@ -1,5 +1,6 @@
 package filter;
 
+import dao.impl.FileStorageProvider;
 import entity.Utilisateur;
 import exception.UserNotFoundException;
 import service.UtilisateurService;

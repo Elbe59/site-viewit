@@ -1,15 +1,8 @@
 package controller;
 
 import java.io.*;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
+import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Blob;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -19,17 +12,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-import dao.impl.DataSourceProvider;
-import entity.Film;
+import dao.impl.FileStorageProvider;
+import entity.Genre;
 import entity.Utilisateur;
-import exception.FilmAlreadyActiveException;
+import exception.FileStorageException;
 import exception.FilmAlreadyExistingException;
 import exception.FilmNotFoundException;
-import org.apache.logging.log4j.core.util.IOUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
-import entity.Genre;
+import service.FileStorageService;
 import service.FilmService;
 
 @MultipartConfig
@@ -40,7 +33,7 @@ public class AddFilmServlet extends ServletGenerique {
  
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        WebContext context = new WebContext(req, resp, req.getServletContext());
+		WebContext context = new WebContext(req, resp, req.getServletContext());
         context.setVariable("genres", filmService.listGenre());
         System.out.println(context.toString());
         System.out.println("ok1");
@@ -61,21 +54,28 @@ public class AddFilmServlet extends ServletGenerique {
 		int genreIndex = Integer.parseInt(req.getParameter("genre"));
 		Genre genre1=listGenre.get(genreIndex);
 		Utilisateur utilisateur= (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
+		String fileNameForStorage = "filmInconnu.jpg";
+		//Files.copy(in,Paths.get(FileStorageProvider.getUploadDir()+part.getSubmittedFileName()));
 		if(utilisateur.isAdmin()){
-			String imageName = req.getPart("fichier").getName();
 			Part part = req.getPart("fichier");
+			String extension= FilenameUtils.getExtension(part.getSubmittedFileName());
 			InputStream in=part.getInputStream();
+			try {
+				fileNameForStorage = FileStorageService.storeFile(titre,in,extension);
+			} catch (FileStorageException e) {
+				e.printStackTrace();
+			}
 			String urlBA = req.getParameter("url");
 			urlBA = urlBA.substring( urlBA.lastIndexOf( '=' ) + 1 );
 			try {
-				FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,imageName,urlBA,genre1,in);
+				FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,fileNameForStorage,urlBA,genre1,in);
 			} catch (FilmAlreadyExistingException | FilmNotFoundException e) {
 				e.printStackTrace();
 			}
 		}
 		else {
 			try {
-				FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,null,null,genre1,null);
+				FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,fileNameForStorage,null,genre1,null);
 			} catch (FilmAlreadyExistingException | FilmNotFoundException e) {
 				e.printStackTrace();
 			}
