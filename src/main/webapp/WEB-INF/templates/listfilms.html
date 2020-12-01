@@ -27,9 +27,9 @@
 						</tr>
 					</thead>
 					<tbody>
-					<tr th:each="film : ${listFilms}">
+					<tr th:each="film : ${listFilms}" id="film_gestion_ligne">
 						<td th:text="${filmStat.index +1}">1</td>
-						<td th:text="${film.titre}">Blade Runner 2049</td>
+						<td class = "titreGestion" th:text="${film.titre}">Blade Runner 2049</td>
 						<td th:text="${film.genre.nom}">Science fiction</td>
 						<td th:text="${#temporals.format(film.dateSortie, 'd MMMM yyyy')}">4 october 2017</td>
 						<td th:text="${film.realisateur}">Denis Villeneuve</td>
@@ -38,7 +38,7 @@
 								<button  onclick="if(confirm('Etes vous sur de vouloir activer / désactiver ce film ?')){}else{return false;}" th:name="${film.valide == 0}? 'active' : 'desactive'" th:value="${filmStat.index}" th:title="${film.valide == 0} ? ${'Activer '+film.titre} : ${'Désactiver '+film.titre}" class="btn-delete" type="submit" th:id="${filmStat.index}"><img class="img_liste" th:src="${film.valide == 0} ? '../images/icones/desactive_icon.png' : '../images/icones/active_icon.png'"></button>
 							</form>
 						</td>
-						<td  class="small_column"><a th:href="${'../film?id=' + film.id}" th:title="${'Détail de: ' +film.titre}"><img  th:alt="${'Détail de: ' +film.titre}" class="img_liste" src="../images/icones/loupe.png"></a></td>
+						<td  class="small_column"><button id = "afficherModifFilm" th:title="${'Détail de: ' +film.titre}"><img  th:alt="${'Détail de: ' +film.titre}" class="img_liste" src="../images/icones/loupe.png"></button></td>
 						<td class="small_column">
 							<div class="column-gestion">
 

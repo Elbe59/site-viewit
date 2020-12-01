@@ -101,7 +101,41 @@ public class FilmDaoImpl implements FilmDao {
 		}
 		return listOfFilms;
 	}
-	
+
+	public Film getFilmByTitle(String name) throws FilmNotFoundException
+	{
+		Film film = null;
+		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+			try(PreparedStatement pStm = co.prepareStatement("SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre AND film.titreFilm = ?;")) {
+				pStm.setString(1, name);
+				try(ResultSet rs = pStm.executeQuery()) {
+					while(rs.next()) {
+						Blob blob = rs.getBlob("image");
+						String base64Image=transformBlobToBase64Image(blob);
+						film = new Film(
+								rs.getInt("idFilm"),
+								rs.getString("titreFilm"),
+								rs.getString("resumeFilm"),
+								rs.getDate("dateSortie").toLocalDate(),
+								rs.getInt("dureeFilm"),
+								rs.getString("realisateur"),
+								rs.getString("acteur"),
+								rs.getString("imgFilm"),
+								rs.getString("urlBA"),
+								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
+								rs.getInt("valide"),
+								base64Image);
+					}
+					if(film == null)
+						throw new FilmNotFoundException();
+				}
+			}
+		} catch (SQLException | IOException e) {
+			e.printStackTrace();
+		}
+		return film;
+	}
+
 	@Override
 	public Film getFilm(Integer id) throws FilmNotFoundException{
 		Film film = null;
@@ -135,6 +169,30 @@ public class FilmDaoImpl implements FilmDao {
 			e.printStackTrace();
 		}
 		return film;
+	}
+
+	public Film updateFilm(Film film, String name) throws FilmNotFoundException {
+		Film old = getFilmByTitle(name);
+		Film nouveau = film;
+		try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
+			String sqlQuery = "UPDATE `film` SET titreFilm = ?, resumeFilm = ?, dateSortie = ?, dureeFilm = ?, realisateur = ?, acteur = ?, urlBA = ?, idGenre=?, valide=? WHERE `film`.`idFilm` = ? ";
+			PreparedStatement statement = connection.prepareStatement(sqlQuery);
+			statement.setString(1, film.getTitre());
+			statement.setString(2, film.getResume());
+			statement.setTimestamp(3, Timestamp.valueOf(film.getDateSortie().atStartOfDay()));
+			statement.setInt(4, film.getDuree());
+			statement.setString(5, film.getRealisateur());
+			statement.setString(6, film.getActeur());
+			statement.setString(7, film.getUrlBA());
+			statement.setInt(8, film.getGenre().getId());
+			statement.setInt(9, film.getValide());
+			int nb = statement.executeUpdate();
+			statement.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return nouveau;
 	}
 
 	@Override

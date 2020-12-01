@@ -16,7 +16,9 @@ public interface FilmDao {
 
 	public List<Film> listFilms();
 	public List<Film> listFilms(String colonne);
+	public Film updateFilm(Film film, String name) throws FilmNotFoundException;
 	public Film getFilm(Integer id) throws FilmNotFoundException;
+	public Film getFilmByTitle(String name) throws FilmNotFoundException;
 	public Film addFilm(Film film, InputStream in) throws FilmAlreadyExistingException, FilmNotFoundException;
 	public Film deleteFilm(Integer id) throws FilmNotFoundException;
 	public Film activeFilm(Integer id) throws FilmNotFoundException, FilmAlreadyActiveException;

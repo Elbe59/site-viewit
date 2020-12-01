@@ -12,6 +12,23 @@ function listFilmJSON () {
 	filmRequest.send();
 };
 
+let getValueOldFilm = function()
+{
+	let filmLigne = document.getElementById("film_gestion_ligne");
+	let title = filmLigne.getElementsByClassName("titreGestion").value;
+
+	let modifFilmReq = new XMLHttpRequest();
+	modifFilmReq.open("GET", "/ws/admin/modification_films/"+title, true);
+	modifFilmReq.responseType = "json";
+
+	modifFilmReq.onload = function ()
+	{
+		let film = this.response;
+		return film;
+	}
+	modifFilmReq.send();
+}
+
 function Lecture(jsonFile) {
 	let listOfFilms = ListOfFilms();
 	for (i=0;i<listOfFilms.length;i++) {
@@ -121,6 +138,11 @@ window.onload = function() {
 	});*/
 	if(window.location.pathname==="/admin/gestionuser"){
 		listUsers();
+	}
+
+	document.getElementById("afficherModifFilm").onclick = function () {
+		let oldFilm = getValueOldFilm();
+		window.location.href = "/admin/modifier_Film";
 	}
 };
 

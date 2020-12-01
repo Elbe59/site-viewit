@@ -88,6 +88,22 @@ public class FilmService {
 			return null;
 		}
 	}
+
+	public Film getFilmByTitle(String name) throws FilmNotFoundException {
+		try{
+			return filmDao.getFilmByTitle(name);
+		}catch (FilmNotFoundException e){
+			return null;
+		}
+	}
+
+	public Film updateFilm(Film film, String name) throws FilmNotFoundException {
+		try{
+			return filmDao.updateFilm(film, name);
+		}catch (FilmNotFoundException e){
+			return null;
+		}
+	}
 	
 	/*public void addFilm(File img) {
 		stockageService.addImage(img);
