@@ -19,6 +19,8 @@ import exception.FileStorageException;
 import exception.FilmAlreadyExistingException;
 import exception.FilmNotFoundException;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -30,7 +32,7 @@ import service.FilmService;
 public class AddFilmServlet extends ServletGenerique {
 	private static final long serialVersionUID = 1L;
 	private FilmService filmService = FilmService.getInstance();
- 
+	static final Logger LOGGER = LogManager.getLogger();
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		WebContext context = new WebContext(req, resp, req.getServletContext());

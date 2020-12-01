@@ -18,8 +18,11 @@ import entity.FilmDto;
 import entity.Genre;
 import entity.GenreDto;
 import exception.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FilmService {
+	private final Logger LOG = LogManager.getLogger();
 
 	private FilmDao filmDao = new FilmDaoImpl();
 	private GenreDao genreDao = new GenreDaoImpl();
@@ -41,6 +44,7 @@ public class FilmService {
 	}
 
 	public List<Film> listFilms(String colonne) {
+		LOG.info("Liste les films");
 		return filmDao.listFilms(colonne);
 	}
 

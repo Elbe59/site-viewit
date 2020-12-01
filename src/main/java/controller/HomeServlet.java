@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import entity.Utilisateur;
 import exception.FilmNotFoundException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -22,11 +24,12 @@ import service.FilmService;
 @WebServlet("/accueil")
 public class HomeServlet extends ServletGenerique {
 	private static final long serialVersionUID = 1L;
+	static final Logger LOGGER = LogManager.getLogger(HomeServlet.class);
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//HttpServletRequest httpRequest = (HttpServletRequest) req;
-		
+		LOGGER.info("Vous êtes sur la page d'accueil.");
 		String trier = req.getParameter("trier");
 		List<Film> listOfFilms = FilmService.getInstance().listFilms(trier);
         WebContext context = new WebContext(req, resp, req.getServletContext());
