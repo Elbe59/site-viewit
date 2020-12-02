@@ -27,8 +27,6 @@ public class FilmDaoImpl implements FilmDao {
 			try(Statement stm = co.createStatement()) {
 				try(ResultSet rs = stm.executeQuery("SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre ORDER BY titreFilm;")) {
 					while(rs.next()) {
-						Blob blob = rs.getBlob("image");
-						String base64Image=transformBlobToBase64Image(blob);
 						listOfFilms.add(new Film(
 								rs.getInt("idFilm"),
 								rs.getString("titreFilm"),
@@ -40,8 +38,7 @@ public class FilmDaoImpl implements FilmDao {
 								rs.getString("imgFilm"),
 								rs.getString("urlBA"),
 								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
-								rs.getInt("valide"),
-								base64Image));;
+								rs.getInt("valide")));
 					}
 				}
 			}
@@ -77,9 +74,6 @@ public class FilmDaoImpl implements FilmDao {
 			try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
 				try(ResultSet rs = pStm.executeQuery()) {
 					while(rs.next()) {
-						Blob blob = rs.getBlob("image");
-						String base64Image=transformBlobToBase64Image(blob);
-
 						listOfFilms.add(new Film(
 								rs.getInt("idFilm"),
 								rs.getString("titreFilm"),
@@ -91,8 +85,7 @@ public class FilmDaoImpl implements FilmDao {
 								rs.getString("imgFilm"),
 								rs.getString("urlBA"),
 								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
-								rs.getInt("valide"),
-								base64Image));
+								rs.getInt("valide")));
 					}
 				}
 			}
@@ -110,9 +103,6 @@ public class FilmDaoImpl implements FilmDao {
 				pStm.setInt(1, id);
 				try(ResultSet rs = pStm.executeQuery()) {
 					while(rs.next()) {
-						Blob blob = rs.getBlob("image");
-						String base64Image=transformBlobToBase64Image(blob);
-
 						film = new Film(
 								rs.getInt("idFilm"),
 								rs.getString("titreFilm"),
@@ -124,8 +114,7 @@ public class FilmDaoImpl implements FilmDao {
 								rs.getString("imgFilm"),
 								rs.getString("urlBA"),
 								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
-								rs.getInt("valide"),
-								base64Image);
+								rs.getInt("valide"));
 					}
 					if(film == null)
 						throw new FilmNotFoundException();
@@ -162,9 +151,9 @@ public class FilmDaoImpl implements FilmDao {
 	}
 	
 	@Override
-	public Film addFilm(Film film,InputStream image) throws FilmAlreadyExistingException, FilmNotFoundException {
+	public Film addFilm(Film film) throws FilmAlreadyExistingException, FilmNotFoundException {
 		List<Film> films = listFilms();
-		String sqlQuerry = "INSERT INTO FILM (titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide, image) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
+		String sqlQuerry = "INSERT INTO FILM (titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide) VALUES (?,?,?,?,?,?,?,?,?,?);";
 		boolean existing  = false;
 		for (int i = 0; i<films.size(); i++)
 		{
@@ -182,8 +171,6 @@ public class FilmDaoImpl implements FilmDao {
 			if (existing) {
 				throw new FilmAlreadyExistingException();
 			} else {
-				if(image == null)
-					sqlQuerry = "INSERT INTO FILM (titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide, image) VALUES (?,?,?,?,?,?,?,?,?,?,'');";
 				try (PreparedStatement pStm = co.prepareStatement(sqlQuerry)) {
 					pStm.setString(1, film.getTitre());
 					pStm.setString(2, film.getResume());
@@ -195,8 +182,6 @@ public class FilmDaoImpl implements FilmDao {
 					pStm.setString(8, film.getUrlBA());
 					pStm.setInt(9, film.getGenre().getId());
 					pStm.setInt(10, film.getValide());
-					if (image != null)
-						pStm.setBlob(11, image);
 					pStm.executeUpdate();
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -266,21 +251,6 @@ public class FilmDaoImpl implements FilmDao {
 			e.printStackTrace();
 		}
 		return film;
-	}
-
-	public String transformBlobToBase64Image(Blob blob) throws IOException, SQLException {
-		InputStream inputStream = blob.getBinaryStream();
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		byte[] buffer = new byte[4096];
-		int bytesRead = -1;
-		while ((bytesRead = inputStream.read(buffer)) != -1) {
-			outputStream.write(buffer, 0, bytesRead);
-		}
-		byte[] imageBytes = outputStream.toByteArray();
-		String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-		inputStream.close();
-		outputStream.close();
-		return base64Image;
 	}
 
 	public int getSqlIdFilm(Film film) throws FilmNotFoundException {

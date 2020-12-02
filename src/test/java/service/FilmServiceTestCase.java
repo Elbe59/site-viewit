@@ -98,10 +98,9 @@ public class FilmServiceTestCase {
                 Film::getUrlBA,
                 Film -> Film.getGenre().getId(),
                 Film -> Film.getGenre().getNom(),
-                Film::getValide,
-                Film::getBase64Image).containsOnly(
-                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1,""),
-                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0,""));
+                Film::getValide).containsOnly(
+                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1),
+                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0));
     }
 
     @Test
@@ -124,19 +123,18 @@ public class FilmServiceTestCase {
                 Film::getUrlBA,
                 Film -> Film.getGenre().getId(),
                 Film -> Film.getGenre().getNom(),
-                Film::getValide,
-                Film::getBase64Image).contains(
-                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1,""),
-                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0, ""));
+                Film::getValide).contains(
+                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1),
+                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0));
     }
 
     @Test
     public void shouldAddFilm() throws IOException, FilmAlreadyExistingException, FilmNotFoundException {
         //given
         Genre genre = new Genre(1,"aventure");
-        Film film = new Film("titre3","resume3",LocalDate.of(2019,12,20), 120, "realisateur3","acteur3","image3.png","youtube.com/3",genre,0,"");
+        Film film = new Film(1,"titre3","resume3",LocalDate.of(2019,12,20), 120, "realisateur3","acteur3","image3.png","youtube.com/3",genre,0);
         //when
-        Film res = filmService.getInstance().addFilm("titre3","resume3","2019-12-20", 120,"realisateur3","acteur3","image3.png","youtube.com/3",genre,null);
+        Film res = filmService.getInstance().addFilm("titre3","resume3","2019-12-20", 120,"realisateur3","acteur3","image3.png","youtube.com/3",genre);
         //then
         assertThat(res).isNotNull();
         assertThat(res.getTitre()).isEqualTo(film.getTitre());
@@ -148,16 +146,15 @@ public class FilmServiceTestCase {
         assertThat(res.getImageName()).isEqualTo(film.getImageName());
         assertThat(res.getUrlBA()).isEqualTo(film.getUrlBA());
         assertThat(res.getValide()).isEqualTo(film.getValide());
-        assertThat(res.getBase64Image()).isEqualTo(film.getBase64Image());
     }
 
     @Test
     public void shouldAddFilmThrowFilmAlreadyExistingException() throws IOException, FilmAlreadyExistingException, FilmNotFoundException {
         //given
         Genre genre = new Genre(1, "Aventure");
-        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, 1, "");
+        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, 1);
         //when
-        Film res = filmService.getInstance().addFilm("titre 1", "resume 1", "2020-11-11", 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, null);
+        Film res = filmService.getInstance().addFilm("titre 1", "resume 1", "2020-11-11", 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre);
         //then
         Mockito.verify(filmDao, Mockito.never()).getSqlIdFilm(film);
         Assertions.assertThat(res).isNull();
@@ -230,7 +227,7 @@ public class FilmServiceTestCase {
         //given
         int id = 1;
         Genre genre = new Genre(1, "Aventure");
-        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, 1, "");
+        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, 1);
         //when
         Film res = filmService.getInstance().getFilm(id);
         //then
@@ -245,7 +242,6 @@ public class FilmServiceTestCase {
         assertThat(res.getImageName()).isEqualTo(film.getImageName());
         assertThat(res.getUrlBA()).isEqualTo(film.getUrlBA());
         assertThat(res.getValide()).isEqualTo(film.getValide());
-        assertThat(res.getBase64Image()).isEqualTo(film.getBase64Image());
     }
 
     @Test
@@ -264,7 +260,7 @@ public class FilmServiceTestCase {
         //given
         int id = 1;
         Genre genre = new Genre(1, "Aventure");
-        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, 1, "");
+        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, 1);
         //when
         Film res = filmService.getInstance().deleteFilm(id);
         //then
@@ -279,7 +275,6 @@ public class FilmServiceTestCase {
         assertThat(res.getImageName()).isEqualTo(film.getImageName());
         assertThat(res.getUrlBA()).isEqualTo(film.getUrlBA());
         assertThat(res.getValide()).isEqualTo(film.getValide());
-        assertThat(res.getBase64Image()).isEqualTo(film.getBase64Image());
     }
 
     @Test
@@ -370,10 +365,9 @@ public class FilmServiceTestCase {
                 Film::getUrlBA,
                 Film -> Film.getGenre().getId(),
                 Film -> Film.getGenre().getNom(),
-                Film::getValide,
-                Film::getBase64Image).containsOnly(
-                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1,""),
-                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0,""));
+                Film::getValide).containsOnly(
+                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1),
+                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0));
     }
 
     @Test
@@ -442,7 +436,7 @@ public class FilmServiceTestCase {
         int idUser = 2;
         int idFilm = 1;
         Genre genre = new Genre(1, "Aventure");
-        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, 1, "");
+        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, 1);
         //when
         Film res = filmService.getInstance().addFavori(idFilm, idUser);
         //then
@@ -456,7 +450,6 @@ public class FilmServiceTestCase {
         assertThat(res.getImageName()).isEqualTo(film.getImageName());
         assertThat(res.getUrlBA()).isEqualTo(film.getUrlBA());
         assertThat(res.getValide()).isEqualTo(film.getValide());
-        assertThat(res.getBase64Image()).isEqualTo(film.getBase64Image());
     }
 
     @Test
@@ -487,7 +480,7 @@ public class FilmServiceTestCase {
         int idUser = 1;
         int idFilm = 1;
         Genre genre = new Genre(1, "Aventure");
-        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, 1, "");
+        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, 1);
         //when
         Film res = filmService.getInstance().suppFavori(idFilm, idUser);
         //then
@@ -501,7 +494,6 @@ public class FilmServiceTestCase {
         assertThat(res.getImageName()).isEqualTo(film.getImageName());
         assertThat(res.getUrlBA()).isEqualTo(film.getUrlBA());
         assertThat(res.getValide()).isEqualTo(film.getValide());
-        assertThat(res.getBase64Image()).isEqualTo(film.getBase64Image());
     }
 
     @Test
@@ -563,10 +555,9 @@ public class FilmServiceTestCase {
                 Film::getUrlBA,
                 Film -> Film.getGenre().getId(),
                 Film -> Film.getGenre().getNom(),
-                Film::getValide,
-                Film::getBase64Image).containsOnly(
-                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1,""),
-                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0,""));
+                Film::getValide).containsOnly(
+                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1),
+                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0));
     }
 
     @Test

@@ -58,8 +58,7 @@ public class FilmDaoTestCase {
 				Film::getUrlBA,
 				Film -> Film.getGenre().getId(),
 				Film -> Film.getGenre().getNom(),
-				Film::getValide,
-				Film::getBase64Image).contains(
+				Film::getValide).contains(
 						tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1,""),
 						tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0, ""));
 	}
@@ -83,8 +82,7 @@ public class FilmDaoTestCase {
 				Film::getUrlBA,
 				Film -> Film.getGenre().getId(),
 				Film -> Film.getGenre().getNom(),
-				Film::getValide,
-				Film::getBase64Image).containsOnly(
+				Film::getValide).containsOnly(
 				tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1,""),
 				tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0,""));
 	}
@@ -107,7 +105,6 @@ public class FilmDaoTestCase {
 		assertThat(film.getGenre().getId()).isEqualTo(1);
 		assertThat(film.getGenre().getNom()).isEqualTo("Aventure");
 		assertThat(film.getValide()).isEqualTo(1);
-		assertThat(film.getBase64Image()).isEqualTo("");
 	}
 
 	@Test (expected = FilmNotFoundException.class)
@@ -216,9 +213,9 @@ public class FilmDaoTestCase {
 		InputStream image = null;
 		Film search = null;
 		Genre genre = new Genre(1,"action");
-		Film film = new Film("titre3","resume3",LocalDate.of(2019, 12, 30), 120, "real3","acteur3","image3.png","youtube.com/ba3",genre,1,"");
+		Film film = new Film(1,"titre3","resume3",LocalDate.of(2019, 12, 30), 120, "real3","acteur3","image3.png","youtube.com/ba3",genre,1);
 		//when
-		Film res = filmDao.addFilm(film, image);
+		Film res = filmDao.addFilm(film);
 		//then
 		Assertions.assertThat(res).isEqualToComparingFieldByField(film);
 
@@ -239,8 +236,7 @@ public class FilmDaoTestCase {
 								rs.getString("imgFilm"),
 								rs.getString("urlBA"),
 								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
-								rs.getInt("valide"),
-								"");
+								rs.getInt("valide"));
 					}
 				}
 			}
@@ -256,7 +252,6 @@ public class FilmDaoTestCase {
 		assertThat(search.getImageName()).isEqualTo(film.getImageName());
 		assertThat(search.getUrlBA()).isEqualTo(film.getUrlBA());
 		assertThat(search.getValide()).isEqualTo(film.getValide());
-		assertThat(search.getBase64Image()).isEqualTo(film.getBase64Image());
 	}
 
 	@Test (expected = FilmAlreadyExistingException.class)
@@ -264,9 +259,9 @@ public class FilmDaoTestCase {
 		//given
 		InputStream image = null;
 		Genre genre = new Genre(1,"action");
-		Film film = new Film("titre 1","resume 1",LocalDate.of(2020, 11, 11), 120, "realisateur 1","acteur 1","image1.png","youtube.com/ba1",genre,1,"");
+		Film film = new Film(1,"titre 1","resume 1",LocalDate.of(2020, 11, 11), 120, "realisateur 1","acteur 1","image1.png","youtube.com/ba1",genre,1);
 		//when
-		Film res = filmDao.addFilm(film, image);
+		Film res = filmDao.addFilm(film);
 		//then
 		fail("Film not found not throw as expected");
 	}
@@ -275,7 +270,7 @@ public class FilmDaoTestCase {
 	public void shouldGetSqlIdFilm() throws IOException, FilmNotFoundException {
 		//given
 		Genre genre = new Genre(1,"action");
-		Film film = new Film("titre 1","resume 1",LocalDate.of(2020, 11, 11), 123, "realisateur 1","acteur 1","image1.png","youtube.com/1",genre,1,"");
+		Film film = new Film(1,"titre 1","resume 1",LocalDate.of(2020, 11, 11), 123, "realisateur 1","acteur 1","image1.png","youtube.com/1",genre,1);
 		//when
 		int id = filmDao.getSqlIdFilm(film);
 		//then
@@ -286,7 +281,7 @@ public class FilmDaoTestCase {
 	public void shouldGetSqlIdFilmThrowFilmNotFoundException() throws IOException, FilmNotFoundException{
 		//given
 		Genre genre = new Genre(1,"action");
-		Film film = new Film("titre","resume",LocalDate.of(2019, 4, 11), 120, "realisateur","acteur","image1.png","youtube.com/1",genre,1,"");
+		Film film = new Film(1,"titre","resume",LocalDate.of(2019, 4, 11), 120, "realisateur","acteur","image1.png","youtube.com/1",genre,1);
 		//when
 		int id = filmDao.getSqlIdFilm(film);
 		//then
@@ -321,10 +316,9 @@ public class FilmDaoTestCase {
 				Film::getUrlBA,
 				Film -> Film.getGenre().getId(),
 				Film -> Film.getGenre().getNom(),
-				Film::getValide,
-				Film::getBase64Image).containsOnly(
-				tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1,""),
-				tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0,""));
+				Film::getValide).containsOnly(
+				tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1),
+				tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0));
 	}
 
 	@Test (expected = UserNotFoundException.class)

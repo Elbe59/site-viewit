@@ -49,15 +49,15 @@ public class FilmService {
 	}
 
 
-	public Film addFilm(String titre,String resume,String dateSortieStr,int duree,String realisateur,String acteur,String imageName,String urlBA,Genre genre1, InputStream in) throws FilmAlreadyExistingException, FilmNotFoundException, IOException {
+	public Film addFilm(String titre,String resume,String dateSortieStr,int duree,String realisateur,String acteur,String imageName,String urlBA,Genre genre1) throws FilmAlreadyExistingException, FilmNotFoundException, IOException {
 		Film res = null;
 		LocalDate dateSortie = formaterDate(dateSortieStr);
-		Film film=new Film(titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,0,"");
+		Film film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,0);
 		try{
-			res = filmDao.addFilm(film,in);
+			res = filmDao.addFilm(film);
 		}catch (FilmAlreadyExistingException e)
 		{
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		finally {
 			return res;
