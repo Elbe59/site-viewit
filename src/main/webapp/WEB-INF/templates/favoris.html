@@ -35,7 +35,7 @@
                 </svg>
             </label>
         </form>
-      <a th:href="${'../film?id=' + film.id}"><img th:src="*{'data:image/png;base64,'+film.base64Image}" th:alt-title="${film.titre}"></a>
+      <a th:href="${'../film?id=' + film.id}"><img th:src="@{'../filmimage?id='+${film.id}}" th:alt-title="${film.titre}"></a>
     </article>
   </section>
 </main>

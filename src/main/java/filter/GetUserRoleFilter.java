@@ -1,6 +1,10 @@
 package filter;
 
+import dao.impl.FileStorageProvider;
 import entity.Utilisateur;
+import exception.UserNotFoundException;
+import service.UtilisateurService;
+
 import org.thymeleaf.context.WebContext;
 
 import javax.servlet.*;
@@ -24,6 +28,7 @@ public class GetUserRoleFilter extends HttpFilter {
             user="Personne Personne";
         }
         else{
+        	id=utilisateur.getId();
             if(utilisateur.isAdmin() == false){
                 System.out.println("Vous êtes simple utilisateur");
                 role="1";
@@ -32,8 +37,11 @@ public class GetUserRoleFilter extends HttpFilter {
                 System.out.println("Vous êtes admin suprême");
                 role="2";
             }
-            user=utilisateur.getPrenom() + " " +utilisateur.getNom();
-            id=utilisateur.getId();
+            try {
+				user=UtilisateurService.getInstance().getUser(id).getPrenom() + " " + UtilisateurService.getInstance().getUser(id).getNom();
+			} catch (UserNotFoundException e) {
+				e.printStackTrace();
+			}  
         }
         req.setAttribute("role_value",role);
         req.setAttribute("utilisateur",user);

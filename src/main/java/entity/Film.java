@@ -17,14 +17,12 @@ public class Film {
 	private String urlBA;
 	private Genre genre;
 	private Integer valide;
-	private Blob imageFile;
-	private String base64Image;
 
 
 	public Film() {};
 	
 	public Film(Integer id, String titre, String resume, LocalDate dateSortie, Integer duree, String realisateur,
-				String acteur, String imageName, String urlBA, Genre genre, Integer valide, String base64Image) throws IOException {
+				String acteur, String imageName, String urlBA, Genre genre, Integer valide) throws IOException {
 		this.id = id;
 		this.titre = titre;
 		this.resume = resume;
@@ -36,22 +34,6 @@ public class Film {
 		this.urlBA = urlBA;
 		this.genre = genre;
 		this.valide = valide;
-		this.base64Image=base64Image;
-	}
-
-	public Film( String titre, String resume, LocalDate dateSortie, Integer duree, String realisateur,
-				String acteur, String imageName, String urlBA, Genre genre, Integer valide, String base64Image) throws IOException {
-		this.titre = titre;
-		this.resume = resume;
-		this.dateSortie = dateSortie;
-		this.duree = duree;
-		this.realisateur = realisateur;
-		this.acteur = acteur;
-		this.imageName = imageName;
-		this.urlBA = urlBA;
-		this.genre = genre;
-		this.valide = valide;
-		this.base64Image=base64Image;
 	}
 	
 	public Integer getId() {
@@ -129,20 +111,5 @@ public class Film {
 	}
 	public void setValide(Integer valide) {
 		this.valide = valide;
-	}
-	public Blob getImageFile() {
-		return imageFile;
-	}
-
-	public void setImageFile(Blob imageFile) {
-		this.imageFile = imageFile;
-	}
-
-	public String getBase64Image() {
-		return base64Image;
-	}
-
-	public void setBase64Image(String base64Image) {
-		this.base64Image = base64Image;
 	}
 }

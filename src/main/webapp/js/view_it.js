@@ -290,14 +290,14 @@ let modifUser = function (user){
 }
 
 let validModifUser = function (user){
-	let new_email=document.getElementById("modif_mail").value;
-	let new_name=document.getElementById("modif_prenom").value;
+	let new_email=document.getElementById("modif_mail").value.toLowerCase();
+	let new_name=document.getElementById("modif_prenom").value.toLowerCase();
 	new_name = new_name.charAt(0).toLocaleUpperCase() + new_name.substring(1);
-	let new_surname=document.getElementById("modif_nom").value;
+	let new_surname=document.getElementById("modif_nom").value.toLowerCase();
 	new_surname = new_surname.charAt(0).toLocaleUpperCase() + new_surname.substring(1);
 	let new_password=document.getElementById("modif_mdp").value;
 	let previous_password=document.getElementById("previous_mdp").value;
-	if (verifEntry(new_email,new_name,new_surname,new_password)){
+	if (verifEntry(new_email,new_name,new_surname,new_password,previous_password)){
 		if(confirm('Etes vous sur de vouloir modifier cet utilisateur ?')) {
 			let modifUserRequest = new XMLHttpRequest();
 			let url = "../ws/admin/gestionuser/"+user.id+"/modif";
@@ -320,9 +320,7 @@ let validModifUser = function (user){
 		else{
 			document.getElementById("bloc_modif_utilisateur").hidden = true;
 			return false;}
-
 	}
-
 }
 
 let deleteUser = function (user){
@@ -371,7 +369,7 @@ let verifyAjoutForm = function (user) {
 	}
 }
 
-let verifEntry = function (email,name,surname,password){
+let verifEntry = function (email,name,surname,password,previous_password){
 	let booleanVerif = true;
 	// A compléter pour vérifier les champs du formulaire.
 	if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
@@ -379,7 +377,7 @@ let verifEntry = function (email,name,surname,password){
 		booleanVerif = false;
 		alert("Vous avez rentré une mauvaise adresse email.");
 	}
-	if (password.length < 5) {
+	if (password.length >0 && password.length < 7) {
 		booleanVerif = false;
 		alert("Votre mot de passe doit contenir au minimum 7 caractères.")
 	}
@@ -503,6 +501,11 @@ let buildUserTableLine = function (user,compteur) {
 		lineElement.style.fontWeight = "bold";
 	}
 	lineElement.appendChild(actionCell);
+	if (user.id == ACTUAL_USER_ID) {
+		let nomUser = document.getElementById("userCo="+ACTUAL_USER_ID);
+		nomUser.innerText = user.prenom + " " + user.nom;
+		console.log(nomUser.innerText)
+	}
 	return lineElement;
 };
 

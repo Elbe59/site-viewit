@@ -18,12 +18,14 @@ import entity.FilmDto;
 import entity.Genre;
 import entity.GenreDto;
 import exception.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FilmService {
+	private final Logger LOG = LogManager.getLogger();
 
 	private FilmDao filmDao = new FilmDaoImpl();
 	private GenreDao genreDao = new GenreDaoImpl();
-	private StockageImageService stockageService = new StockageImageService();
 
 	private static class FilmHolder {
 		private final static FilmService instance = new FilmService();
@@ -62,6 +64,7 @@ public class FilmService {
 		else {
 			param = "valide";//popularité
 		}
+		LOG.info("Liste les films");
 		return filmDao.listFilms(param);
 	}
 	
@@ -74,16 +77,15 @@ public class FilmService {
 	}
 
 	//Ajout d'un film
-	public Film addFilm(String titre,String resume,String dateSortieStr,int duree,String realisateur,String acteur,String imageName,String url,Genre genre1, InputStream in) throws FilmAlreadyExistingException, FilmNotFoundException, IOException, UrlDoesNotMatch {
-		Film res = new Film();
+	public Film addFilm(String titre,String resume,String dateSortieStr,int duree,String realisateur,String acteur,String imageName,String urlBA,Genre genre1) throws FilmAlreadyExistingException, FilmNotFoundException, IOException {
+		Film res = null;
 		LocalDate dateSortie = formaterDate(dateSortieStr);
-		String urlBA = urlVerification(url);
-		Film film=new Film(titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,0,"");
+		Film film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,0);
 		try{
-			res = filmDao.addFilm(film,in);
+			res = filmDao.addFilm(film);
 		}catch (FilmAlreadyExistingException e)
 		{
-			return null;
+			e.printStackTrace();
 		}
 		return res;
 	}

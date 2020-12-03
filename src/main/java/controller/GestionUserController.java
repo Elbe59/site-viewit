@@ -61,8 +61,16 @@ public class GestionUserController {
                 return Response.status(405).entity("").build();
             }
             else{
-                utilisateur.setMdp(new_password);
-                utilisateur.setMdpHash(new_password);
+                if(new_password.length()>=7){
+                    utilisateur.setMdp(new_password);
+                    utilisateur.setMdpHash(new_password);
+                    System.out.println("Mdp chnge");
+                }
+                else  {
+                    utilisateur.setMdp(previous_password);
+                    utilisateur.setMdpHash(previous_password);
+                    System.out.println("Mdp not chnge");
+                }
                 utilisateur.setEmail(email);
                 utilisateur.setNom(nom);
                 utilisateur.setPrenom(prenom);
