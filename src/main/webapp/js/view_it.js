@@ -290,10 +290,10 @@ let modifUser = function (user){
 }
 
 let validModifUser = function (user){
-	let new_email=document.getElementById("modif_mail").value;
-	let new_name=document.getElementById("modif_prenom").value;
+	let new_email=document.getElementById("modif_mail").value.toLowerCase();
+	let new_name=document.getElementById("modif_prenom").value.toLowerCase();
 	new_name = new_name.charAt(0).toLocaleUpperCase() + new_name.substring(1);
-	let new_surname=document.getElementById("modif_nom").value;
+	let new_surname=document.getElementById("modif_nom").value.toLowerCase();
 	new_surname = new_surname.charAt(0).toLocaleUpperCase() + new_surname.substring(1);
 	let new_password=document.getElementById("modif_mdp").value;
 	let previous_password=document.getElementById("previous_mdp").value;
@@ -377,15 +377,9 @@ let verifEntry = function (email,name,surname,password,previous_password){
 		booleanVerif = false;
 		alert("Vous avez rentré une mauvaise adresse email.");
 	}
-	if(password.length ===0 && previous_password ===0){
-
-	}
-	else if (password.length < 5) {
+	if (password.length >0 && password.length < 7) {
 		booleanVerif = false;
 		alert("Votre mot de passe doit contenir au minimum 7 caractères.")
-	}
-	else{
-
 	}
 	if (name.length ===0) {
 		booleanVerif = false;
