@@ -30,6 +30,6 @@ public interface FilmDao {
 	public Film removeAvis (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException;
 
 	public List<FilmDto> listFilmsDto(Integer idUtilisateur);
-	public List<Film> listFavorisFilm(Integer idUtilisateur) throws UserNotFoundException;
+	public List<Film> listFavorisFilm(Integer idUtilisateur, String trie) throws UserNotFoundException;
 	public Integer getPourcentageFilm (Integer id) throws FilmNotFoundException;
 }

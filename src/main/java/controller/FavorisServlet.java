@@ -25,10 +25,12 @@ public class FavorisServlet extends ServletGenerique {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		WebContext context = new WebContext(req, resp, req.getServletContext());
 		Utilisateur utilisateur = (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
+		String trier = req.getParameter("trier");
+		System.out.println("get : " + trier);
 		List<Film> listOfFilms = null;
 		if(utilisateur != null){
 			try {
-				listOfFilms = FilmService.getInstance().listFavorisFilm(utilisateur.getId());
+				listOfFilms = FilmService.getInstance().listFavorisFilm(utilisateur.getId(), trier);
 				context.setVariable("listUser", listOfFilms);
 
 			} catch (FilmNotFoundException | UserNotFoundException e) {
@@ -43,8 +45,10 @@ public class FavorisServlet extends ServletGenerique {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("utilisateurConnecte");
+		//String trier = request.getParameter("trier");
+		//System.out.println("post : " + trier);
 		try {
-			List<Film> listOfFilms = FilmService.getInstance().listFavorisFilm(utilisateur.getId());
+			List<Film> listOfFilms = FilmService.getInstance().listFavorisFilm(utilisateur.getId(), null);
 			if(utilisateur != null){
 				if(request.getParameter("suppfavori")!=null) {
 					int index = Integer.parseInt(request.getParameter("suppfavori"));
@@ -55,7 +59,8 @@ public class FavorisServlet extends ServletGenerique {
 		} catch (UserNotFoundException | FilmNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
-		response.sendRedirect("favoris");
+		doGet(request, response);
+		//response.sendRedirect("favoris");
 	}
 	
 }

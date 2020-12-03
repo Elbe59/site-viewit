@@ -53,25 +53,8 @@ public class FilmDaoImpl implements FilmDao {
 	}
 
 	@Override
-	public List<Film> listFilms(String colonne) {
+	public List<Film> listFilms(String param) {
 		List<Film> listOfFilms = new ArrayList<Film>();
-		String param = "";
-		
-		if(colonne == null)
-			param = "titreFilm";
-		else if(colonne.equals("alpha"))
-			param = "titreFilm";
-		else if (colonne.equals("recent"))
-			param = "dateSortie DESC";
-		else if (colonne.equals("ancien"))
-			param = "dateSortie";
-		else if (colonne.equals("genre"))
-			param = "nomGenre";
-		else if (colonne.contentEquals("valide"))
-			param = "valide";
-		else {
-			param = "valide";//popularité
-		}
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			String sqlQuery="SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre ORDER BY "+param;
 			try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
@@ -138,18 +121,21 @@ public class FilmDaoImpl implements FilmDao {
 	}
 
 	@Override
-	public List<Film> listFavorisFilm(Integer idUtilisateur) throws UserNotFoundException {
+	public List<Film> listFavorisFilm(Integer idUtilisateur, String trie) throws UserNotFoundException {
 		List<Film> listOfFilms = new ArrayList<Film>();
 		Film film = null;
 		userDao.getUser(idUtilisateur);
 		//boolean notFound = true;
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-			try(PreparedStatement pStm = co.prepareStatement("SELECT idfilm FROM PREFERER WHERE idUtilisateur=? AND favoris = 1;")) {
+			try(PreparedStatement pStm = co.prepareStatement("SELECT preferer.idfilm, titreFilm, dateSortie FROM PREFERER JOIN FILM ON FILM.idFilm = PREFERER.idFilm WHERE idUtilisateur=? AND favoris = 1 ORDER BY ?;")) {
 				pStm.setInt(1, idUtilisateur);
+				pStm.setString(2, trie);
 				try(ResultSet rs = pStm.executeQuery()) {
 					while(rs.next()) {
 						//notFound = false;
 						Integer idFilm = rs.getInt("idFilm");
+						rs.getString("titreFilm");
+						rs.getDate("dateSortie").toLocalDate();
 						film = getFilm(idFilm);
 						listOfFilms.add(film);
 					}
@@ -182,8 +168,9 @@ public class FilmDaoImpl implements FilmDao {
 			if (existing) {
 				throw new FilmAlreadyExistingException();
 			} else {
-				if(image == null)
-					sqlQuerry = "INSERT INTO FILM (titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide, image) VALUES (?,?,?,?,?,?,?,?,?,?,'');";
+				if(image == null) {
+					sqlQuerry = "INSERT INTO FILM (titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide) VALUES (?,?,?,?,?,?,?,?,?,?);";
+				}
 				try (PreparedStatement pStm = co.prepareStatement(sqlQuerry)) {
 					pStm.setString(1, film.getTitre());
 					pStm.setString(2, film.getResume());
@@ -195,8 +182,9 @@ public class FilmDaoImpl implements FilmDao {
 					pStm.setString(8, film.getUrlBA());
 					pStm.setInt(9, film.getGenre().getId());
 					pStm.setInt(10, film.getValide());
-					if (image != null)
+					if (image != null) {
 						pStm.setBlob(11, image);
+					}
 					pStm.executeUpdate();
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -362,7 +350,7 @@ public class FilmDaoImpl implements FilmDao {
 				try(ResultSet rs = pstm.executeQuery()) {
 					if(rs.next()) {
 						verification = true;
-						System.out.println("verif ) true");
+						System.out.println("verif = true");
 					}
 				}
 			} 

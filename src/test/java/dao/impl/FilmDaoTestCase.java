@@ -306,7 +306,7 @@ public class FilmDaoTestCase {
 					"INSERT INTO preferer (favoris, idFilm, idUtilisateur, liker) VALUES (1, 2, 7,1);");
 		}
 		//when
-		List<Film> res = filmDao.listFavorisFilm(7);
+		List<Film> res = filmDao.listFavorisFilm(7, "");
 		//then
 		assertThat(res).hasSize(2);
 		assertThat(res).extracting(
@@ -332,7 +332,7 @@ public class FilmDaoTestCase {
 		//given
 		int id = 99;
 		//when
-		List<Film> res = filmDao.listFavorisFilm(id);
+		List<Film> res = filmDao.listFavorisFilm(id, "");
 		//then
 		fail("User not found not throw as expected");
 	}

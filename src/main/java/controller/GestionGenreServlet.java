@@ -38,8 +38,8 @@ public class GestionGenreServlet extends ServletGenerique {
             System.out.println("Supprime genre : " + (id));
             try {
                 FilmService.getInstance().deleteGenre(id,nbFilmLie);
-            } catch (SQLException | GenreNotFoundException | GenreLinkToFilmException throwables) {
-                throwables.printStackTrace();
+            } catch (SQLException | GenreNotFoundException | GenreLinkToFilmException e) {
+                e.printStackTrace();
             }
         }
         if(request.getParameter("enregistrer")!=null) {

@@ -25,6 +25,8 @@ import entity.Utilisateur;
 import exception.FilmAlreadyActiveException;
 import exception.FilmAlreadyExistingException;
 import exception.FilmNotFoundException;
+import exception.UrlDoesNotMatch;
+
 import org.apache.logging.log4j.core.util.IOUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -66,17 +68,17 @@ public class AddFilmServlet extends ServletGenerique {
 			Part part = req.getPart("fichier");
 			InputStream in=part.getInputStream();
 			String urlBA = req.getParameter("url");
-			urlBA = urlBA.substring( urlBA.lastIndexOf( '=' ) + 1 );
+			//urlBA = urlBA.substring( urlBA.lastIndexOf( '=' ) + 1 );
 			try {
 				FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,imageName,urlBA,genre1,in);
-			} catch (FilmAlreadyExistingException | FilmNotFoundException e) {
+			} catch (FilmAlreadyExistingException | FilmNotFoundException | UrlDoesNotMatch e) {
 				e.printStackTrace();
 			}
 		}
 		else {
 			try {
 				FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,null,null,genre1,null);
-			} catch (FilmAlreadyExistingException | FilmNotFoundException e) {
+			} catch (FilmAlreadyExistingException | FilmNotFoundException | UrlDoesNotMatch e) {
 				e.printStackTrace();
 			}
 		}
