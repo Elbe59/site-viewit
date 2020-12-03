@@ -61,7 +61,7 @@ public class GenreDaoImpl implements GenreDao {
                         genre = new Genre(rs.getInt("idGenre"), rs.getString("nomGenre"));
                     }
                     if (genre == null)
-                        throw new GenreNotFoundException();
+                        throw new GenreNotFoundException("Genre introuvable.");
                 }
             }
         } catch (SQLException e) {
@@ -96,7 +96,7 @@ public class GenreDaoImpl implements GenreDao {
         }
         try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
             if (existing) {
-                throw new GenreAlreadyExistingException();
+                throw new GenreAlreadyExistingException("Le genre que vous essayé d'ajouter existe déjà.");
             } else {
                 try (PreparedStatement pStm = co.prepareStatement("INSERT INTO Genre (nomGenre) VALUES (?);")) {
                     pStm.setString(1, name);
@@ -127,7 +127,7 @@ public class GenreDaoImpl implements GenreDao {
             e.printStackTrace();
         }
         if (id == null)
-            throw new GenreNotFoundException();
+            throw new GenreNotFoundException("L'id du genre que vous essayez de récupérer est introuvable.");
         else
             return id;
     }

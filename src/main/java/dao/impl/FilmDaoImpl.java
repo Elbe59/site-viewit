@@ -100,7 +100,7 @@ public class FilmDaoImpl implements FilmDao {
 								rs.getInt("valide"));
 					}
 					if(film == null)
-						throw new FilmNotFoundException();
+						throw new FilmNotFoundException("Le film que vous essayez de récupérer n'a pas été trouvé.");
 				}
 			}
 		} catch (SQLException | IOException e) {
@@ -155,7 +155,7 @@ public class FilmDaoImpl implements FilmDao {
 		}
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
 			if (existing) {
-				throw new FilmAlreadyExistingException();
+				throw new FilmAlreadyExistingException("Le film que vous essayez d'ajouter existe déjà.");
 			} else {
 				try (PreparedStatement pStm = co.prepareStatement(sqlQuerry)) {
 					pStm.setString(1, film.getTitre());
@@ -186,7 +186,7 @@ public class FilmDaoImpl implements FilmDao {
 		try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
 			film=getFilm(id);
 			if (film.getValide()==1)
-				throw new FilmAlreadyActiveException();
+				throw new FilmAlreadyActiveException("Le film que vous essayez d'activer est déjà activé.");
 			String sqlQuery = "UPDATE `film` SET `valide` = '1' WHERE `film`.`idFilm` = ?";
 			PreparedStatement statement = connection.prepareStatement(sqlQuery);
 			statement.setInt(1, id);
@@ -205,7 +205,7 @@ public class FilmDaoImpl implements FilmDao {
 		try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
 			film=getFilm(id);
 			if(film.getValide()==0)
-				throw new FilmAlreadyDesactiveException();
+				throw new FilmAlreadyDesactiveException("Le film que vous essayez de désactiver est déjà désactivé.");
 			String sqlQuery = "UPDATE `film` SET `valide` = '0' WHERE `film`.`idFilm` = ?";
 			PreparedStatement statement = connection.prepareStatement(sqlQuery);
 			statement.setInt(1, id);
@@ -259,7 +259,7 @@ public class FilmDaoImpl implements FilmDao {
 			e.printStackTrace();
 		}
 		if (id == null)
-			throw new FilmNotFoundException();
+			throw new FilmNotFoundException("Aucun film ne correspond à l'id que vous essayez de récupérer.");
 		else
 			return id;
 	}

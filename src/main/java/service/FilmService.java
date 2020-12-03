@@ -72,40 +72,43 @@ public class FilmService {
 		try{
 			return filmDao.getFilm(id);
 		}catch (FilmNotFoundException e){
-			return null;
+			throw new FilmNotFoundException("Film non trouvé.");
 		}
 	}
 
 	//Ajout d'un film
 	public Film addFilm(String titre,String resume,String dateSortieStr,int duree,String realisateur,String acteur,String imageName,String urlBA,Genre genre1) throws FilmAlreadyExistingException, FilmNotFoundException, IOException {
-		Film res = null;
+		//Film res = null;
 		LocalDate dateSortie = formaterDate(dateSortieStr);
 		Film film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,0);
 		try{
-			res = filmDao.addFilm(film);
+			return filmDao.addFilm(film);
 		}catch (FilmAlreadyExistingException e)
 		{
-			e.printStackTrace();
+			throw new FilmAlreadyExistingException("Le film " + titre + " existe déjà.");
 		}
-		return res;
+		//return res;
 	}
 	
 	public Film deleteFilm(int id) throws FilmNotFoundException {
 		try{
 			return filmDao.deleteFilm(id);
 		}catch (FilmNotFoundException e){
-			return null;
+			throw new FilmNotFoundException("Le film que vous essayez de supprimer n'existe pas.");
 		}
 	}
 
 	//Activation - Rendre visible le film sur la page d'accueil
 	public Film activeFilm(Integer id) throws FilmNotFoundException, FilmAlreadyActiveException
 	{
-		try{
+		try {
 			return filmDao.activeFilm(id);
-		}catch (FilmAlreadyActiveException | FilmNotFoundException e)
-		{
-			return null;
+		}
+		catch(FilmNotFoundException e){
+			throw new FilmNotFoundException("Film non trouvé lors de la tentative d'activation");
+		}
+		catch(FilmAlreadyActiveException e) {
+			throw new FilmAlreadyActiveException("Film déjà activé.");
 		}
 	}
 
@@ -114,66 +117,77 @@ public class FilmService {
 	{
 		try{
 			return filmDao.desactiveFilm(id);
-		}catch (FilmAlreadyDesactiveException | FilmNotFoundException e)
-		{
-			return null;
+		}
+		catch (FilmAlreadyDesactiveException e){
+			throw new FilmAlreadyDesactiveException("Film déjà désactivé.");
+		}
+		catch(FilmNotFoundException e) {
+			throw new FilmNotFoundException("Film non trouvé lors de la tentative de désactivation");
 		}
 	}
 	
 	
-	public Film addFavori(int idFilm, Integer idUtilisateur) throws FilmNotFoundException
-	{
+	public Film addFavori(int idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
 		try{
 			return filmDao.addFavori(idFilm,idUtilisateur);
-		}catch (FilmNotFoundException | UserNotFoundException e)
-		{
-			//e.printStackTrace();
-			return null;
+		}
+		catch (FilmNotFoundException e){
+			throw new FilmNotFoundException("Film non trouvé lors de la tentative d'ajout aux favoris");
+		}
+		catch(UserNotFoundException e){
+			throw new UserNotFoundException("Impossible de trouvé l'utilisateur pour l'ajout d'un favori");
 		}
 	}
 
-	public Film suppFavori(int idFilm, Integer idUtilisateur) throws FilmNotFoundException, SQLException
-	{
+	public Film suppFavori(int idFilm, Integer idUtilisateur) throws FilmNotFoundException, SQLException, UserNotFoundException {
 		try{
 			return filmDao.suppFavori(idFilm,idUtilisateur);
-		}catch (FilmNotFoundException | UserNotFoundException e)
-		{
-			return null;
+		}
+		catch (FilmNotFoundException e){
+			throw new FilmNotFoundException("Film non trouvé lors de la tentative pour retirer le film aux favoris");
+		}
+		catch(UserNotFoundException e){
+			throw new UserNotFoundException("Impossible de trouvé l'utilisateur pour retirer le film aux favoris");
 		}
 	}
 	
 	//Mettre un like
-	public Film addLike(int idFilm, Integer idUtilisateur) throws FilmNotFoundException
+	public Film addLike(int idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException
 	{
 		try{
 			return filmDao.addLike(idFilm,idUtilisateur);
-		}catch (FilmNotFoundException | UserNotFoundException e)
-		{
-			//e.printStackTrace();
-			return null;
+		}
+		catch (FilmNotFoundException e){
+			throw new FilmNotFoundException("Film non trouvé lors de la tentative d'ajout au favori");
+		}
+		catch(UserNotFoundException e){
+			throw new UserNotFoundException("Impossible de trouvé l'utilisateur pour retirer le film des favoris");
 		}
 	}
 
 	//Mettre un dislike
-	public Film addDislike(int idFilm, Integer idUtilisateur) throws FilmNotFoundException
-	{
+	public Film addDislike(int idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
 		try{
 			return filmDao.addDislike(idFilm,idUtilisateur);
-		}catch (FilmNotFoundException | UserNotFoundException e)
-		{
-			//e.printStackTrace();
-			return null;
+		}
+		catch (FilmNotFoundException e){
+			throw new FilmNotFoundException("Film non trouvé lors de la tentative d'un dislike");
+		}
+		catch(UserNotFoundException e){
+			throw new UserNotFoundException("Impossible de trouvé l'utilisateur lors de la tentative d'un dislike");
 		}
 	}
 	
 	//Retirer son like ou dislike
-	public Film removeAvis(int idFilm, Integer idUtilisateur) throws FilmNotFoundException, SQLException
-	{
+	public Film removeAvis(int idFilm, Integer idUtilisateur) throws FilmNotFoundException, SQLException, UserNotFoundException {
 		try{
 			return filmDao.removeAvis(idFilm,idUtilisateur);
-		}catch (FilmNotFoundException | UserNotFoundException e)
-		{
-			return null;
+		}
+		catch (FilmNotFoundException e){
+			throw new FilmNotFoundException("Film non trouvé lors de la tentative d'un retrait d'un like ou dislike");
+		}
+		catch(UserNotFoundException e){
+			throw new UserNotFoundException("Impossible de trouvé l'utilisateur lors de la tentative d'un retrait d'un like ou dislike");
 		}
 	}
 	
@@ -198,8 +212,9 @@ public class FilmService {
 		System.out.println("list : " + param);
 		try{
 			return filmDao.listFavorisFilm(idUtilisateur, param);
-		}catch(UserNotFoundException e){
-			return null;
+		}
+		catch(UserNotFoundException e){
+			throw new UserNotFoundException("Impossible de trouvé l'utilisateur pour lister ses favoris");
 		}
 	}
 
@@ -208,18 +223,18 @@ public class FilmService {
 		try{
 			return genreDao.addGenre(name);
 		}catch (GenreAlreadyExistingException e){
-			return null;
+			throw new GenreAlreadyExistingException("Echec de l'ajout d'un Genre : Genre déjà existant.");
 		}
 	}
 	
 	public Genre deleteGenre(Integer id,int nbFilmLie) throws GenreNotFoundException, SQLException, GenreLinkToFilmException {
 		if (nbFilmLie > 0) {
-			throw new GenreLinkToFilmException();
+			throw new GenreLinkToFilmException("Le genre que vous essayez de supprimer est lié à " + nbFilmLie + " film(s).");
 		} else {
 			try {
 				return genreDao.deleteGenre(id);
 			} catch (GenreNotFoundException e) {
-				return null;
+				throw new GenreNotFoundException("Echec de suppresion d'un Genre : Genre non trouvé.");
 			}
 		}
 	}
@@ -228,7 +243,7 @@ public class FilmService {
 		try{
 			return genreDao.getGenre(id);
 		}catch (GenreNotFoundException e){
-			return null;
+			throw new GenreNotFoundException("Le genre que vous essayez de récupérer n'a pas été trouvé.");
 		}
 	}
 	

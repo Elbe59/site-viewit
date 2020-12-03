@@ -2,8 +2,8 @@ package exception;
 
 public class FilmAlreadyExistingException extends Exception{
 
-    public FilmAlreadyExistingException()
+    public FilmAlreadyExistingException(String message)
     {
-        super("Le film existe déjà");
+        super(message);
     }
 }

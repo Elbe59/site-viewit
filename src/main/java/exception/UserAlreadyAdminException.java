@@ -1,8 +1,8 @@
 package exception;
 
 public class UserAlreadyAdminException extends Exception{
-    public UserAlreadyAdminException()
+    public UserAlreadyAdminException(String message)
     {
-        super("Utilisateur déjà admin");
+        super(message);
     }
 }

@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import entity.Utilisateur;
 import exception.FilmNotFoundException;
+import exception.UserNotFoundException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.thymeleaf.TemplateEngine;
@@ -53,6 +55,8 @@ public class HomeServlet extends ServletGenerique {
 					FilmService.getInstance().addFavori(idFilm, utilisateur.getId());
 				} catch (FilmNotFoundException e) {
 					e.printStackTrace();
+				} catch (UserNotFoundException e) {
+					e.printStackTrace();
 				}
 			}
 			if(request.getParameter("suppfavori")!=null) {
@@ -63,6 +67,8 @@ public class HomeServlet extends ServletGenerique {
 				} catch (FilmNotFoundException e) {
 					e.printStackTrace();
 				} catch (SQLException e) {
+					e.printStackTrace();
+				} catch (UserNotFoundException e) {
 					e.printStackTrace();
 				}
 			}

@@ -38,7 +38,6 @@ public class UtilisateurServiceTestCase {
     public void initDb() throws Exception {
         try (Connection co = DataSourceProvider.getDataSource().getConnection();
              Statement stm = co.createStatement()) {
-            stm.executeUpdate("DELETE FROM commentaire");
             stm.executeUpdate("DELETE FROM preferer");
             stm.executeUpdate("DELETE FROM UTILISATEUR");
             stm.executeUpdate(
@@ -58,7 +57,7 @@ public class UtilisateurServiceTestCase {
         Assertions.assertThat(res).isEqualToComparingFieldByField(user);
     }
 
-    @Test
+    @Test (expected = UserAlreadyExistingException.class)
     public void shouldAddUserThrowUserAlreadyExistingException() throws UserAlreadyExistingException {
         //given
         Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1",MotDePasseUtils.genererMotDePasse("mdpHash1"), false);
@@ -96,7 +95,7 @@ public class UtilisateurServiceTestCase {
         Assertions.assertThat(res).isEqualToComparingFieldByField(user);
     }
 
-    @Test
+    @Test (expected = UserNotFoundException.class)
     public void shouldGetUserThrowUserNotFoundException() throws UserNotFoundException {
         //given
         int id = 3;
@@ -138,7 +137,7 @@ public class UtilisateurServiceTestCase {
         Assertions.assertThat(res).isEqualToComparingFieldByField(user);
     }
 
-    @Test
+    @Test (expected = UserNotFoundException.class)
     public void shouldDeleteUserThrowUserNotFoundException() throws UserNotFoundException, SQLException {
         //given
         int id = 3;
@@ -171,7 +170,7 @@ public class UtilisateurServiceTestCase {
         Assertions.assertThat(res).isNull();
     }
 
-    @Test
+    @Test (expected = UserAlreadyAdminException.class)
     public void shouldChangeRoleUserThrowUserAlreadyAdminException() throws UserAlreadyAdminException, SQLException, UserAlreadyDownException {
         //given
         String up = "up";
@@ -181,7 +180,7 @@ public class UtilisateurServiceTestCase {
         Assertions.assertThat(res).isNull();
     }
 
-    @Test
+    @Test (expected = UserAlreadyDownException.class)
     public void shouldChangeRoleUserThrowUserAlreadyDownException() throws UserAlreadyAdminException, SQLException, UserAlreadyDownException {
         //given
         String down = "down";

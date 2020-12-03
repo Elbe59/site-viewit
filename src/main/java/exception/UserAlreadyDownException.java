@@ -1,8 +1,8 @@
 package exception;
 
 public class UserAlreadyDownException extends Exception{
-    public UserAlreadyDownException()
+    public UserAlreadyDownException(String message)
     {
-        super("Utilisateur est déjà non-admin");
+        super(message);
     }
 }

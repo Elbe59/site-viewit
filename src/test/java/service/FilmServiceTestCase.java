@@ -2,12 +2,10 @@ package service;
 
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import dao.FilmDao;
@@ -37,6 +35,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
+import static org.junit.Assert.fail;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FilmServiceTestCase {
@@ -69,9 +68,9 @@ public class FilmServiceTestCase {
                     +"(2,'Action'),"
                     +"(3,'Horreur');");
             stm.executeUpdate(
-                    "INSERT INTO film(idFilm, titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide, image) "
-                            + "VALUES (1, 'titre 1', 'resume 1', '2020-11-11', 123, 'realisateur 1', 'acteur 1', 'image1.png', 'youtu.be/1', 1, 1, ''),"
-                            + "(2, 'titre 2', 'resume 2', '2020-11-12', 123, 'realisateur 2', 'acteur 2', 'image2.png', 'youtu.be/2', 2, 0, '');");
+                    "INSERT INTO film(idFilm, titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide) "
+                            + "VALUES (1, 'titre 1', 'resume 1', '2020-11-11', 123, 'realisateur 1', 'acteur 1', 'image1.png', 'youtu.be/1', 1, 1),"
+                            + "(2, 'titre 2', 'resume 2', '2020-11-12', 123, 'realisateur 2', 'acteur 2', 'image2.png', 'youtu.be/2', 2, 0);");
 
             stm.executeUpdate(
                     "INSERT INTO preferer (favoris, idFilm, idUtilisateur, liker) VALUES (1, 1, 1,1);");
@@ -99,16 +98,11 @@ public class FilmServiceTestCase {
                 Film::getUrlBA,
                 Film -> Film.getGenre().getId(),
                 Film -> Film.getGenre().getNom(),
-<<<<<<< HEAD
-                Film::getValide,
-                Film::getBase64Image).containsOnly(
-                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", 1, "Aventure", 1,""),
-                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtu.be/2", 2, "Action", 0,""));
-=======
+
                 Film::getValide).containsOnly(
-                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1),
-                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0));
->>>>>>> 86f9d20a62508b6e4b7c1c4ddd92d61a87ed341b
+                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", 1, "Aventure", 1),
+                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtu.be/2", 2, "Action", 0));
+
     }
 
     @Test
@@ -131,31 +125,57 @@ public class FilmServiceTestCase {
                 Film::getUrlBA,
                 Film -> Film.getGenre().getId(),
                 Film -> Film.getGenre().getNom(),
-<<<<<<< HEAD
-                Film::getValide,
-                Film::getBase64Image).contains(
-                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", 1, "Aventure", 1,""),
-                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtu.be/2", 2, "Action", 0, ""));
-=======
                 Film::getValide).contains(
-                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1),
-                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0));
->>>>>>> 86f9d20a62508b6e4b7c1c4ddd92d61a87ed341b
+                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", 1, "Aventure", 1),
+                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtu.be/2", 2, "Action", 0));
+
     }
+    
+    @Test
+    public void shouldGetFilm() throws IOException, FilmNotFoundException {
+        //given
+        int id = 1;
+        Genre genre = new Genre(1, "Aventure");
+
+        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1);
+
+        //when
+        Film res = filmService.getInstance().getFilm(id);
+        //then
+        assertThat(res).isNotNull();
+        assertThat(res.getTitre()).isEqualTo(film.getTitre());
+        assertThat(res.getResume()).isEqualTo(film.getResume());
+        assertThat(res.getDateSortie()).isEqualTo(film.getDateSortie());
+        assertThat(res.getDuree()).isEqualTo(film.getDuree());
+        assertThat(res.getGenre().getNom()).isEqualTo(film.getGenre().getNom());
+        assertThat(res.getRealisateur()).isEqualTo(film.getRealisateur());
+        assertThat(res.getActeur()).isEqualTo(film.getActeur());
+        assertThat(res.getImageName()).isEqualTo(film.getImageName());
+        assertThat(res.getUrlBA()).isEqualTo(film.getUrlBA());
+        assertThat(res.getValide()).isEqualTo(film.getValide());
+    }
+
+    @Test (expected = FilmNotFoundException.class)
+    public void shouldGetFilmThrowFilmNotFoundException() throws FilmNotFoundException
+    {
+        //given
+        int id = 42;
+        //when
+        filmService.getInstance().getFilm(id);
+        //then
+        fail("Should throw a FilmNotFoundException");
+    }
+
 
     @Test
     public void shouldAddFilm() throws IOException, FilmAlreadyExistingException, FilmNotFoundException, UrlDoesNotMatch {
         //given
         Genre genre = new Genre(1,"aventure");
-<<<<<<< HEAD
-        Film film = new Film("titre3","resume3",LocalDate.of(2019,12,20), 120, "realisateur3","acteur3","image3.png","3",genre,0,"");
+
+        Film film = new Film(1,"titre3","resume3",LocalDate.of(2019,12,20), 120, "realisateur3","acteur3","image3.png","youtu.be/3",genre,0);
         //when
-        Film res = filmService.addFilm("titre3","resume3","2019-12-20", 120,"realisateur3","acteur3","image3.png","youtu.be/3",genre, null);
-=======
-        Film film = new Film(1,"titre3","resume3",LocalDate.of(2019,12,20), 120, "realisateur3","acteur3","image3.png","youtube.com/3",genre,0);
-        //when
-        Film res = filmService.getInstance().addFilm("titre3","resume3","2019-12-20", 120,"realisateur3","acteur3","image3.png","youtube.com/3",genre);
->>>>>>> 86f9d20a62508b6e4b7c1c4ddd92d61a87ed341b
+        Film res = filmService.getInstance().addFilm("titre3","resume3","2019-12-20", 120,"realisateur3","acteur3","image3.png","youtu.be/3",genre);
+
         //then
         assertThat(res).isNotNull();
         assertThat(res.getTitre()).isEqualTo(film.getTitre());
@@ -173,20 +193,59 @@ public class FilmServiceTestCase {
     public void shouldAddFilmThrowFilmAlreadyExistingException() throws IOException, FilmAlreadyExistingException, FilmNotFoundException, UrlDoesNotMatch {
         //given
         Genre genre = new Genre(1, "Aventure");
-<<<<<<< HEAD
-        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1, "");
+
+        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1);
+        Mockito.when(filmService.addFilm("titre 1", "resume 1", "2020-11-11", 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre)).thenThrow(new FilmAlreadyExistingException("Film déjà existant"));
         //when
-        Film res = filmService.getInstance().addFilm("titre 1", "resume 1", "2020-11-11", 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, null);
-=======
-        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, 1);
-        //when
-        Film res = filmService.getInstance().addFilm("titre 1", "resume 1", "2020-11-11", 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre);
->>>>>>> 86f9d20a62508b6e4b7c1c4ddd92d61a87ed341b
+        try {
+            filmService.getInstance().addFilm("titre 1", "resume 1", "2020-11-11", 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre);
+
+        }
         //then
+        catch(Exception e){
+        	Assertions.assertThatExceptionOfType(FilmAlreadyExistingException.class);
+        }
         Mockito.verify(filmDao, Mockito.never()).getSqlIdFilm(film);
-        Assertions.assertThat(res).isNull();
     }
 
+    @Test
+    public void shouldDeleteFilm() throws IOException, FilmNotFoundException {
+        //given
+        int id = 1;
+        Genre genre = new Genre(1, "Aventure");
+
+        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1);
+
+        //when
+        Film res = filmService.getInstance().deleteFilm(id);
+        //then
+        assertThat(res).isNotNull();
+        assertThat(res.getTitre()).isEqualTo(film.getTitre());
+        assertThat(res.getResume()).isEqualTo(film.getResume());
+        assertThat(res.getDateSortie()).isEqualTo(film.getDateSortie());
+        assertThat(res.getDuree()).isEqualTo(film.getDuree());
+        assertThat(res.getGenre().getNom()).isEqualTo(film.getGenre().getNom());
+        assertThat(res.getRealisateur()).isEqualTo(film.getRealisateur());
+        assertThat(res.getActeur()).isEqualTo(film.getActeur());
+        assertThat(res.getImageName()).isEqualTo(film.getImageName());
+        assertThat(res.getUrlBA()).isEqualTo(film.getUrlBA());
+        assertThat(res.getValide()).isEqualTo(film.getValide());
+    }
+
+    @Test (expected = FilmNotFoundException.class) 
+    public void shouldDeleteFilmTrowFilmNotFoundException() throws FilmNotFoundException
+    {
+        //given
+        int id = 3;
+        //Mockito.when(filmDao.getFilm(id)).thenThrow(FilmNotFoundException.class);
+        //when
+        filmService.getInstance().deleteFilm(id);
+        //then
+        fail("Should throw a FilmNotFoundException");
+        //Assertions.assertThat(res).isNull();
+    }
+    
+    
     @Test
     public void shouldActiveFilm() throws FilmAlreadyActiveException, FilmNotFoundException {
         //given
@@ -197,17 +256,17 @@ public class FilmServiceTestCase {
         Assertions.assertThat(res.getValide()).isEqualTo(1);
     }
 
-    @Test
+    @Test (expected = FilmAlreadyActiveException.class)
     public void shouldActiveFilmThrowFilmAlreadyActiveException() throws FilmAlreadyActiveException, FilmNotFoundException {
         //given
         int id = 1;
         //when
         Film res = filmService.getInstance().activeFilm(id);
         //then
-        Assertions.assertThat(res).isNull();
+        fail("Should throw a FilmAlreadyActiveException");
     }
 
-    @Test
+    @Test (expected = FilmNotFoundException.class)
     public void shouldActiveFilmThrowFilmNotFoundException() throws FilmAlreadyActiveException, FilmNotFoundException {
         //given
         int id = 3;
@@ -228,7 +287,7 @@ public class FilmServiceTestCase {
         Assertions.assertThat(res.getValide()).isEqualTo(0);
     }
 
-    @Test
+    @Test (expected = FilmAlreadyDesactiveException.class)
     public void shouldDesactiveFilmThrowFilmAlreadyDesactiveException() throws FilmAlreadyDesactiveException, FilmNotFoundException {
         //given
         int id = 2;
@@ -238,7 +297,7 @@ public class FilmServiceTestCase {
         Assertions.assertThat(res).isNull();
     }
 
-    @Test
+    @Test (expected = FilmNotFoundException.class)
     public void shouldDesactiveFilmThrowFilmNotFoundException() throws FilmAlreadyDesactiveException, FilmNotFoundException {
         //given
         int id = 3;
@@ -250,24 +309,22 @@ public class FilmServiceTestCase {
     }
 
     @Test
-    public void shouldGetFilm() throws IOException, FilmNotFoundException {
+    public void shouldAddFavoris() throws IOException, FilmNotFoundException, UserNotFoundException {
         //given
-        int id = 1;
+        int idUser = 2;
+        int idFilm = 1;
         Genre genre = new Genre(1, "Aventure");
-<<<<<<< HEAD
-        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1, "");
-=======
-        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, 1);
->>>>>>> 86f9d20a62508b6e4b7c1c4ddd92d61a87ed341b
+
+        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1);
+
         //when
-        Film res = filmService.getInstance().getFilm(id);
+        Film res = filmService.getInstance().addFavori(idFilm, idUser);
         //then
         assertThat(res).isNotNull();
         assertThat(res.getTitre()).isEqualTo(film.getTitre());
         assertThat(res.getResume()).isEqualTo(film.getResume());
         assertThat(res.getDateSortie()).isEqualTo(film.getDateSortie());
         assertThat(res.getDuree()).isEqualTo(film.getDuree());
-        assertThat(res.getGenre().getNom()).isEqualTo(film.getGenre().getNom());
         assertThat(res.getRealisateur()).isEqualTo(film.getRealisateur());
         assertThat(res.getActeur()).isEqualTo(film.getActeur());
         assertThat(res.getImageName()).isEqualTo(film.getImageName());
@@ -275,36 +332,45 @@ public class FilmServiceTestCase {
         assertThat(res.getValide()).isEqualTo(film.getValide());
     }
 
-    @Test
-    public void shouldGetFilmThrowFilmNotFoundException() throws FilmNotFoundException
-    {
+    @Test (expected = UserNotFoundException.class)
+    public void shouldAddFavorisThrowUserNotFound() throws IOException, FilmNotFoundException, UserNotFoundException {
         //given
-        int id = 3;
+        int idUser = 3;
+        int idFilm = 1;
         //when
-        Film res = filmService.getFilm(id);
+        Film res = filmService.getInstance().addFavori(idFilm, idUser);
         //then
-        Assertions.assertThat(res).isNull();
+        assertThat(res).isNull();
+    }
+
+    @Test (expected = FilmNotFoundException.class)
+    public void shouldAddFavorisThrowFilmNotFoundException() throws IOException, FilmNotFoundException, UserNotFoundException {
+        //given
+        int idUser = 2;
+        int idFilm = 3;
+        //when
+        Film res = filmService.getInstance().addFavori(idFilm, idUser);
+        //then
+        assertThat(res).isNull();
     }
 
     @Test
-    public void shouldDeleteFilm() throws IOException, FilmNotFoundException {
+    public void shouldSuppFavoris() throws IOException, FilmNotFoundException, SQLException, UserNotFoundException {
         //given
-        int id = 1;
+        int idUser = 1;
+        int idFilm = 1;
         Genre genre = new Genre(1, "Aventure");
-<<<<<<< HEAD
-        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1, "");
-=======
-        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, 1);
->>>>>>> 86f9d20a62508b6e4b7c1c4ddd92d61a87ed341b
+
+        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1);
+
         //when
-        Film res = filmService.getInstance().deleteFilm(id);
+        Film res = filmService.getInstance().suppFavori(idFilm, idUser);
         //then
         assertThat(res).isNotNull();
         assertThat(res.getTitre()).isEqualTo(film.getTitre());
         assertThat(res.getResume()).isEqualTo(film.getResume());
         assertThat(res.getDateSortie()).isEqualTo(film.getDateSortie());
         assertThat(res.getDuree()).isEqualTo(film.getDuree());
-        assertThat(res.getGenre().getNom()).isEqualTo(film.getGenre().getNom());
         assertThat(res.getRealisateur()).isEqualTo(film.getRealisateur());
         assertThat(res.getActeur()).isEqualTo(film.getActeur());
         assertThat(res.getImageName()).isEqualTo(film.getImageName());
@@ -312,17 +378,79 @@ public class FilmServiceTestCase {
         assertThat(res.getValide()).isEqualTo(film.getValide());
     }
 
+    @Test (expected = UserNotFoundException.class)
+    public void shouldSuppFavorisThrowUserNotFound() throws IOException, FilmNotFoundException, SQLException, UserNotFoundException {
+        //given
+        int idUser = 3;
+        int idFilm = 1;
+        //when
+        Film res = filmService.getInstance().suppFavori(idFilm, idUser);
+        //then
+        assertThat(res).isNull();
+    }
+
+    @Test (expected = FilmNotFoundException.class)
+    public void shouldSuppFavorisThrowFilmNotFoundException() throws IOException, FilmNotFoundException, SQLException, UserNotFoundException {
+        //given
+        int idUser = 2;
+        int idFilm = 3;
+        //when
+        Film res = filmService.getInstance().suppFavori(idFilm, idUser);
+        //then
+        assertThat(res).isNull();
+    }
+    
     @Test
-    public void shouldDeleteFilmTrowFilmNotFoundException() throws FilmNotFoundException
-    {
+    public void shouldAddLike() throws FilmNotFoundException, UserNotFoundException, IOException {
+    	//GIVEN
+    	Genre genre = new Genre(1, "Aventure");
+    	Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1);
+    	//WHEN
+    	Film result = filmService.getInstance().addLike(1,1);
+    	//THEN
+    	Assertions.assertThat(result).isEqualTo(film);
+    	
+    }
+    
+    
+    @Test
+    public void shouldGetFilmByUser() throws FilmNotFoundException, UserNotFoundException {
+        //given
+        int id = 1;
+        //when
+        List<Film> res = filmService.getInstance().listFavorisFilm(id, "");
+        //then
+        assertThat(res).hasSize(2);
+        assertThat(res).extracting(
+                Film::getId,
+                Film::getTitre,
+                Film::getResume,
+                Film::getDateSortie,
+                Film::getDuree,
+                Film::getRealisateur,
+                Film::getActeur,
+                Film::getImageName,
+                Film::getUrlBA,
+                Film -> Film.getGenre().getId(),
+                Film -> Film.getGenre().getNom(),
+
+                Film::getValide).containsOnly(
+                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", 1, "Aventure", 1),
+                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtu.be/2", 2, "Action", 0));
+
+    }
+
+    @Test (expected = UserNotFoundException.class)
+    public void shouldGetFilmByUserThrowUserNotFoundException() throws UserNotFoundException, FilmNotFoundException {
         //given
         int id = 3;
-        //Mockito.when(filmDao.getFilm(id)).thenThrow(FilmNotFoundException.class);
+        //Mockito.when(userDao.getUser(id)).thenThrow(UserNotFoundException.class);
         //when
-        Film res = filmService.getInstance().deleteFilm(id);
+        List<Film> res = filmService.getInstance().listFavorisFilm(id , "");
         //then
-        Assertions.assertThat(res).isNull();
+        fail("Should throw a UserNotFoundException");
     }
+    
 
     @Test
     public void shouldListGenre()
@@ -359,23 +487,24 @@ public class FilmServiceTestCase {
         Assertions.assertThat(res).isNull();
     }
     
-    @Test
-    public void shouldDeleteGenreThrowGenreLinkToFilmException() throws GenreNotFoundException, SQLException, GenreLinkToFilmException {
+    @Test (expected = GenreLinkToFilmException.class)
+    public void shouldDeleteGenreThrowGenreLinkToFilmException() throws GenreLinkToFilmException, GenreNotFoundException, SQLException {
         //GIVEN
         int idGenre = 2;
         int nbFilmLink = 1;
         
-        Mockito.when(filmService.getGenre(idGenre)).thenReturn(new Genre(2, "Action"));
-        Mockito.when(filmService.deleteGenre(idGenre, nbFilmLink)).thenThrow(new GenreLinkToFilmException());
+        //Mockito.when(filmService.getGenre(idGenre)).thenReturn(new Genre(2, "Action"));
+        //Mockito.when(filmService.deleteGenre(idGenre, nbFilmLink)).thenThrow(new GenreLinkToFilmException("Erreur, le genre est encore lié à un film."));
         //WHEN
-        try {
-            filmService.deleteGenre(idGenre, nbFilmLink);
-        }
+        //try {
+            filmService.getInstance().deleteGenre(idGenre, nbFilmLink);
+        //}
         //THEN
-        catch(Exception e) {
-        	Assertions.assertThatExceptionOfType(GenreLinkToFilmException.class);
-        }
-        Mockito.verify(genreDao, Mockito.atLeast(1)).getGenre(idGenre);
+        //catch(Exception e) {
+        	//Assertions.assertThatExceptionOfType(GenreLinkToFilmException.class);
+        //}
+        //Mockito.verify(genreDao, Mockito.atLeast(1)).getGenre(idGenre);
+        fail("Should throw a GenreLinkToFilmException");
     }
 
     @Test
@@ -389,57 +518,22 @@ public class FilmServiceTestCase {
         Assertions.assertThat(res).isEqualToComparingFieldByField(genre);
     }
 
-    @Test
+    @Test (expected = GenreNotFoundException.class)
     public void shouldGetGenreTrowGenreNotFoundException() throws GenreNotFoundException {
         //given
         int id = 4;
+        //Mockito.when(filmService.getInstance().getGenre(id)).thenThrow(new GenreNotFoundException("Genre non trouvé."));
         //when
-        Genre res = filmService.getInstance().getGenre(id);
+        //try{
+            filmService.getInstance().getGenre(id);
+        //}
         //then
-        Assertions.assertThat(res).isNull();
-    }
-
-    @Test
-    public void shouldGetFilmByUser() throws FilmNotFoundException, UserNotFoundException {
-        //given
-        int id = 1;
-        //when
-        List<Film> res = filmService.getInstance().listFavorisFilm(id, "");
-        //then
-        assertThat(res).hasSize(2);
-        assertThat(res).extracting(
-                Film::getId,
-                Film::getTitre,
-                Film::getResume,
-                Film::getDateSortie,
-                Film::getDuree,
-                Film::getRealisateur,
-                Film::getActeur,
-                Film::getImageName,
-                Film::getUrlBA,
-                Film -> Film.getGenre().getId(),
-                Film -> Film.getGenre().getNom(),
-<<<<<<< HEAD
-                Film::getValide,
-                Film::getBase64Image).containsOnly(
-                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", 1, "Aventure", 1,""),
-                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtu.be/2", 2, "Action", 0,""));
-=======
-                Film::getValide).containsOnly(
-                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1),
-                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0));
->>>>>>> 86f9d20a62508b6e4b7c1c4ddd92d61a87ed341b
-    }
-
-    @Test
-    public void shouldGetFilmByUserThrowUserNotFoundException() throws UserNotFoundException, FilmNotFoundException {
-        //given
-        int id = 3;
-        //Mockito.when(userDao.getUser(id)).thenThrow(UserNotFoundException.class);
-        //when
-        List<Film> res = filmService.getInstance().listFavorisFilm(id , "");
-        //then
-        Assertions.assertThat(res).isNull();
+        //catch(Exception e) {
+        	//Assertions.assertThatExceptionOfType(GenreNotFoundException.class);
+        //}
+        //Assertions.assertThat(res).isNull();
+        //Mockito.verify(filmService, Mockito.never()).getGenre(Mockito.any());
+        fail("Should throw a GenreNotFoundException");
     }
 
     @Test
@@ -457,7 +551,7 @@ public class FilmServiceTestCase {
         //given
         String name = "Aventure";
         //when
-        Genre res = filmService.getInstance().addGenre(name);
+        Genre res = filmService.addGenre(name);
         //then
         Assertions.assertThat(res).isNull();
     }
@@ -469,7 +563,7 @@ public class FilmServiceTestCase {
         String dateStr = "2020-12-26";
         LocalDate date = LocalDate.of(2020,12,26);
         //when
-        LocalDate res = filmService.getInstance().formaterDate(dateStr);
+        LocalDate res = filmService.formaterDate(dateStr);
         //then
         Assertions.assertThat(res).isEqualTo(res);
     }
@@ -492,101 +586,6 @@ public class FilmServiceTestCase {
                 tuple(1,"Aventure",1), tuple(2,"Action",1), tuple(3,"Horreur", 0));
     }
 
-    @Test
-    public void shouldAddFavoris() throws IOException, FilmNotFoundException {
-        //given
-        int idUser = 2;
-        int idFilm = 1;
-        Genre genre = new Genre(1, "Aventure");
-<<<<<<< HEAD
-        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1, "");
-=======
-        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, 1);
->>>>>>> 86f9d20a62508b6e4b7c1c4ddd92d61a87ed341b
-        //when
-        Film res = filmService.getInstance().addFavori(idFilm, idUser);
-        //then
-        assertThat(res).isNotNull();
-        assertThat(res.getTitre()).isEqualTo(film.getTitre());
-        assertThat(res.getResume()).isEqualTo(film.getResume());
-        assertThat(res.getDateSortie()).isEqualTo(film.getDateSortie());
-        assertThat(res.getDuree()).isEqualTo(film.getDuree());
-        assertThat(res.getRealisateur()).isEqualTo(film.getRealisateur());
-        assertThat(res.getActeur()).isEqualTo(film.getActeur());
-        assertThat(res.getImageName()).isEqualTo(film.getImageName());
-        assertThat(res.getUrlBA()).isEqualTo(film.getUrlBA());
-        assertThat(res.getValide()).isEqualTo(film.getValide());
-    }
-
-    @Test
-    public void shouldAddFavorisThrowUserNotFound() throws IOException, FilmNotFoundException {
-        //given
-        int idUser = 3;
-        int idFilm = 1;
-        //when
-        Film res = filmService.getInstance().addFavori(idFilm, idUser);
-        //then
-        assertThat(res).isNull();
-    }
-
-    @Test
-    public void shouldAddFavorisThrowFilmNotFoundException() throws IOException, FilmNotFoundException {
-        //given
-        int idUser = 2;
-        int idFilm = 3;
-        //when
-        Film res = filmService.getInstance().addFavori(idFilm, idUser);
-        //then
-        assertThat(res).isNull();
-    }
-
-    @Test
-    public void shouldSuppFavoris() throws IOException, FilmNotFoundException, SQLException {
-        //given
-        int idUser = 1;
-        int idFilm = 1;
-        Genre genre = new Genre(1, "Aventure");
-<<<<<<< HEAD
-        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1, "");
-=======
-        Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", genre, 1);
->>>>>>> 86f9d20a62508b6e4b7c1c4ddd92d61a87ed341b
-        //when
-        Film res = filmService.getInstance().suppFavori(idFilm, idUser);
-        //then
-        assertThat(res).isNotNull();
-        assertThat(res.getTitre()).isEqualTo(film.getTitre());
-        assertThat(res.getResume()).isEqualTo(film.getResume());
-        assertThat(res.getDateSortie()).isEqualTo(film.getDateSortie());
-        assertThat(res.getDuree()).isEqualTo(film.getDuree());
-        assertThat(res.getRealisateur()).isEqualTo(film.getRealisateur());
-        assertThat(res.getActeur()).isEqualTo(film.getActeur());
-        assertThat(res.getImageName()).isEqualTo(film.getImageName());
-        assertThat(res.getUrlBA()).isEqualTo(film.getUrlBA());
-        assertThat(res.getValide()).isEqualTo(film.getValide());
-    }
-
-    @Test
-    public void shouldsuppFavorisThrowUserNotFound() throws IOException, FilmNotFoundException, SQLException {
-        //given
-        int idUser = 3;
-        int idFilm = 1;
-        //when
-        Film res = filmService.getInstance().suppFavori(idFilm, idUser);
-        //then
-        assertThat(res).isNull();
-    }
-
-    @Test
-    public void shouldsuppFavorisThrowFilmNotFoundException() throws IOException, FilmNotFoundException, SQLException {
-        //given
-        int idUser = 2;
-        int idFilm = 3;
-        //when
-        Film res = filmService.getInstance().suppFavori(idFilm, idUser);
-        //then
-        assertThat(res).isNull();
-    }
 
     @Test
     public void shouldListFilmDto()
@@ -625,26 +624,21 @@ public class FilmServiceTestCase {
                 Film::getUrlBA,
                 Film -> Film.getGenre().getId(),
                 Film -> Film.getGenre().getNom(),
-<<<<<<< HEAD
-                Film::getValide,
-                Film::getBase64Image).containsOnly(
-                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", 1, "Aventure", 1,""),
-                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtu.be/2", 2, "Action", 0,""));
-=======
+
                 Film::getValide).containsOnly(
-                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", 1, "Aventure", 1),
-                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", 2, "Action", 0));
->>>>>>> 86f9d20a62508b6e4b7c1c4ddd92d61a87ed341b
+                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", 1, "Aventure", 1),
+                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtu.be/2", 2, "Action", 0));
+
     }
 
-    @Test
+    @Test (expected = UserNotFoundException.class)
     public void shouldListFavorisFilmThrowUserNotFoundException() throws FilmNotFoundException, UserNotFoundException {
         //given
         int id = 3;
         //WHEN
         List<Film> films = filmService.getInstance().listFavorisFilm(id, "");
         //THEN
-        Assertions.assertThat(films).isNull();
+        fail("Should throw a UserNotFoundException");
     }
 }
 

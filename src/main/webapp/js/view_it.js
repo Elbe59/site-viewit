@@ -20,7 +20,7 @@ function Lecture(jsonFile) {
 				if (jsonFile[j].favori == true) {
 					listOfFilms[i][3].querySelector("input").name = "suppfavori";
 					listOfFilms[i][3].querySelector("svg").style.color = "red";
-					listOfFilms[i][3].querySelector("svg").style.opacity = 1;
+					listOfFilms[i][3].querySelector("svg").style.opacity = 0.8;
 				} else {
 					listOfFilms[i][3].querySelector("input").name = "addfavori";
 				}
@@ -175,7 +175,7 @@ let remplirFilmIcone = function (filmDetail){
 	let dislike=iconesBloc.querySelector("#dislike_film");
 	if (filmDetail.favori === true) {
 		favori.style.color="red";
-		favori.style.opacity=1;
+		favori.style.opacity=0.8;
 		favori.onclick = function (){
 			removeAvis(filmDetail.id,"favori");
 		}

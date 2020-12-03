@@ -2,8 +2,8 @@ package exception;
 
 public class FilmAlreadyDesactiveException extends Exception{
 
-    public FilmAlreadyDesactiveException()
+    public FilmAlreadyDesactiveException(String message)
     {
-        super("Le film est déjà désactivé");
+        super(message);
     }
 }

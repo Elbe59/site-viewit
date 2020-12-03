@@ -2,8 +2,8 @@ package exception;
 
 public class GenreNotFoundException extends Exception{
 
-    public GenreNotFoundException()
+    public GenreNotFoundException(String message)
     {
-        super("Genre non trouvé");
+        super(message);
     }
 }

@@ -2,8 +2,8 @@ package exception;
 
 public class FilmNotFoundException extends Exception{
 
-    public FilmNotFoundException()
+    public FilmNotFoundException(String message)
     {
-        super("Film non trouvé");
+        super(message);
     }
 }

@@ -4,6 +4,7 @@ import entity.FilmDto;
 import entity.Utilisateur;
 import entity.UtilisateurDto;
 import exception.FilmNotFoundException;
+import exception.UserNotFoundException;
 import service.FilmService;
 import service.UtilisateurService;
 
@@ -34,7 +35,7 @@ public class DetailFilmController {
 
     @PATCH
     @Path("/remove/{action}")
-    public Response removeAvis(@PathParam("action") String action, @PathParam("filmId") Integer filmId,@PathParam("userId") Integer userId) throws FilmNotFoundException, SQLException {
+    public Response removeAvis(@PathParam("action") String action, @PathParam("filmId") Integer filmId,@PathParam("userId") Integer userId) throws FilmNotFoundException, SQLException, UserNotFoundException {
         if(action.contentEquals("favori")){
             FilmService.getInstance().suppFavori(filmId, userId);
         }
@@ -52,7 +53,7 @@ public class DetailFilmController {
 
     @PATCH
     @Path("/add/{action}")
-    public Response addAvis(@PathParam("action") String action, @PathParam("filmId") Integer filmId,@PathParam("userId") Integer userId) throws FilmNotFoundException {
+    public Response addAvis(@PathParam("action") String action, @PathParam("filmId") Integer filmId,@PathParam("userId") Integer userId) throws FilmNotFoundException, UserNotFoundException {
         if(action.contentEquals("favori")){
             FilmService.getInstance().addFavori(filmId, userId);
         }

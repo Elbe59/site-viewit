@@ -2,8 +2,8 @@ package exception;
 
 public class FilmAlreadyActiveException extends Exception{
 
-    public FilmAlreadyActiveException()
+    public FilmAlreadyActiveException(String msg)
     {
-        super("Le Film est déjà activé");
+        super(msg);
     }
 }

@@ -54,7 +54,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
                                 rs.getInt("admin")==1?true:false);
                     }
                     if (user==null)
-                        throw new UserNotFoundException();
+                        throw new UserNotFoundException("Utilisateur non trouvé");
                 }
             }
         } catch (SQLException e) {
@@ -73,7 +73,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
         }
         try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
             if (existing)
-                throw new UserAlreadyExistingException();
+                throw new UserAlreadyExistingException("Utilisateur déjà existant");
             try (PreparedStatement pStm = co.prepareStatement("INSERT INTO UTILISATEUR ( prenomUtilisateur, nomUtilisateur, email, mdp,mdpHash, admin) VALUES (?,?,?,?,?,?);")) {
                 pStm.setString(1, user.getPrenom());
                 pStm.setString(2, user.getNom());
@@ -113,12 +113,12 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
                 if(action.contentEquals("up")){
                     sqlQuery="UPDATE `utilisateur` SET `admin` = '1' WHERE `utilisateur`.`idUtilisateur`=?";
                     if (user.isAdmin())
-                        throw new UserAlreadyAdminException();
+                        throw new UserAlreadyAdminException("L'utilisateur est déjà admin.");
                 }
                 else {
                     sqlQuery="UPDATE `utilisateur` SET `admin` = '0' WHERE `utilisateur`.`idUtilisateur`=?";
                     if (!user.isAdmin())
-                        throw new UserAlreadyDownException();
+                        throw new UserAlreadyDownException("Utilisateur est déjà non-admin");
                 }
                 try (PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
                     pStm.setInt(1, id);
@@ -172,7 +172,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
                                 rs.getInt("admin")==1?true:false);
                     }
                     if (user==null)
-                        throw new UserNotFoundException();
+                        throw new UserNotFoundException("Utilisateur non trouvé d'après le mail " + email);
                 }
             }
         } catch (SQLException e) {
@@ -199,7 +199,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
             e.printStackTrace();
         }
         if (id == null)
-            throw new UserNotFoundException();
+            throw new UserNotFoundException("Id de l'utilisateur non trouvé");
         else
             return id;
     }
