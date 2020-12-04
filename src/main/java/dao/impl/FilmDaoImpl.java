@@ -15,10 +15,13 @@ import entity.FilmDto;
 import entity.Genre;
 import entity.Utilisateur;
 import exception.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FilmDaoImpl implements FilmDao {
 
 	private UtilisateurDao userDao = new UtilisateurDaoImpl();
+	static final Logger LOGGER = LogManager.getLogger();
 
 	@Override
 	public List<Film> listFilms() {
@@ -43,9 +46,11 @@ public class FilmDaoImpl implements FilmDao {
 				}
 			}
 		} catch (SQLException | IOException e) {
+			LOGGER.error("Error while trying to return list of film, no parameters.");
 			e.printStackTrace();
 		}
-		
+		LOGGER.debug("Returned list of film");
+		LOGGER.debug("List of size: "+listOfFilms.size());
 		return listOfFilms;
 	}
 
@@ -85,14 +90,18 @@ public class FilmDaoImpl implements FilmDao {
 				}
 			}
 		} catch (SQLException | IOException e) {
+			LOGGER.error("Error while trying to return list of film, whith parameter "+param);
 			e.printStackTrace();
 		}
+		LOGGER.debug("Succesfully return list of films whith parameter "+param);
+		LOGGER.debug("List of size: "+listOfFilms.size());
 		return listOfFilms;
 	}
 	
 	@Override
 	public Film getFilm(Integer id) throws FilmNotFoundException{
 		Film film = null;
+		LOGGER.debug("Looking for film nb "+id);
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(PreparedStatement pStm = co.prepareStatement("SELECT * FROM film JOIN genre ON film.idGenre = genre.idGenre AND film.idFilm = ?;")) {
 				pStm.setInt(1, id);
@@ -116,8 +125,10 @@ public class FilmDaoImpl implements FilmDao {
 				}
 			}
 		} catch (SQLException | IOException e) {
+			LOGGER.error("Error trying to get the film;");
 			e.printStackTrace();
 		}
+		LOGGER.debug("Succesfully found "+film.getTitre()+", for id "+id);
 		return film;
 	}
 
@@ -125,6 +136,7 @@ public class FilmDaoImpl implements FilmDao {
 	public List<Film> listFavorisFilm(Integer idUtilisateur, String trie) throws UserNotFoundException {
 		List<Film> listOfFilms = new ArrayList<Film>();
 		Film film = null;
+		LOGGER.debug("Looking for list favoris of user id: "+idUtilisateur+", order by parameter: "+trie);
 		userDao.getUser(idUtilisateur);
 		//boolean notFound = true;
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
@@ -143,13 +155,16 @@ public class FilmDaoImpl implements FilmDao {
 				}
 			}
 		} catch (SQLException | FilmNotFoundException e) {
+			LOGGER.error("Error while looking for list favoris");
 			e.printStackTrace();
 		}
+		LOGGER.debug("Returned list of favoris of user "+idUtilisateur+", of size "+listOfFilms.size());
 		return listOfFilms;
 	}
 	
 	@Override
 	public Film addFilm(Film film) throws FilmAlreadyExistingException, FilmNotFoundException {
+		LOGGER.debug("Adding film "+film.getTitre()+" ...");
 		List<Film> films = listFilms();
 		String sqlQuerry = "INSERT INTO film (titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide) VALUES (?,?,?,?,?,?,?,?,?,?);";
 		boolean existing  = false;
@@ -182,19 +197,23 @@ public class FilmDaoImpl implements FilmDao {
 					pStm.setInt(10, film.getValide());
 					pStm.executeUpdate();
 				} catch (SQLException e) {
+					LOGGER.error("error while adding film "+film.getTitre());
 					e.printStackTrace();
 				}
 			}
 		} catch (SQLException e) {
+			LOGGER.error("error while adding film "+film.getTitre());
 			e.printStackTrace();
 		}
 		film.setId(getSqlIdFilm(film));
+		LOGGER.info("film "+film.getTitre()+" succesfully added at id="+film.getId());
 		//System.out.println("id: "+film.getId());
 		return film;
 	}
 
 	public Film activeFilm(Integer id) throws FilmNotFoundException, FilmAlreadyActiveException {
 		Film film = null;
+		LOGGER.debug("Trying to activate film nb "+id);
 		try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
 			film=getFilm(id);
 			if (film.getValide()==1)
@@ -206,14 +225,17 @@ public class FilmDaoImpl implements FilmDao {
 			statement.close();
 
 		} catch (SQLException e) {
+			LOGGER.error("error while activating film "+id);
 			e.printStackTrace();
 		}
 		film=getFilm(id);
+		LOGGER.info("film "+film.getTitre()+" succesfully activated");
 		return film;
 	}
 
 	public Film desactiveFilm(Integer id) throws FilmNotFoundException, FilmAlreadyDesactiveException {
 		Film film = null;
+		LOGGER.debug("Trying to desactivate film nb "+id);
 		try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
 			film=getFilm(id);
 			if(film.getValide()==0)
@@ -225,17 +247,18 @@ public class FilmDaoImpl implements FilmDao {
 			statement.close();
 
 		} catch (SQLException e) {
+			LOGGER.error("error while deactivating film "+id);
 			e.printStackTrace();
 		}
-		try{
-			film=getFilm(id);
-		}catch (FilmNotFoundException e){}
+		film=getFilm(id);
+		LOGGER.info("film "+film.getTitre()+" succesfully deactivated");
 		return film;
 	}
 
 	@Override
 	public Film deleteFilm(Integer id) throws FilmNotFoundException{
 		Film film = null;
+		LOGGER.debug("Trying to delete film nb "+id);
 		try(Connection connection=DataSourceProvider.getDataSource().getConnection()){
 			String sqlQuery="DELETE FROM `film` WHERE idFilm = ?";
 			film = getFilm(id);
@@ -246,13 +269,16 @@ public class FilmDaoImpl implements FilmDao {
 			statement.close();
 
 		} catch (SQLException e) {
+			LOGGER.error("error while deleting film "+id);
 			e.printStackTrace();
 		}
+		LOGGER.info("film "+film.getTitre()+" succesfully delete");
 		return film;
 	}
 
 	public int getSqlIdFilm(Film film) throws FilmNotFoundException {
 		Integer id = null;
+		LOGGER.debug("Trying to get the id of film "+film.getTitre());
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(PreparedStatement pStm = co.prepareStatement("SELECT idFilm FROM film WHERE titreFilm =? AND dateSortie =? AND resumeFilm =? AND acteur = ? AND realisateur = ? AND urlBA = ? ")) {
 				pStm.setString(1, film.getTitre());
@@ -268,15 +294,20 @@ public class FilmDaoImpl implements FilmDao {
 				}
 			}
 		} catch (SQLException e) {
+			LOGGER.error("error while looking for the id of "+film.getTitre());
 			e.printStackTrace();
 		}
 		if (id == null)
 			throw new FilmNotFoundException("Aucun film ne correspond à l'id que vous essayez de récupérer.");
 		else
+		{
+			LOGGER.debug("Succesfully found the id "+id+" for film "+film.getTitre());
 			return id;
+		}
 	}
 
 	public List<FilmDto> listFilmsDto(Integer idUtilisateur) {
+		LOGGER.debug("Getting list of film whith dto format, for user "+idUtilisateur);
 		List<Film> listOfFilms = listFilms();
 		List<FilmDto> listOfFilmsCo = new ArrayList<FilmDto>();
 
@@ -309,15 +340,19 @@ public class FilmDaoImpl implements FilmDao {
 					listOfFilmsCo.add(filmDto);
 				}
 			} catch (FilmNotFoundException e) {
+				LOGGER.error("error while listing films dto for user  "+idUtilisateur);
 				e.printStackTrace();
 			}
 		} catch (SQLException | IOException e) {
+			LOGGER.error("error while listing films dto for user  "+idUtilisateur);
 			e.printStackTrace();
 		}
+		LOGGER.debug("Returned list of films dto of size "+listOfFilmsCo.size()+" for user  "+idUtilisateur);
 		return trierListFilms(listOfFilmsCo);
 	}
 
 	public List<FilmDto> trierListFilms (List<FilmDto> listFilmsDto) {
+		LOGGER.debug("Trying to trier list film");
 		List<FilmDto> listFilmsDtoTri = new ArrayList<FilmDto>();
 		List<FilmDto> listFilmsDtoRec = new ArrayList<FilmDto>(listFilmsDto);
 		while (listFilmsDtoTri.size() != listFilmsDto.size()) {
@@ -332,10 +367,12 @@ public class FilmDaoImpl implements FilmDao {
 			}
 			listFilmsDtoTri.add(maximum);
 		}
+		LOGGER.debug("Succesfully trier list film, of size "+listFilmsDtoTri.size());
 		return listFilmsDtoTri;
 	}
 
 	public Film addFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
+		LOGGER.debug("Trying to add film nb "+idFilm+" to favoris of user nb"+idUtilisateur);
 		Film film = getFilm(idFilm);
 		System.out.println("ds add favoris");
 		boolean verification = false;
@@ -354,6 +391,7 @@ public class FilmDaoImpl implements FilmDao {
 			co.close();
 		}
 		catch (Exception e) {
+			LOGGER.error("error while adding films "+idFilm+" to favoris of user nb"+idUtilisateur);
 			e.printStackTrace();
 		}
 		
@@ -367,6 +405,7 @@ public class FilmDaoImpl implements FilmDao {
 				co.close();
 			}
 			catch (Exception e) {
+				LOGGER.error("error while adding films "+idFilm+" to favoris of user nb"+idUtilisateur);
 				e.printStackTrace();
 			}
 		}
@@ -380,14 +419,17 @@ public class FilmDaoImpl implements FilmDao {
 				co.close();
 			}
 			catch (Exception e) {
+				LOGGER.error("error while adding films "+idFilm+" to favoris of user nb"+idUtilisateur);
 				e.printStackTrace();
 			}
 		}
+		LOGGER.info("Succesfully added films "+film.getTitre()+" to favoris of user nb"+idUtilisateur);
 		return film;
 	}
 
 	public Film suppFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
 		Film film = null;
+		LOGGER.debug("Trying to delete films "+idFilm+" from favoris of user nb"+idUtilisateur);
 		userDao.getUser(idUtilisateur);
 		try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
 			film=getFilm(idFilm);
@@ -400,12 +442,15 @@ public class FilmDaoImpl implements FilmDao {
 			}
 			co.close();
 		} catch (SQLException e) {
+			LOGGER.error("error while removing films "+idFilm+" from favoris of user nb"+idUtilisateur);
 			e.printStackTrace();
 		}
+		LOGGER.info("Succesfully removed films "+film.getTitre()+" from favoris of user nb"+idUtilisateur);
 		return film;
 	}
 	
 	public Film addLike (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
+		LOGGER.debug("Trying to add a like to films "+idFilm+" from user nb"+idUtilisateur);
 		Film film = getFilm(idFilm);
 		System.out.println("ds add like");
 		boolean verification = false;
@@ -424,6 +469,7 @@ public class FilmDaoImpl implements FilmDao {
 			co.close();
 		}
 		catch (Exception e) {
+			LOGGER.error("Error while adding a like to films "+idFilm+" from user nb"+idUtilisateur);
 			e.printStackTrace();
 		}
 		
@@ -437,6 +483,7 @@ public class FilmDaoImpl implements FilmDao {
 				co.close();
 			}
 			catch (Exception e) {
+				LOGGER.error("Error while adding a like to films "+idFilm+" from user nb"+idUtilisateur);
 				e.printStackTrace();
 			}
 		}
@@ -450,13 +497,16 @@ public class FilmDaoImpl implements FilmDao {
 				co.close();
 			}
 			catch (Exception e) {
+				LOGGER.error("Error while adding a like to films "+idFilm+" from user nb"+idUtilisateur);
 				e.printStackTrace();
 			}
 		}
+		LOGGER.info("Succesfully added a like to films "+film.getTitre()+" from user nb"+idUtilisateur);
 		return film;
 	}
 	
 	public Film addDislike (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
+		LOGGER.debug("Trying to add a dislike to films "+idFilm+" from user nb"+idUtilisateur);
 		Film film = getFilm(idFilm);
 		System.out.println("ds add like");
 		boolean verification = false;
@@ -475,6 +525,7 @@ public class FilmDaoImpl implements FilmDao {
 			co.close();
 		}
 		catch (Exception e) {
+			LOGGER.error("Error while adding a dislike to films "+idFilm+" from user nb"+idUtilisateur);
 			e.printStackTrace();
 		}
 		
@@ -488,6 +539,7 @@ public class FilmDaoImpl implements FilmDao {
 				co.close();
 			}
 			catch (Exception e) {
+				LOGGER.error("Error while adding a dislike to films "+idFilm+" from user nb"+idUtilisateur);
 				e.printStackTrace();
 			}
 		}
@@ -501,13 +553,16 @@ public class FilmDaoImpl implements FilmDao {
 				co.close();
 			}
 			catch (Exception e) {
+				LOGGER.error("Error while adding a dislike to films "+idFilm+" from user nb"+idUtilisateur);
 				e.printStackTrace();
 			}
 		}
+		LOGGER.info("Succesfully added a dislike to films "+idFilm+" from user nb"+idUtilisateur);
 		return film;
 	}
 	
 	public Film removeAvis (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
+		LOGGER.debug("Trying to remove avis from film "+idFilm+" of user nb"+idUtilisateur);
 		Film film = null;
 		userDao.getUser(idUtilisateur);
 		try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
@@ -521,12 +576,15 @@ public class FilmDaoImpl implements FilmDao {
 			}
 			co.close();
 		} catch (SQLException e) {
+			LOGGER.error("Error while removing avis from film "+idFilm+" of user nb"+idUtilisateur);
 			e.printStackTrace();
 		}
+		LOGGER.info("succesfully removed avis from film "+film.getTitre()+" of user nb"+idUtilisateur);
 		return film;
 	}
 	
 	public Integer getPourcentageFilm (Integer id) throws FilmNotFoundException {
+		LOGGER.debug("Calculating percentage of film "+id);
 		Integer pourcentage = 0;
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(PreparedStatement pStm = co.prepareStatement("SELECT"
@@ -547,8 +605,10 @@ public class FilmDaoImpl implements FilmDao {
 				}
 			}
 		} catch (SQLException e) {
+			LOGGER.debug("error while calculating percentage of film "+id);
 			e.printStackTrace();
 		}
+		LOGGER.debug("Returned "+pourcentage+"% for film "+id);
 		return pourcentage;
 	}
 }

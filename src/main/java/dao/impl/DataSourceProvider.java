@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.Properties;
 import javax.sql.DataSource;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mariadb.jdbc.MariaDbDataSource;
 
 /*public class DataSourceProvider {
@@ -51,6 +53,7 @@ package hei.devops.whatpeoplethink.provider;
 
 public class DataSourceProvider {
 
+	static final Logger LOGGER = LogManager.getLogger();
 	private static MariaDbDataSource dataSource;
 
 	public static DataSource getDataSource() {
@@ -64,6 +67,7 @@ public class DataSourceProvider {
 	private static void initDataSource(){
 		Properties jdbcProperties = new Properties();
 		try{
+			LOGGER.debug("Connexion à la base de donnée");
 			jdbcProperties.load(DataSourceProvider.class.getClassLoader().getResourceAsStream("jdbc.properties"));
 			dataSource = new MariaDbDataSource();
 
@@ -72,7 +76,9 @@ public class DataSourceProvider {
 			dataSource.setDatabaseName(jdbcProperties.getProperty("jdbc.database"));
 			dataSource.setUser(jdbcProperties.getProperty("jdbc.user"));
 			dataSource.setPassword(jdbcProperties.getProperty("jdbc.password"));
+			LOGGER.info("Connexion à mariadb réussie");
 		}catch(Exception e){
+			LOGGER.error("Erreur lors de la connexion à mariadb");
 			e.printStackTrace();
 		}
 
