@@ -32,4 +32,5 @@ public interface FilmDao {
 	public List<FilmDto> listFilmsDto(Integer idUtilisateur);
 	public List<Film> listFavorisFilm(Integer idUtilisateur, String trie) throws UserNotFoundException;
 	public Integer getPourcentageFilm (Integer id) throws FilmNotFoundException;
+	public List<FilmDto> trierListFilms (List<FilmDto> listFilmsDto);
 }

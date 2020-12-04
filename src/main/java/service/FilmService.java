@@ -61,8 +61,10 @@ public class FilmService {
 			param = "nomGenre";
 		else if (colonne.contentEquals("valide"))
 			param = "valide";
+		else if (colonne.contentEquals("Popularite"))
+			param = "Popularite";
 		else {
-			param = "valide";//popularité
+			param = "valide";
 		}
 		LOG.info("Liste les films");
 		return filmDao.listFilms(param);
@@ -298,5 +300,9 @@ public class FilmService {
 	
 	public Integer getPourcentageFilm (Integer id) throws FilmNotFoundException {
 		return filmDao.getPourcentageFilm(id);
+	}
+	
+	public List<FilmDto> trierListFilms (List<FilmDto> listFilmsDto) {
+		return filmDao.trierListFilms(listFilmsDto);
 	}
 }
