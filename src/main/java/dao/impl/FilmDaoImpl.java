@@ -56,24 +56,36 @@ public class FilmDaoImpl implements FilmDao {
 
 	@Override
 	public List<Film> listFilms(String param) {
+		System.out.println(param);
 		List<Film> listOfFilms = new ArrayList<Film>();
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-			String sqlQuery="SELECT * FROM film JOIN genre ON film.idGenre = genre.idGenre ORDER BY "+param;
-			try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
-				try(ResultSet rs = pStm.executeQuery()) {
-					while(rs.next()) {
-						listOfFilms.add(new Film(
-								rs.getInt("idFilm"),
-								rs.getString("titreFilm"),
-								rs.getString("resumeFilm"),
-								rs.getDate("dateSortie").toLocalDate(),
-								rs.getInt("dureeFilm"),
-								rs.getString("realisateur"),
-								rs.getString("acteur"),
-								rs.getString("imgFilm"),
-								rs.getString("urlBA"),
-								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
-								rs.getInt("valide")));
+			if (param == "Popularite") {
+				for (int i=0;i<listFilmsDto(0).size();i++) {
+					try {
+						listOfFilms.add(getFilm(listFilmsDto(0).get(i).getId()));
+						System.out.println(getFilm(listFilmsDto(0).get(i).getId()));
+					} catch (FilmNotFoundException e) {
+						e.printStackTrace();
+					}	
+				}
+			} else {
+				String sqlQuery="SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre ORDER BY "+param;
+				try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
+					try(ResultSet rs = pStm.executeQuery()) {
+						while(rs.next()) {
+							listOfFilms.add(new Film(
+									rs.getInt("idFilm"),
+									rs.getString("titreFilm"),
+									rs.getString("resumeFilm"),
+									rs.getDate("dateSortie").toLocalDate(),
+									rs.getInt("dureeFilm"),
+									rs.getString("realisateur"),
+									rs.getString("acteur"),
+									rs.getString("imgFilm"),
+									rs.getString("urlBA"),
+									new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
+									rs.getInt("valide")));
+						}
 					}
 				}
 			}
@@ -335,8 +347,28 @@ public class FilmDaoImpl implements FilmDao {
 			LOGGER.error("error while listing films dto for user  "+idUtilisateur);
 			e.printStackTrace();
 		}
-		LOGGER.info("Returned list of films dto of size "+listOfFilmsCo.size()+" for user  "+idUtilisateur);
-		return listOfFilmsCo;
+		LOGGER.debug("Returned list of films dto of size "+listOfFilmsCo.size()+" for user  "+idUtilisateur);
+		return trierListFilms(listOfFilmsCo);
+	}
+
+	public List<FilmDto> trierListFilms (List<FilmDto> listFilmsDto) {
+		LOGGER.debug("Trying to trier list film");
+		List<FilmDto> listFilmsDtoTri = new ArrayList<FilmDto>();
+		List<FilmDto> listFilmsDtoRec = new ArrayList<FilmDto>(listFilmsDto);
+		while (listFilmsDtoTri.size() != listFilmsDto.size()) {
+			FilmDto maximum = listFilmsDtoRec.get(0);
+			listFilmsDtoRec.remove(0);
+			for (int i=0;i<listFilmsDtoRec.size();i++) {
+				if (maximum.getPourcentage() < listFilmsDtoRec.get(i).getPourcentage()) {
+					listFilmsDtoRec.add(0,maximum);
+					maximum = listFilmsDtoRec.get(i+1);
+					listFilmsDtoRec.remove(i+1);
+				}
+			}
+			listFilmsDtoTri.add(maximum);
+		}
+		LOGGER.debug("Succesfully trier list film, of size "+listFilmsDtoTri.size());
+		return listFilmsDtoTri;
 	}
 
 	public Film addFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
