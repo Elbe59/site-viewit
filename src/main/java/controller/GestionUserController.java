@@ -79,7 +79,9 @@ public class GestionUserController {
             }
         } catch (UserNotFoundException  | SQLException  e) {
             return Response.status(409).entity("").build();
-        }
+        } catch (UserAlreadyExistingException e) {
+        	return Response.status(404).entity("").build();
+		} 
     }
 
     @DELETE

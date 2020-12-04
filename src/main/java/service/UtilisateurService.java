@@ -36,7 +36,7 @@ public class UtilisateurService {
         return user;
     }
 
-    public Utilisateur modifyUser(Utilisateur user) throws SQLException {
+    public Utilisateur modifyUser(Utilisateur user) throws SQLException, UserAlreadyExistingException {
         String password=user.getMdpHash();
         String passwordHash= MotDePasseUtils.genererMotDePasse(password);
         user.setMdpHash(passwordHash);
