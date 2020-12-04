@@ -6,6 +6,8 @@ import entity.Genre;
 import entity.GenreDto;
 import entity.Utilisateur;
 import exception.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +17,10 @@ import java.util.List;
 
 public class GenreDaoImpl implements GenreDao {
 
+    static final Logger LOGGER = LogManager.getLogger();
+
     public List<Genre> listGenre() {
+        LOGGER.debug("trying to list genres");
         List<Genre> listOfGenres = new ArrayList<Genre>();
         try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
             try (Statement stm = co.createStatement()) {
@@ -26,12 +31,15 @@ public class GenreDaoImpl implements GenreDao {
                 }
             }
         } catch (SQLException e) {
+            LOGGER.error("error listing genres");
             e.printStackTrace();
         }
+        LOGGER.debug("returned list genres of size "+listOfGenres.size());
         return listOfGenres;
     }
 
     public List<GenreDto> listGenreDto(List<Genre> genreList) {
+        LOGGER.debug("trying to list genres, dto format");
         List<GenreDto> listOfGenresDto = new ArrayList<GenreDto>();
         try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
             try (Statement stm = co.createStatement()) {
@@ -45,13 +53,16 @@ public class GenreDaoImpl implements GenreDao {
 
             }
         } catch (SQLException e) {
+            LOGGER.error("error listing genres dto");
             e.printStackTrace();
         }
+        LOGGER.debug("returned list genres dto of size "+listOfGenresDto.size());
         return listOfGenresDto;
     }
 
     @Override
     public Genre getGenre(Integer id) throws GenreNotFoundException {
+        LOGGER.debug("Trying to get genre nb "+id);
         Genre genre = null;
         try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
             try (PreparedStatement pStm = co.prepareStatement("SELECT * FROM genre WHERE idGenre =?;")) {
@@ -65,12 +76,15 @@ public class GenreDaoImpl implements GenreDao {
                 }
             }
         } catch (SQLException e) {
+            LOGGER.error("error while getting genre nb "+id);
             e.printStackTrace();
         }
+        LOGGER.debug("Returned genre "+genre.getNom());
         return genre;
     }
 
     public Genre deleteGenre(Integer id) throws GenreNotFoundException {
+        LOGGER.debug("Trying to delete genre nb "+id);
         Genre genre = null;
         genre = getGenre(id);
         try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
@@ -78,14 +92,17 @@ public class GenreDaoImpl implements GenreDao {
                 pStm.setInt(1, id);
                 pStm.executeUpdate();
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            LOGGER.error("error while deleting genre nb "+id);
+            e.printStackTrace();
         }
+        LOGGER.info("genre "+genre.getNom()+" has been delete");
         return genre;
     }
 
     @Override
     public Genre addGenre(String name) throws GenreAlreadyExistingException, GenreNotFoundException {
+        LOGGER.debug("Trying to add genre "+name);
         List<Genre> genres = listGenre();
         boolean existing = false;
         Genre res = new Genre(name);
@@ -105,14 +122,17 @@ public class GenreDaoImpl implements GenreDao {
                     throwables.printStackTrace();
                 }
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            LOGGER.error("error while adding genre nb "+name);
+            e.printStackTrace();
         }
         res.setId(getSqlIdGenre(res));
+        LOGGER.info("added genre "+name+" at id "+res.getId());
         return res;
     }
 
     public int getSqlIdGenre(Genre genre) throws GenreNotFoundException {
+        LOGGER.debug("Searching for id of genre  "+genre.getNom());
         Integer id = null;
         try(Connection co = DataSourceProvider.getDataSource().getConnection()){
             try(PreparedStatement pStm = co.prepareStatement("SELECT idGenre FROM Genre WHERE nomGenre =? ")) {
@@ -124,11 +144,15 @@ public class GenreDaoImpl implements GenreDao {
                 }
             }
         } catch (SQLException e) {
+            LOGGER.error("error while searching for id of genre  "+genre.getNom());
             e.printStackTrace();
         }
         if (id == null)
             throw new GenreNotFoundException("L'id du genre que vous essayez de récupérer est introuvable.");
         else
+        {
+            LOGGER.debug("Returned id="+id+" for genre "+genre.getNom());
             return id;
+        }
     }
 }
