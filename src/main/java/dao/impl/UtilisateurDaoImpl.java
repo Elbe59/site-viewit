@@ -154,11 +154,18 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
     }
 
     @Override
-    public Utilisateur modifyUser(Utilisateur user) throws SQLException {
-        LOGGER.debug("Modifing user nb "+user.getId());
-        try {
+    public Utilisateur modifyUser(Utilisateur user) throws SQLException, UserAlreadyExistingException {
+    	List<Utilisateur> users = listUser();
+        boolean existing  = false;
+        for (int i = 0; i<users.size(); i++)
+        {
+            if (users.get(i).getEmail().equals(user.getEmail()))
+                existing = true;
+        }
+    	try {
             getUser(user.getId());
-
+            if (existing)
+                throw new UserAlreadyExistingException("Utilisateur déjà existant");
             try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
                 String sqlQuery = "UPDATE `utilisateur` SET email = ?, prenomUtilisateur = ?, nomUtilisateur = ?, mdpHash = ? WHERE idUtilisateur = ?";
                 try (PreparedStatement pStm = connection.prepareStatement(sqlQuery)) {
