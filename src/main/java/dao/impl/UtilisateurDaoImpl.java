@@ -17,7 +17,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
 
         try(Connection co = DataSourceProvider.getDataSource().getConnection()){
             try(Statement stm = co.createStatement()) {
-                try(ResultSet rs = stm.executeQuery("SELECT * FROM UTILISATEUR ORDER BY nomUtilisateur;")) {
+                try(ResultSet rs = stm.executeQuery("SELECT * FROM utilisateur ORDER BY nomUtilisateur;")) {
                     while(rs.next()) {
                         listUser.add(new Utilisateur(
                                 rs.getInt("idUtilisateur"),
@@ -40,7 +40,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
     public Utilisateur getUser(Integer id) throws UserNotFoundException{
         Utilisateur user = null;
         try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-            try(PreparedStatement pStm = co.prepareStatement("SELECT * FROM UTILISATEUR WHERE idUtilisateur = ?;")) {
+            try(PreparedStatement pStm = co.prepareStatement("SELECT * FROM utilisateur WHERE idUtilisateur = ?;")) {
                 pStm.setInt(1, id);
                 try(ResultSet rs = pStm.executeQuery()) {
                     while(rs.next()) {
@@ -74,7 +74,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
         try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
             if (existing)
                 throw new UserAlreadyExistingException("Utilisateur déjà existant");
-            try (PreparedStatement pStm = co.prepareStatement("INSERT INTO UTILISATEUR ( prenomUtilisateur, nomUtilisateur, email, mdp,mdpHash, admin) VALUES (?,?,?,?,?,?);")) {
+            try (PreparedStatement pStm = co.prepareStatement("INSERT INTO utilisateur ( prenomUtilisateur, nomUtilisateur, email, mdp,mdpHash, admin) VALUES (?,?,?,?,?,?);")) {
                 pStm.setString(1, user.getPrenom());
                 pStm.setString(2, user.getNom());
                 pStm.setString(3, user.getEmail());
@@ -93,7 +93,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
         Utilisateur user = null;
             user = getUser(id);
             try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
-                try (PreparedStatement pStm = co.prepareStatement("DELETE FROM UTILISATEUR WHERE idUtilisateur = ?;")) {
+                try (PreparedStatement pStm = co.prepareStatement("DELETE FROM utilisateur WHERE idUtilisateur = ?;")) {
                     pStm.setInt(1, id);
                     pStm.executeUpdate();
                 } catch (SQLException e) {
@@ -157,7 +157,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
     public Utilisateur getUserByEmail(String email) throws UserNotFoundException{
         Utilisateur user = null;
         try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-            String sqlQuery="SELECT * FROM UTILISATEUR WHERE email=?";
+            String sqlQuery="SELECT * FROM utilisateur WHERE email=?";
             try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
                 pStm.setString(1,email);
                 try(ResultSet rs = pStm.executeQuery()) {
@@ -184,7 +184,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
     public int getSqlIdUser(Utilisateur user) throws UserNotFoundException {
         Integer id = null;
         try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-            try(PreparedStatement pStm = co.prepareStatement("SELECT idUtilisateur FROM UTILISATEUR WHERE nomUtilisateur =? AND prenomUtilisateur =? AND email =? AND mdp = ? ")) {
+            try(PreparedStatement pStm = co.prepareStatement("SELECT idUtilisateur FROM utilisateur WHERE nomUtilisateur =? AND prenomUtilisateur =? AND email =? AND mdp = ? ")) {
                 pStm.setString(1, user.getNom());
                 pStm.setString(2, user.getPrenom());
                 pStm.setString(3, user.getEmail());

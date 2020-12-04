@@ -19,7 +19,7 @@ public class GenreDaoImpl implements GenreDao {
         List<Genre> listOfGenres = new ArrayList<Genre>();
         try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
             try (Statement stm = co.createStatement()) {
-                try (ResultSet rs = stm.executeQuery("SELECT * FROM GENRE ORDER BY nomGenre;")) {
+                try (ResultSet rs = stm.executeQuery("SELECT * FROM genre ORDER BY nomGenre;")) {
                     while (rs.next()) {
                         listOfGenres.add(new Genre(rs.getInt("idGenre"), rs.getString("nomGenre")));
                     }
@@ -54,7 +54,7 @@ public class GenreDaoImpl implements GenreDao {
     public Genre getGenre(Integer id) throws GenreNotFoundException {
         Genre genre = null;
         try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
-            try (PreparedStatement pStm = co.prepareStatement("SELECT * FROM GENRE WHERE idGenre =?;")) {
+            try (PreparedStatement pStm = co.prepareStatement("SELECT * FROM genre WHERE idGenre =?;")) {
                 pStm.setInt(1, id);
                 try (ResultSet rs = pStm.executeQuery()) {
                     while (rs.next()) {

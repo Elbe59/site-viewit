@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 
 import org.mariadb.jdbc.MariaDbDataSource;
 
-public class DataSourceProvider {
+/*public class DataSourceProvider {
 
 	private static MariaDbDataSource dataSource;
 
@@ -39,3 +39,44 @@ public class DataSourceProvider {
 		}
 	}
 }
+
+package hei.devops.whatpeoplethink.provider;
+
+		import org.mariadb.jdbc.MariaDbDataSource;
+
+		import java.util.Properties;
+
+		import javax.sql.DataSource;*/
+
+
+public class DataSourceProvider {
+
+	private static MariaDbDataSource dataSource;
+
+	public static DataSource getDataSource() {
+
+		if (dataSource == null) {
+			initDataSource();
+		}
+		return dataSource;
+	}
+
+	private static void initDataSource(){
+		Properties jdbcProperties = new Properties();
+		try{
+			jdbcProperties.load(DataSourceProvider.class.getClassLoader().getResourceAsStream("jdbc.properties"));
+			dataSource = new MariaDbDataSource();
+
+			dataSource.setServerName(jdbcProperties.getProperty("jdbc.server.host"));
+			dataSource.setPort(Integer.parseInt(jdbcProperties.getProperty("jdbc.server.port")));
+			dataSource.setDatabaseName(jdbcProperties.getProperty("jdbc.database"));
+			dataSource.setUser(jdbcProperties.getProperty("jdbc.user"));
+			dataSource.setPassword(jdbcProperties.getProperty("jdbc.password"));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+	}
+
+}
+

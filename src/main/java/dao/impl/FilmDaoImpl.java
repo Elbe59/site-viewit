@@ -25,7 +25,7 @@ public class FilmDaoImpl implements FilmDao {
 		List<Film> listOfFilms = new ArrayList<Film>();
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(Statement stm = co.createStatement()) {
-				try(ResultSet rs = stm.executeQuery("SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre ORDER BY titreFilm;")) {
+				try(ResultSet rs = stm.executeQuery("SELECT * FROM film JOIN genre ON film.idGenre = genre.idGenre ORDER BY titreFilm;")) {
 					while(rs.next()) {
 						listOfFilms.add(new Film(
 								rs.getInt("idFilm"),
@@ -53,7 +53,7 @@ public class FilmDaoImpl implements FilmDao {
 	public List<Film> listFilms(String param) {
 		List<Film> listOfFilms = new ArrayList<Film>();
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-			String sqlQuery="SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre ORDER BY "+param;
+			String sqlQuery="SELECT * FROM film JOIN genre ON film.idGenre = genre.idGenre ORDER BY "+param;
 			try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
 				try(ResultSet rs = pStm.executeQuery()) {
 					while(rs.next()) {
@@ -82,7 +82,7 @@ public class FilmDaoImpl implements FilmDao {
 	public Film getFilm(Integer id) throws FilmNotFoundException{
 		Film film = null;
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-			try(PreparedStatement pStm = co.prepareStatement("SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre AND film.idFilm = ?;")) {
+			try(PreparedStatement pStm = co.prepareStatement("SELECT * FROM film JOIN genre ON film.idGenre = genre.idGenre AND film.idFilm = ?;")) {
 				pStm.setInt(1, id);
 				try(ResultSet rs = pStm.executeQuery()) {
 					while(rs.next()) {
@@ -116,7 +116,7 @@ public class FilmDaoImpl implements FilmDao {
 		userDao.getUser(idUtilisateur);
 		//boolean notFound = true;
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-			try(PreparedStatement pStm = co.prepareStatement("SELECT preferer.idfilm, titreFilm, dateSortie FROM PREFERER JOIN FILM ON FILM.idFilm = PREFERER.idFilm WHERE idUtilisateur=? AND favoris = 1 ORDER BY ?;")) {
+			try(PreparedStatement pStm = co.prepareStatement("SELECT preferer.idfilm, titreFilm, dateSortie FROM preferer JOIN film ON film.idFilm = preferer.idFilm WHERE idUtilisateur=? AND favoris = 1 ORDER BY ?;")) {
 				pStm.setInt(1, idUtilisateur);
 				pStm.setString(2, trie);
 				try(ResultSet rs = pStm.executeQuery()) {
@@ -139,7 +139,7 @@ public class FilmDaoImpl implements FilmDao {
 	@Override
 	public Film addFilm(Film film) throws FilmAlreadyExistingException, FilmNotFoundException {
 		List<Film> films = listFilms();
-		String sqlQuerry = "INSERT INTO FILM (titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide) VALUES (?,?,?,?,?,?,?,?,?,?);";
+		String sqlQuerry = "INSERT INTO film (titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide) VALUES (?,?,?,?,?,?,?,?,?,?);";
 		boolean existing  = false;
 		for (int i = 0; i<films.size(); i++)
 		{
@@ -242,7 +242,7 @@ public class FilmDaoImpl implements FilmDao {
 	public int getSqlIdFilm(Film film) throws FilmNotFoundException {
 		Integer id = null;
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-			try(PreparedStatement pStm = co.prepareStatement("SELECT idFilm FROM FILM WHERE titreFilm =? AND dateSortie =? AND resumeFilm =? AND acteur = ? AND realisateur = ? AND urlBA = ? ")) {
+			try(PreparedStatement pStm = co.prepareStatement("SELECT idFilm FROM film WHERE titreFilm =? AND dateSortie =? AND resumeFilm =? AND acteur = ? AND realisateur = ? AND urlBA = ? ")) {
 				pStm.setString(1, film.getTitre());
 				pStm.setTimestamp(2, Timestamp.valueOf(film.getDateSortie().atStartOfDay()));
 				pStm.setString(3, film.getResume());
@@ -269,7 +269,7 @@ public class FilmDaoImpl implements FilmDao {
 		List<FilmDto> listOfFilmsCo = new ArrayList<FilmDto>();
 
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-			String sqlQuery = "SELECT film.idFilm,film.titreFilm,preferer.idUtilisateur,preferer.favoris,preferer.liker FROM FILM JOIN PREFERER ON film.idFilm = preferer.idFilm WHERE preferer.idUtilisateur=?;";
+			String sqlQuery = "SELECT film.idFilm,film.titreFilm,preferer.idUtilisateur,preferer.favoris,preferer.liker FROM film JOIN preferer ON film.idFilm = preferer.idFilm WHERE preferer.idUtilisateur=?;";
 			try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
 				pStm.setInt(1, idUtilisateur);
 				for (int i=0;i<listOfFilms.size();i++) {
@@ -501,9 +501,9 @@ public class FilmDaoImpl implements FilmDao {
 		Integer pourcentage = 0;
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(PreparedStatement pStm = co.prepareStatement("SELECT"
-					+ "	(SELECT idFilm FROM PREFERER WHERE idFilm=? GROUP BY idFilm) AS idFilm,"
-					+ "	IFNULL((SELECT count(liker) FROM PREFERER WHERE idFilm=? AND liker=1 GROUP BY idFilm),0) AS likes,"
-					+ " IFNULL((SELECT count(liker) FROM PREFERER WHERE idFilm=? AND liker!=0 GROUP BY idFilm),0) AS total;")) {
+					+ "	(SELECT idFilm FROM preferer WHERE idFilm=? GROUP BY idFilm) AS idFilm,"
+					+ "	IFNULL((SELECT count(liker) FROM preferer WHERE idFilm=? AND liker=1 GROUP BY idFilm),0) AS likes,"
+					+ " IFNULL((SELECT count(liker) FROM preferer WHERE idFilm=? AND liker!=0 GROUP BY idFilm),0) AS total;")) {
 				pStm.setInt(1, id);
 				pStm.setInt(2, id);
 				pStm.setInt(3, id);
