@@ -1,4 +1,5 @@
 let ACTUAL_USER_ID =0;
+let oldFilmValues;
 
 function listFilmJSON () {
 	let filmRequest = new XMLHttpRequest();
@@ -12,22 +13,67 @@ function listFilmJSON () {
 	filmRequest.send();
 };
 
-let getValueOldFilm = function()
+let getValueOldFilm = function(idFilm)
 {
-	let filmLigne = document.getElementById("film_gestion_ligne");
-	let title = filmLigne.getElementsByClassName("titreGestion").value;
-
+	console.log("dans getValueOldFilm");
+	console.log(idFilm+" est l'id du film");
 	let modifFilmReq = new XMLHttpRequest();
-	modifFilmReq.open("GET", "/ws/admin/modification_films/"+title, true);
+	let url = "/ws/admin/modification_films/"+idFilm;
+	modifFilmReq.open("GET",url, true);
 	modifFilmReq.responseType = "json";
 
 	modifFilmReq.onload = function ()
 	{
 		let film = this.response;
-		return film;
-	}
+		console.log(film.titre);
+		console.log("dans la gestion reponse");
+		setValueOldFilm(film);
+	};
 	modifFilmReq.send();
-}
+};
+
+let setValueOldFilm = function (oldFilm) {
+	document.getElementById("titreFilm").value = "oldFilm.titre";
+	document.getElementById("resumeFilm").value = oldFilm.resume;
+	document.getElementById("realisateurFilm").value = oldFilm.realisateur;
+	document.getElementById("acteurFilm").value = oldFilm.acteur;
+	document.getElementById("dureeFilm").value = oldFilm.duree;
+	document.getElementById("dateFilm").value = oldFilm.dateSortie;
+	document.getElementById("genre-addFilm").value = oldFilm.genre.idGenre;
+	document.getElementById("urlFilm").value = oldFilm.urlBA;
+};
+
+let initiaFormOldFilm = function (idFilm) {
+	oldFilmValues= getValueOldFilm(idFilm);
+	window.location.href = "/admin/modifier_Film";
+};
+
+let getValueNewFilm = function (){
+	let newFilm = function () {
+		this.titre = document.getElementById("titreFilm").value;
+		this.resume = document.getElementById("resumeFilm").value;
+		this.realisateur = document.getElementById("realisateurFilm").value;
+		this.acteur = document.getElementById("acteurFilm").value;
+		this.duree = document.getElementById("dureeFilm").value;
+		this.dateSortie = document.getElementById("dateFilm").value;
+		this.idGenre = document.getElementById("genre-addFilm").value;
+		this.urlBA = document.getElementById("urlFilm").value;
+	};
+	return newFilm;
+};
+
+let sendNewFilm = function(newFilm, title)
+{
+	let sendFilmRequest = new XMLHttpRequest();
+	sendFilmRequest.open("POST", "/ws/admin/modification_films/"+title, true);
+	//sendFilmRequest.responseType = "json";
+
+	sendFilmRequest.onload = function ()
+	{
+
+	};
+	sendFilmRequest.send();
+};
 
 function Lecture(jsonFile) {
 	let listOfFilms = ListOfFilms();
@@ -165,11 +211,6 @@ window.onload = function() {
 	}
 	if(window.location.pathname==="/admin/gestionuser"){
 		listUsers();
-	}
-
-	document.getElementById("afficherModifFilm").onclick = function () {
-		let oldFilm = getValueOldFilm();
-		window.location.href = "/admin/modifier_Film";
 	}
 };
 

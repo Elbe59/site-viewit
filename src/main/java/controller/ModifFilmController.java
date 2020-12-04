@@ -1,5 +1,7 @@
 package controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import entity.Film;
 import exception.FilmNotFoundException;
 import service.FilmService;
@@ -13,10 +15,13 @@ public class ModifFilmController {
     FilmService filmService = FilmService.getInstance();
 
     @GET
-    @Path("/{title}")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Film getValueFilm(@PathParam("title") String title) throws FilmNotFoundException {
-        Film film = filmService.getFilmByTitle(title);
-        return film;
+    @Path("/{idFilm}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getValueFilm(@PathParam("idFilm") Integer idFilm) throws FilmNotFoundException, JsonProcessingException {
+        Film film = filmService.getFilm(idFilm);
+        System.out.println(film.getTitre());
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonFilm = mapper.writeValueAsString(film);
+        return jsonFilm;
     }
 }
