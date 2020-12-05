@@ -36,13 +36,16 @@ public class ModifFilmServlet extends ServletGenerique {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		WebContext context = new WebContext(req, resp, req.getServletContext());
 		int id = Integer.parseInt(req.getParameter("id"));
-		context.setVariable("genres", filmService.listGenre());
-		context.setVariable("id", id);
+		Film filmToModif= null;
 		try {
-			context.setVariable("film", filmService.getFilm(id));
+			filmToModif = filmService.getFilm(id);
 		} catch (FilmNotFoundException e) {
 			e.printStackTrace();
 		}
+		filmToModif.setUrlBA("https://www.youtube.com/watch?v="+filmToModif.getUrlBA());
+		context.setVariable("genres", filmService.listGenre());
+		context.setVariable("id", id);
+		context.setVariable("film", filmToModif);
 		TemplateEngine engine = createTemplateEngine(req.getServletContext());
 		engine.process("modifFilm", context, resp.getWriter());
 	}

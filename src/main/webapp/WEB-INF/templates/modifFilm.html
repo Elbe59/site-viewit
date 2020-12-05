@@ -60,7 +60,7 @@
             <div th:if="${role_value==2}" class="infoAddBlock" required>
                 <label for="urlFilm">Lien vers la bande annonce (Youtube)</label>
                 <div>
-                    <input type="text" th:value="${film.urlBA}" id="urlFilm" name="url">
+                    <input type="url" th:value="${film.urlBA}" id="urlFilm" name="url">
                 </div>
             </div>
 
