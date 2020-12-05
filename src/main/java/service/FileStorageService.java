@@ -6,10 +6,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.thymeleaf.util.StringUtils;
 
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,6 +39,15 @@ public class FileStorageService {
             }
         }
 
+    }
+
+    public static String deleteFile(String fileName) throws FileStorageException {
+        Path storageLocation = Paths.get(FileStorageProvider.getUploadDir()).toAbsolutePath().normalize();
+        Path targetLocation = storageLocation.resolve(fileName);
+        File file = new File(String.valueOf(targetLocation));
+        file.delete();
+        System.out.println("Suppression du précédent fichier");
+        return fileName;
     }
 
     public static FileInputStream displayImage(int filmId){

@@ -79,6 +79,6 @@ public class AddFilmServlet extends ServletGenerique {
 				e.printStackTrace();
 			}
 		}
-		resp.sendRedirect("../user/ajoutfilm");
+		resp.sendRedirect("../accueil");
 	}
 }

@@ -211,6 +211,32 @@ public class FilmDaoImpl implements FilmDao {
 		return film;
 	}
 
+	public Film updateFilm(Film newFilm, Integer previousidFilm) throws FilmNotFoundException {
+		Film nouveau = newFilm;
+		try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
+			String sqlQuery = "UPDATE `film` SET titreFilm = ?, resumeFilm = ?, dateSortie = ?, dureeFilm = ?, realisateur = ?, acteur = ?, urlBA = ?, idGenre=?, valide=?, imgFilm=? WHERE `film`.`idFilm` = ? ";
+			PreparedStatement statement = connection.prepareStatement(sqlQuery);
+			statement.setString(1, newFilm.getTitre());
+			statement.setString(2, newFilm.getResume());
+			statement.setTimestamp(3, Timestamp.valueOf(newFilm.getDateSortie().atStartOfDay()));
+			statement.setInt(4, newFilm.getDuree());
+			statement.setString(5, newFilm.getRealisateur());
+			statement.setString(6, newFilm.getActeur());
+			statement.setString(7, newFilm.getUrlBA());
+			statement.setInt(8, newFilm.getGenre().getId());
+			statement.setInt(9, newFilm.getValide());
+			statement.setString(10, newFilm.getImageName());
+			statement.setInt(11, previousidFilm);
+			int nb = statement.executeUpdate();
+			statement.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return nouveau;
+	}
+
+
 	public Film activeFilm(Integer id) throws FilmNotFoundException, FilmAlreadyActiveException {
 		Film film = null;
 		LOGGER.debug("Trying to activate film nb "+id);

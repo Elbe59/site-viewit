@@ -18,7 +18,9 @@ public interface FilmDao {
 	public List<Film> listFilms(String colonne);
 	public Film getFilm(Integer id) throws FilmNotFoundException;
 	public Film addFilm(Film film) throws FilmAlreadyExistingException, FilmNotFoundException;
-	public Film deleteFilm(Integer id) throws FilmNotFoundException;
+	public Film updateFilm(Film newFilm, Integer previousidFilm) throws FilmNotFoundException;
+
+		public Film deleteFilm(Integer id) throws FilmNotFoundException;
 	public Film activeFilm(Integer id) throws FilmNotFoundException, FilmAlreadyActiveException;
 	public Film desactiveFilm(Integer id) throws FilmNotFoundException, FilmAlreadyDesactiveException;
 	public int getSqlIdFilm(Film film) throws FilmNotFoundException;
