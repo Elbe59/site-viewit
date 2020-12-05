@@ -77,9 +77,6 @@ public class FilmDaoImpl implements FilmDao {
 			try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
 				try(ResultSet rs = pStm.executeQuery()) {
 					while(rs.next()) {
-						Blob blob = rs.getBlob("image");
-						String base64Image=transformBlobToBase64Image(blob);
-
 						listOfFilms.add(new Film(
 								rs.getInt("idFilm"),
 								rs.getString("titreFilm"),
@@ -92,7 +89,7 @@ public class FilmDaoImpl implements FilmDao {
 								rs.getString("urlBA"),
 								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
 								rs.getInt("valide"),
-								base64Image));
+								"nn"));
 					}
 				}
 			}
@@ -144,9 +141,6 @@ public class FilmDaoImpl implements FilmDao {
 				pStm.setInt(1, id);
 				try(ResultSet rs = pStm.executeQuery()) {
 					while(rs.next()) {
-						Blob blob = rs.getBlob("image");
-						String base64Image=transformBlobToBase64Image(blob);
-
 						film = new Film(
 								rs.getInt("idFilm"),
 								rs.getString("titreFilm"),
@@ -159,7 +153,7 @@ public class FilmDaoImpl implements FilmDao {
 								rs.getString("urlBA"),
 								new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
 								rs.getInt("valide"),
-								base64Image);
+								"");
 					}
 					if(film == null)
 						throw new FilmNotFoundException();

@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.*;
+import java.net.Inet4Address;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,22 +34,28 @@ import entity.Genre;
 import service.FilmService;
 
 @MultipartConfig
-@WebServlet("/admin/modifier_Film")
-public class modifFIlmServlet extends ServletGenerique {
+@WebServlet("/admin/modifier_film")
+public class modifFilmServlet extends ServletGenerique {
     private static final long serialVersionUID = 1L;
     private FilmService filmService = FilmService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         WebContext context = new WebContext(req, resp, req.getServletContext());
+        int id=Integer.parseInt(req.getParameter("id"));
         context.setVariable("genres", filmService.listGenre());
+        context.setVariable("id", id);
+        try {
+            context.setVariable("film", filmService.getFilm(id));
+        } catch (FilmNotFoundException e) {
+            e.printStackTrace();
+        }
         TemplateEngine engine = createTemplateEngine(req.getServletContext());
         engine.process("modifFilm", context, resp.getWriter());
     }
 
-    /*protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Genre> listGenre=FilmService.getInstance().listGenre();
-        System.out.println("ok3");
         String titre = req.getParameter("titre");
         String resume = req.getParameter("resume");
         String dateSortieStr = req.getParameter("dateSortie");
@@ -76,7 +83,7 @@ public class modifFIlmServlet extends ServletGenerique {
             } catch (FilmAlreadyExistingException | FilmNotFoundException e) {
                 e.printStackTrace();
             }
-        }*/
+        }
 
 
 
@@ -100,6 +107,6 @@ public class modifFIlmServlet extends ServletGenerique {
 		System.out.println("urlBA : " + urlBA);
 		System.out.println("genre : " + genre);*/
 
-       // resp.sendRedirect("../user/ajoutfilm");
-    //}
+        resp.sendRedirect("../accueil");
+    }
 }

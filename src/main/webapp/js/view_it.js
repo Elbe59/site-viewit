@@ -1,5 +1,4 @@
 let ACTUAL_USER_ID =0;
-let oldFilmValues;
 
 function listFilmJSON () {
 	let filmRequest = new XMLHttpRequest();
@@ -13,12 +12,12 @@ function listFilmJSON () {
 	filmRequest.send();
 };
 
-let getValueOldFilm = function(idFilm)
+/*let getValueOldFilm = function(idFilm)
 {
 	console.log("dans getValueOldFilm");
 	console.log(idFilm+" est l'id du film");
 	let modifFilmReq = new XMLHttpRequest();
-	let url = "/ws/admin/modification_films/"+idFilm;
+	let url = "../ws/admin/modificationfilms/"+idFilm;
 	modifFilmReq.open("GET",url, true);
 	modifFilmReq.responseType = "json";
 
@@ -27,13 +26,14 @@ let getValueOldFilm = function(idFilm)
 		let film = this.response;
 		console.log(film.titre);
 		console.log("dans la gestion reponse");
+		console.log(film);
 		setValueOldFilm(film);
 	};
 	modifFilmReq.send();
 };
 
 let setValueOldFilm = function (oldFilm) {
-	document.getElementById("titreFilm").value = "oldFilm.titre";
+	document.getElementById("titreFilm").value = oldFilm.titre;
 	document.getElementById("resumeFilm").value = oldFilm.resume;
 	document.getElementById("realisateurFilm").value = oldFilm.realisateur;
 	document.getElementById("acteurFilm").value = oldFilm.acteur;
@@ -41,11 +41,6 @@ let setValueOldFilm = function (oldFilm) {
 	document.getElementById("dateFilm").value = oldFilm.dateSortie;
 	document.getElementById("genre-addFilm").value = oldFilm.genre.idGenre;
 	document.getElementById("urlFilm").value = oldFilm.urlBA;
-};
-
-let initiaFormOldFilm = function (idFilm) {
-	oldFilmValues= getValueOldFilm(idFilm);
-	window.location.href = "/admin/modifier_Film";
 };
 
 let getValueNewFilm = function (){
@@ -73,7 +68,7 @@ let sendNewFilm = function(newFilm, title)
 
 	};
 	sendFilmRequest.send();
-};
+};*/
 
 function Lecture(jsonFile) {
 	let listOfFilms = ListOfFilms();
@@ -181,12 +176,6 @@ function Trier() {
 	console.log(newList);
 }
 
-function addFilmForm(){
-	let form=document.querySelectorAll("div.infoAddBlock");
-	console.log(form);
-
-}
-
 window.onload = function() {
 	ACTUAL_USER_ID=document.querySelector(".conteneur_deco > form > label").getAttribute("id").substring(7);
 
@@ -194,21 +183,24 @@ window.onload = function() {
 	if(window.location.pathname==="/accueil" || window.location.pathname==="/" || window.location.pathname==="/user/favoris"){
 		listFilmJSON();
 		let listOfFilms = ListOfFilms();
-		addFilmForm();
+		//addFilmForm();
 		console.log(listOfFilms);
 	}
+	/*if(window.location.pathname==="/admin/gestionfilm"){
+		let filmId = parseInt(document.getElementById("modif_film'+film.id")
+		}
+	}*/
 
-	/*let element=document.getElementById("header_gestion_user");
-	element.addEventListener("click",function(){
-		console.log("cc");
-		listUsers();
-	});*/
 	if(window.location.pathname==="/film"){
 		let filmId = parseInt(document.getElementsByClassName('filmDetail')[0].getAttribute('id'))
 		if(ACTUAL_USER_ID !== "0"){
 			getFilmInfo(filmId);
 		}
 	}
+	/*if(window.location.pathname==="/admin/modifier_film"){
+		getValueOldFilm(parseInt(document.querySelector('main').getAttribute("id").substring(11)));
+	}*/
+
 	if(window.location.pathname==="/admin/gestionuser"){
 		listUsers();
 	}
