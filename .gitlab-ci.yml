@@ -8,9 +8,10 @@ stages:
   - install
 
 
+
 package-java-job:
   image: maven:latest
-  script: mvn package
+  script: mvn package -DskipTests
   stage: package
   artifacts:
     paths: 
