@@ -308,8 +308,9 @@ let validModifUser = function (user){
 				}
 				else if(this.status===405){
 					alert("Le Mot de Passe actuel saisi n'est pas correct");
-				}
-				else{
+				} else if (this.status===404) {
+					alert("Vous ne pouvez pas modifier un utilisateur par une adresse mail existante");
+				} else{
 					document.getElementById("bloc_modif_utilisateur").hidden=true;
 					listUsers();
 				}

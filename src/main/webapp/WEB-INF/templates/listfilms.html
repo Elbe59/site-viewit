@@ -38,7 +38,7 @@
 						<td class="small_column">
 							<div class="column-gestion">
 
-								<a th:title="${'Modifier ' +film.titre}" th:href="${'../modiffilm?id='+film.id}"><img class="img_liste" src="../images/icones/modification.png"></a>
+								<a th:title="${'Modifier ' +film.titre}" th:href="${'../admin/modifier_film?id='+film.id}" ><img class="img_liste" src="../images/icones/modification.png"></a>
 								<form method="post" >
 									<button  onclick="if(confirm('Etes vous sur de vouloir supprimer ce film ?')){}else{return false;}" name="supp" th:value="${filmStat.index}" th:title="${'Supprimer ' +film.titre}" class="btn-delete" type="submit" th:id="${filmStat.index}"><img class="img_liste" src="../images/icones/supprimer.png"></button>
 								</form>

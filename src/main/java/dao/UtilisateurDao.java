@@ -16,7 +16,7 @@ public interface UtilisateurDao {
     public Utilisateur addUser(Utilisateur user) throws UserAlreadyExistingException;
     public Utilisateur deleteUser(Integer id) throws UserNotFoundException, SQLException;
 
-    Utilisateur modifyUser(Utilisateur user) throws SQLException;
+    Utilisateur modifyUser(Utilisateur user) throws SQLException, UserAlreadyExistingException;
 
     public Utilisateur getUserByEmail(String email) throws UserNotFoundException;
     public Utilisateur changeRoleUser(String action,Integer id) throws SQLException, UserAlreadyAdminException, UserAlreadyDownException;

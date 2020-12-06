@@ -84,6 +84,13 @@ public class FilmService {
 			return filmDao.addFilm(film);
 		}
 	}
+
+	public Film updateFilm(Integer idFilm,String titre,String resume,String dateSortieStr,int duree,String realisateur,String acteur,String imageName,String urlBA,Genre genre1) throws FilmNotFoundException, IOException {
+		Film film = getFilm(idFilm);
+		LocalDate dateSortie = formaterDate(dateSortieStr);
+		Film new_film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,film.getValide());
+		return filmDao.updateFilm(new_film,idFilm);
+	}
 	
 	public Film deleteFilm(int id) throws FilmNotFoundException {
 		try{
@@ -285,5 +292,9 @@ public class FilmService {
 		else {
 			return ("titreFilm");
 		}
+	}
+	
+	public List<FilmDto> trierListFilms (List<FilmDto> listFilmsDto) {
+		return filmDao.trierListFilms(listFilmsDto);
 	}
 }

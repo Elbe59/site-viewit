@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr" dir="ltr">
+<head th:replace="~{fragments :: head(ViewIt-modifFilm)}"></head>
+<header th:replace="~{fragments :: header}"></header>
+<body>
+<main class="main-AddFilm" th:id="${'modif_film='+id}">
+    <section class="addFilmSection">
+        <form method="post" class="addFilmForm" th:action="${'../admin/modifier_film?id='+id}" enctype="multipart/form-data" >
+            <div class="infoAddBlock">
+                <label for="titreFilm">Titre</label>
+                <div>
+                    <input type="text" name="titre" id="titreFilm" th:value="${film.titre}" required>
+                </div>
+            </div>
+            <div class="infoAddBlock">
+                <label for="resumeFilm">Synopsis</label>
+                <div>
+                    <textarea name="resume" id="resumeFilm" rows="8" cols="80" placeholder="Synopsis du film ..." required>[[${film.resume}]]</textarea>
+                </div>
+            </div>
+            <div class="infoAddBlock">
+                <label for="realisateurFilm">Réalisateur</label>
+                <div>
+                    <input type="text" th:value="${film.realisateur}" id="realisateurFilm"name="realisateur" required>
+                </div>
+            </div>
+            <div class="infoAddBlock">
+                <label for="acteurFilm">Acteur</label>
+                <div>
+                    <input type="text" th:value="${film.acteur}" id="acteurFilm"name="acteur" required>
+                </div>
+            </div>
+            <div class="infoAddBlock">
+                <label for="dureeFilm">Durée</label>
+                <div>
+                    <input type="number" th:value="${film.duree}" id="dureeFilm" name="duree" min="0" step="1" required>
+                </div>
+            </div>
+            <div class="infoAddBlock">
+                <label for="dateFilm">Date de sortie</label>
+                <div>
+                    <input type="date" th:value="${film.dateSortie}" id="dateFilm" name="dateSortie" required>
+                </div>
+            </div>
+            <div class="infoAddBlock">
+                <label for="genre-addFilm">Genre</label>
+                <div>
+                    <select id="genre-addFilm" name="genre" onfocus="this.size=5;" onblur="this.size=1;"
+                            onchange="this.size=1; this.blur();">
+                        <option th:each="eachGenre : ${genres}" th:selected="${eachGenre.id==film.genre.id}" th:text="${eachGenre.nom}" th:value="${eachGenreStat.index}" th:id="${eachGenreStat.index}">Genre</option>
+                    </select>
+                </div>
+            </div>
+            <div th:if="${role_value==2}" class="infoAddBlock">
+                <label for="fichier">Image de couverture</label>
+                <div>
+                    <input type="file" name="fichier" id="fichier" accept=".png, .jpg, .jpeg">
+                </div>
+            </div>
+            <div th:if="${role_value==2}" class="infoAddBlock" required>
+                <label for="urlFilm">Lien vers la bande annonce (Youtube)</label>
+                <div>
+                    <input type="url" th:value="${film.urlBA}" id="urlFilm" name="url">
+                </div>
+            </div>
+
+            <div class="div-btn-addFilm">
+                <div>
+                    <input id="btn-addFilm" type="submit" value="Enregistrer">
+                </div>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+<footer th:replace="~{fragments :: footer}"></footer>
+</html>
