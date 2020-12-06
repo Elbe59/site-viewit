@@ -8,6 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import exception.UserNotFoundException;
 import org.thymeleaf.TemplateEngine;
@@ -21,10 +23,13 @@ import service.FilmService;
 @WebServlet("/user/favoris")
 public class FavorisServlet extends ServletGenerique {
 
+	static final Logger LOGGER = LogManager.getLogger();
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		WebContext context = new WebContext(req, resp, req.getServletContext());
 		Utilisateur utilisateur = (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
+		LOGGER.debug("loading page favoris of user "+utilisateur.getEmail());
 		String trier = req.getParameter("trier");
 		System.out.println("get : " + trier);
 		List<Film> listOfFilms = null;
@@ -34,6 +39,7 @@ public class FavorisServlet extends ServletGenerique {
 				context.setVariable("listUser", listOfFilms);
 
 			} catch (UserNotFoundException e) {
+				LOGGER.error("User not found");
 				e.printStackTrace();
 			}
 		}

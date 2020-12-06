@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Base64;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,7 +33,7 @@ public class HomeServlet extends ServletGenerique {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//HttpServletRequest httpRequest = (HttpServletRequest) req;
-		LOGGER.info("Vous êtes sur la page d'accueil.");
+		LOGGER.debug("Loading home page");
 		String trier = req.getParameter("trier");
 		List<Film> listOfFilms = FilmService.getInstance().listFilms(trier);
         WebContext context = new WebContext(req, resp, req.getServletContext());
@@ -51,24 +53,31 @@ public class HomeServlet extends ServletGenerique {
 			if(request.getParameter("addfavori")!=null) {
 				int index = Integer.parseInt(request.getParameter("addfavori"));
 				int idFilm = listOfFilms.get(index).getId();
+				LOGGER.info("adding film "+idFilm+" to favoris of user "+utilisateur.getId());
 				try {
 					FilmService.getInstance().addFavori(idFilm, utilisateur.getId());
 				} catch (FilmNotFoundException e) {
+					LOGGER.error("could not add film to favoris");
 					e.printStackTrace();
 				} catch (UserNotFoundException e) {
+					LOGGER.error("could not add film to favoris");
 					e.printStackTrace();
 				}
 			}
 			if(request.getParameter("suppfavori")!=null) {
 				int index = Integer.parseInt(request.getParameter("suppfavori"));
 				int idFilm = listOfFilms.get(index).getId();
+				LOGGER.info("deleting film "+idFilm+" to favoris of user "+utilisateur.getId());
 				try {
 					FilmService.getInstance().suppFavori(idFilm, utilisateur.getId());
 				} catch (FilmNotFoundException e) {
+					LOGGER.error("could not delete film from favoris");
 					e.printStackTrace();
 				} catch (SQLException e) {
+					LOGGER.error("could not delete film from favoris");
 					e.printStackTrace();
 				} catch (UserNotFoundException e) {
+					LOGGER.error("could not delete film from favoris");
 					e.printStackTrace();
 				}
 			}
