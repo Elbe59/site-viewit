@@ -137,46 +137,31 @@ public class FilmDaoImpl implements FilmDao {
 	}
 	
 	@Override
-	public Film addFilm(Film film) throws FilmAlreadyExistingException, FilmNotFoundException {
-		List<Film> films = listFilms();
+	public Film addFilm(Film film) throws FilmAlreadyExistingException {
 		String sqlQuerry = "INSERT INTO film (titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide) VALUES (?,?,?,?,?,?,?,?,?,?);";
-		boolean existing  = false;
-		for (int i = 0; i<films.size(); i++)
-		{
-			//System.out.println("Compare "+films.get(i).getTitre()+" avec "+film.getTitre());
-			if (films.get(i).getTitre().equals(film.getTitre()))
-			{
-				//System.out.println("Titres égales");
-				//System.out.println("compare "+films.get(i).getDateSortie()+" avec "+film.getDateSortie());
-				if(films.get(i).getDateSortie().equals(film.getDateSortie()))
-					//System.out.println("dates égales");
-					existing = true;
-			}
-		}
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
-			if (existing) {
-				throw new FilmAlreadyExistingException("Le film que vous essayez d'ajouter existe déjà.");
-			} else {
-				try (PreparedStatement pStm = co.prepareStatement(sqlQuerry)) {
-					pStm.setString(1, film.getTitre());
-					pStm.setString(2, film.getResume());
-					pStm.setTimestamp(3, Timestamp.valueOf(film.getDateSortie().atStartOfDay()));
-					pStm.setInt(4, film.getDuree());
-					pStm.setString(5, film.getRealisateur());
-					pStm.setString(6, film.getActeur());
-					pStm.setString(7, film.getImageName());
-					pStm.setString(8, film.getUrlBA());
-					pStm.setInt(9, film.getGenre().getId());
-					pStm.setInt(10, film.getValide());
-					pStm.executeUpdate();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+			
+			try (PreparedStatement pStm = co.prepareStatement(sqlQuerry, Statement.RETURN_GENERATED_KEYS)) {
+				pStm.setString(1, film.getTitre());
+				pStm.setString(2, film.getResume());
+				pStm.setTimestamp(3, Timestamp.valueOf(film.getDateSortie().atStartOfDay()));
+				pStm.setInt(4, film.getDuree());
+				pStm.setString(5, film.getRealisateur());
+				pStm.setString(6, film.getActeur());
+				pStm.setString(7, film.getImageName());
+				pStm.setString(8, film.getUrlBA());
+				pStm.setInt(9, film.getGenre().getId());
+				pStm.setInt(10, film.getValide());
+				pStm.executeUpdate();
+				ResultSet ids = pStm.getGeneratedKeys();
+	            if(ids.next()) {
+	                film.setId(ids.getInt(1));
+	            }
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		film.setId(getSqlIdFilm(film));
+		//film.setId(getSqlIdFilm(film));
 		//System.out.println("id: "+film.getId());
 		return film;
 	}
@@ -204,42 +189,42 @@ public class FilmDaoImpl implements FilmDao {
 		Film film = null;
 		try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
 			film=getFilm(id);
-			if(film.getValide()==0)
+			if(film.getValide() == 0) {
 				throw new FilmAlreadyDesactiveException("Le film que vous essayez de désactiver est déjà désactivé.");
+			}
 			String sqlQuery = "UPDATE `film` SET `valide` = '0' WHERE `film`.`idFilm` = ?";
-			PreparedStatement statement = connection.prepareStatement(sqlQuery);
-			statement.setInt(1, id);
-			int nb = statement.executeUpdate();
-			statement.close();
-
+			try (PreparedStatement pstm = connection.prepareStatement(sqlQuery)){
+				pstm.setInt(1, id);
+				pstm.executeUpdate();
+				pstm.close();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		try{
 			film=getFilm(id);
 		}catch (FilmNotFoundException e){}
+		
 		return film;
 	}
 
 	@Override
 	public Film deleteFilm(Integer id) throws FilmNotFoundException{
 		Film film = null;
-		try(Connection connection=DataSourceProvider.getDataSource().getConnection()){
-			String sqlQuery="DELETE FROM `film` WHERE idFilm = ?";
-			film = getFilm(id);
-			//String sqlQuery2="UPDATE film SET idFilm = ? WHERE idFilm = ?";
-			PreparedStatement statement= connection.prepareStatement(sqlQuery);
-			statement.setInt(1,id);
-			int nb= statement.executeUpdate();
-			statement.close();
-
+		try(Connection co=DataSourceProvider.getDataSource().getConnection()){
+			try(PreparedStatement pstm = co.prepareStatement("DELETE FROM `film` WHERE idFilm = ?")){
+				film = getFilm(id);
+				pstm.setInt(1,id);
+				pstm.executeUpdate();
+				pstm.close();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return film;
 	}
 
-	public int getSqlIdFilm(Film film) throws FilmNotFoundException {
+	/*public int getSqlIdFilm(Film film) throws FilmNotFoundException {
 		Integer id = null;
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(PreparedStatement pStm = co.prepareStatement("SELECT idFilm FROM film WHERE titreFilm =? AND dateSortie =? AND resumeFilm =? AND acteur = ? AND realisateur = ? AND urlBA = ? ")) {
@@ -262,7 +247,7 @@ public class FilmDaoImpl implements FilmDao {
 			throw new FilmNotFoundException("Aucun film ne correspond à l'id que vous essayez de récupérer.");
 		else
 			return id;
-	}
+	}*/
 
 	public List<FilmDto> listFilmsDto(Integer idUtilisateur) {
 		List<Film> listOfFilms = listFilms();

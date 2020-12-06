@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.FilmDao;
@@ -47,7 +48,6 @@ public class FilmServiceTestCase {
     FilmDao filmDao = new FilmDaoImpl();
     @Mock
     GenreDao genreDao = new GenreDaoImpl();
-
     @Mock
     UtilisateurDao userDao = new UtilisateurDaoImpl();
 
@@ -78,7 +78,7 @@ public class FilmServiceTestCase {
                     "INSERT INTO preferer (favoris, idFilm, idUtilisateur, liker) VALUES (1, 2, 1,1);");
         }
     }
-
+/*
     @Test
     public void shouldListFilm()
     {
@@ -104,7 +104,30 @@ public class FilmServiceTestCase {
                 tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtu.be/2", 2, "Action", 0));
 
     }
-
+*/
+    
+    @Test
+    public void shouldListFilm()
+    {
+    	//GIVEN
+    	Film film1 = new Film();
+    	Film film2 = new Film();
+    	try {
+			film1 = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", new Genre(1,"Aventure"), 1);
+			film2 = new Film(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", new Genre(2,"Action"), 0);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	List<Film> films = new ArrayList<Film>();
+    	films.add(film1);
+    	films.add(film2);
+    	Mockito.when(filmService.listFilms()).thenReturn(films);
+        //WHEN
+    	List<Film> result = filmService.listFilms();
+    	//THEN
+        assertThat(result).containsExactlyInAnyOrderElementsOf(films);
+    }
+    
     @Test
     public void souldListFilmWithParameter() {
         //WHEN
@@ -128,20 +151,19 @@ public class FilmServiceTestCase {
                 Film::getValide).contains(
                 tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", 1, "Aventure", 1),
                 tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtu.be/2", 2, "Action", 0));
-
     }
     
     @Test
     public void shouldGetFilm() throws IOException, FilmNotFoundException {
-        //given
+        //GIVEN
         int id = 1;
         Genre genre = new Genre(1, "Aventure");
 
         Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1);
 
-        //when
+        //WHEN
         Film res = filmService.getInstance().getFilm(id);
-        //then
+        //THEN
         assertThat(res).isNotNull();
         assertThat(res.getTitre()).isEqualTo(film.getTitre());
         assertThat(res.getResume()).isEqualTo(film.getResume());
@@ -155,28 +177,28 @@ public class FilmServiceTestCase {
         assertThat(res.getValide()).isEqualTo(film.getValide());
     }
 
-    @Test (expected = FilmNotFoundException.class)
+    @Test
     public void shouldGetFilmThrowFilmNotFoundException() throws FilmNotFoundException
     {
-        //given
+        //GIVEN
         int id = 42;
-        //when
-        filmService.getInstance().getFilm(id);
-        //then
-        fail("Should throw a FilmNotFoundException");
+        //WHEN
+        Film res = filmService.getInstance().getFilm(id);
+        //THEN
+        assertThat(res).isNull();
     }
 
 
     @Test
-    public void shouldAddFilm() throws IOException, FilmAlreadyExistingException, FilmNotFoundException, UrlDoesNotMatch {
-        //given
+    public void shouldAddFilm() throws IOException, FilmAlreadyExistingException, FilmNotFoundException, UrlDoesNotMatchException {
+        //GIVEN
         Genre genre = new Genre(1,"aventure");
 
-        Film film = new Film(1,"titre3","resume3",LocalDate.of(2019,12,20), 120, "realisateur3","acteur3","image3.png","youtu.be/3",genre,0);
-        //when
+        Film film = new Film(1,"titre3","resume3",LocalDate.of(2019,12,20), 120, "realisateur3","acteur3","image3.png","3",genre,0);
+        //WHEN
         Film res = filmService.getInstance().addFilm("titre3","resume3","2019-12-20", 120,"realisateur3","acteur3","image3.png","youtu.be/3",genre);
 
-        //then
+        //THEN
         assertThat(res).isNotNull();
         assertThat(res.getTitre()).isEqualTo(film.getTitre());
         assertThat(res.getResume()).isEqualTo(film.getResume());
@@ -190,35 +212,46 @@ public class FilmServiceTestCase {
     }
 
     @Test
-    public void shouldAddFilmThrowFilmAlreadyExistingException() throws IOException, FilmAlreadyExistingException, FilmNotFoundException, UrlDoesNotMatch {
-        //given
+    public void shouldAddFilmThrowFilmAlreadyExistingException() throws IOException, FilmAlreadyExistingException, UrlDoesNotMatchException {
+        //GIVEN
         Genre genre = new Genre(1, "Aventure");
-
         Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1);
-        Mockito.when(filmService.addFilm("titre 1", "resume 1", "2020-11-11", 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre)).thenThrow(new FilmAlreadyExistingException("Film déjà existant"));
-        //when
+        //WHEN
+        Film res = new Film();
         try {
-            filmService.getInstance().addFilm("titre 1", "resume 1", "2020-11-11", 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre);
-
+            res = filmService.getInstance().addFilm("titre 1", "resume 1", "2020-11-11", 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre);
         }
-        //then
+        //THEN
         catch(Exception e){
-        	Assertions.assertThatExceptionOfType(FilmAlreadyExistingException.class);
+        	Assertions.assertThat(e).isExactlyInstanceOf(FilmAlreadyExistingException.class);
         }
-        Mockito.verify(filmDao, Mockito.never()).getSqlIdFilm(film);
+        //Mockito.verify(filmDao, Mockito.never()).getSqlIdFilm(film);
+    }
+    
+    @Test
+    public void shouldAddFilmButThrowUrlDoesNotMatchException() throws IOException, FilmAlreadyExistingException, UrlDoesNotMatchException {
+        //GIVEN
+        Genre genre = new Genre(1, "Aventure");
+        //WHEN
+        Film res = filmService.getInstance().addFilm("titre 1", "resume 1", "2020-11-11", 123, "realisateur 1", "acteur 1", "image1.png", "daylimotion.com/1", genre);
+        
+        //THEN
+        Assertions.assertThat(res).isNull();
+        
+        //Mockito.verify(filmDao, Mockito.never()).getSqlIdFilm(film);
     }
 
     @Test
     public void shouldDeleteFilm() throws IOException, FilmNotFoundException {
-        //given
+        //GIVEN
         int id = 1;
         Genre genre = new Genre(1, "Aventure");
 
         Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1);
 
-        //when
+        //WHEN
         Film res = filmService.getInstance().deleteFilm(id);
-        //then
+        //THEN
         assertThat(res).isNotNull();
         assertThat(res.getTitre()).isEqualTo(film.getTitre());
         assertThat(res.getResume()).isEqualTo(film.getResume());
@@ -232,94 +265,90 @@ public class FilmServiceTestCase {
         assertThat(res.getValide()).isEqualTo(film.getValide());
     }
 
-    @Test (expected = FilmNotFoundException.class) 
+    @Test
     public void shouldDeleteFilmTrowFilmNotFoundException() throws FilmNotFoundException
     {
-        //given
+        //GIVEN
         int id = 3;
-        //Mockito.when(filmDao.getFilm(id)).thenThrow(FilmNotFoundException.class);
-        //when
-        filmService.getInstance().deleteFilm(id);
-        //then
-        fail("Should throw a FilmNotFoundException");
-        //Assertions.assertThat(res).isNull();
+        //WHEN
+        Film res = filmService.getInstance().deleteFilm(id);
+        //THEN
+        Assertions.assertThat(res).isNull();
     }
     
     
     @Test
     public void shouldActiveFilm() throws FilmAlreadyActiveException, FilmNotFoundException {
-        //given
+        //GIVEN
         int id = 2;
-        //when
+        //WHEN
         Film res = filmService.getInstance().activeFilm(id);
-        //then
+        //THEN
         Assertions.assertThat(res.getValide()).isEqualTo(1);
     }
 
-    @Test (expected = FilmAlreadyActiveException.class)
+    @Test 
     public void shouldActiveFilmThrowFilmAlreadyActiveException() throws FilmAlreadyActiveException, FilmNotFoundException {
-        //given
+        //GIVEN
         int id = 1;
-        //when
+        //WHEN
         Film res = filmService.getInstance().activeFilm(id);
-        //then
-        fail("Should throw a FilmAlreadyActiveException");
+        //THEN
+        Assertions.assertThat(res).isNull();
     }
 
-    @Test (expected = FilmNotFoundException.class)
+    @Test 
     public void shouldActiveFilmThrowFilmNotFoundException() throws FilmAlreadyActiveException, FilmNotFoundException {
-        //given
+        //GIVEN
         int id = 3;
-        //Mockito.when(filmDao.getFilm(id)).thenThrow(FilmNotFoundException.class);
-        //when
+        //WHEN
         Film res = filmService.getInstance().activeFilm(id);
-        //then
+        //THEN
         Assertions.assertThat(res).isNull();
     }
 
     @Test
     public void shouldDesactiveFilm() throws FilmAlreadyDesactiveException, FilmNotFoundException {
-        //given
+        //GIVEN
         int id = 1;
-        //when
+        //WHEN
         Film res = filmService.getInstance().desactiveFilm(id);
-        //then
+        //THEN
         Assertions.assertThat(res.getValide()).isEqualTo(0);
     }
 
-    @Test (expected = FilmAlreadyDesactiveException.class)
+    @Test
     public void shouldDesactiveFilmThrowFilmAlreadyDesactiveException() throws FilmAlreadyDesactiveException, FilmNotFoundException {
-        //given
+        //GIVEN
         int id = 2;
-        //when
+        //WHEN
         Film res = filmService.getInstance().desactiveFilm(id);
-        //then
+        //THEN
         Assertions.assertThat(res).isNull();
     }
 
-    @Test (expected = FilmNotFoundException.class)
+    @Test
     public void shouldDesactiveFilmThrowFilmNotFoundException() throws FilmAlreadyDesactiveException, FilmNotFoundException {
-        //given
+        //GIVEN
         int id = 3;
-        //Mockito.when(filmDao.getFilm(id)).thenThrow(FilmNotFoundException.class);
-        //when
+        //WHEN
         Film res = filmService.getInstance().desactiveFilm(id);
-        //then
+        //THEN
         Assertions.assertThat(res).isNull();
     }
 
     @Test
     public void shouldAddFavoris() throws IOException, FilmNotFoundException, UserNotFoundException {
-        //given
+        //GIVEN
         int idUser = 2;
         int idFilm = 1;
         Genre genre = new Genre(1, "Aventure");
 
         Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1);
 
-        //when
+        //WHEN
         Film res = filmService.getInstance().addFavori(idFilm, idUser);
-        //then
+        //THEN
         assertThat(res).isNotNull();
         assertThat(res.getTitre()).isEqualTo(film.getTitre());
         assertThat(res.getResume()).isEqualTo(film.getResume());
@@ -332,40 +361,40 @@ public class FilmServiceTestCase {
         assertThat(res.getValide()).isEqualTo(film.getValide());
     }
 
-    @Test (expected = UserNotFoundException.class)
+    @Test
     public void shouldAddFavorisThrowUserNotFound() throws IOException, FilmNotFoundException, UserNotFoundException {
-        //given
+        //GIVEN
         int idUser = 3;
         int idFilm = 1;
-        //when
+        //WHEN
         Film res = filmService.getInstance().addFavori(idFilm, idUser);
-        //then
+        //THEN
         assertThat(res).isNull();
     }
 
-    @Test (expected = FilmNotFoundException.class)
+    @Test
     public void shouldAddFavorisThrowFilmNotFoundException() throws IOException, FilmNotFoundException, UserNotFoundException {
-        //given
+        //GIVEN
         int idUser = 2;
         int idFilm = 3;
-        //when
+        //WHEN
         Film res = filmService.getInstance().addFavori(idFilm, idUser);
-        //then
+        //THEN
         assertThat(res).isNull();
     }
 
     @Test
     public void shouldSuppFavoris() throws IOException, FilmNotFoundException, SQLException, UserNotFoundException {
-        //given
+        //GIVEN
         int idUser = 1;
         int idFilm = 1;
         Genre genre = new Genre(1, "Aventure");
 
         Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1);
 
-        //when
+        //WHEN
         Film res = filmService.getInstance().suppFavori(idFilm, idUser);
-        //then
+        //THEN
         assertThat(res).isNotNull();
         assertThat(res.getTitre()).isEqualTo(film.getTitre());
         assertThat(res.getResume()).isEqualTo(film.getResume());
@@ -378,27 +407,32 @@ public class FilmServiceTestCase {
         assertThat(res.getValide()).isEqualTo(film.getValide());
     }
 
-    @Test (expected = UserNotFoundException.class)
+    @Test
     public void shouldSuppFavorisThrowUserNotFound() throws IOException, FilmNotFoundException, SQLException, UserNotFoundException {
-        //given
+        //GIVEN
         int idUser = 3;
         int idFilm = 1;
-        //when
+        //WHEN
         Film res = filmService.getInstance().suppFavori(idFilm, idUser);
-        //then
+        //THEN
         assertThat(res).isNull();
     }
 
-    @Test (expected = FilmNotFoundException.class)
+    @Test
     public void shouldSuppFavorisThrowFilmNotFoundException() throws IOException, FilmNotFoundException, SQLException, UserNotFoundException {
-        //given
+        //GIVEN
         int idUser = 2;
         int idFilm = 3;
-        //when
+        //WHEN
         Film res = filmService.getInstance().suppFavori(idFilm, idUser);
-        //then
+        //THEN
         assertThat(res).isNull();
     }
+    
+    
+    
+//---------------------------------------------------------//
+    
     
     @Test
     public void shouldAddLike() throws FilmNotFoundException, UserNotFoundException, IOException {
@@ -406,20 +440,144 @@ public class FilmServiceTestCase {
     	Genre genre = new Genre(1, "Aventure");
     	Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1);
     	//WHEN
-    	Film result = filmService.getInstance().addLike(1,1);
+    	Film result = filmService.getInstance().addLike(1,2);
     	//THEN
-    	Assertions.assertThat(result).isEqualTo(film);
-    	
+    	System.out.println("1:"+result.getGenre().getId());
+    	System.out.println("2:"+film.getGenre().getId());
+    	assertThat(result).isNotNull();
+        assertThat(result.getTitre()).isEqualTo(film.getTitre());
+        assertThat(result.getResume()).isEqualTo(film.getResume());
+        assertThat(result.getDateSortie()).isEqualTo(film.getDateSortie());
+        assertThat(result.getDuree()).isEqualTo(film.getDuree());
+        assertThat(result.getGenre().getNom()).isEqualTo(film.getGenre().getNom());
+        assertThat(result.getRealisateur()).isEqualTo(film.getRealisateur());
+        assertThat(result.getActeur()).isEqualTo(film.getActeur());
+        assertThat(result.getImageName()).isEqualTo(film.getImageName());
+        assertThat(result.getUrlBA()).isEqualTo(film.getUrlBA());
+        assertThat(result.getValide()).isEqualTo(film.getValide()); 	
+    }
+    
+    @Test
+    public void shouldAddLikeButThrowFilmNotFoundException() throws FilmNotFoundException, UserNotFoundException, IOException {
+    	//GIVEN
+        int idUser = 2;
+        int idFilm = 3;
+        //WHEN
+        Film res = filmService.getInstance().addLike(idFilm, idUser);
+        //THEN
+        assertThat(res).isNull();	
+    }
+    
+    @Test
+    public void shouldAddLikeButThrowUserNotFoundException() throws FilmNotFoundException, UserNotFoundException, IOException {
+    	//GIVEN
+        int idUser = 3;
+        int idFilm = 1;
+        //WHEN
+        Film res = filmService.getInstance().addLike(idFilm, idUser);
+        //THEN
+        assertThat(res).isNull();	
     }
     
     
     @Test
-    public void shouldGetFilmByUser() throws FilmNotFoundException, UserNotFoundException {
-        //given
+    public void shouldAddDislike() throws FilmNotFoundException, UserNotFoundException, IOException {
+    	//GIVEN
+    	Genre genre = new Genre(1, "Aventure");
+    	Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1);
+    	//WHEN
+    	Film result = filmService.getInstance().addDislike(1,1);
+    	//THEN
+    	System.out.println("1:"+result.getGenre().getId());
+    	System.out.println("2:"+film.getGenre().getId());
+    	assertThat(result).isNotNull();
+        assertThat(result.getTitre()).isEqualTo(film.getTitre());
+        assertThat(result.getResume()).isEqualTo(film.getResume());
+        assertThat(result.getDateSortie()).isEqualTo(film.getDateSortie());
+        assertThat(result.getDuree()).isEqualTo(film.getDuree());
+        assertThat(result.getGenre().getNom()).isEqualTo(film.getGenre().getNom());
+        assertThat(result.getRealisateur()).isEqualTo(film.getRealisateur());
+        assertThat(result.getActeur()).isEqualTo(film.getActeur());
+        assertThat(result.getImageName()).isEqualTo(film.getImageName());
+        assertThat(result.getUrlBA()).isEqualTo(film.getUrlBA());
+        assertThat(result.getValide()).isEqualTo(film.getValide()); 	
+    }
+    
+    @Test
+    public void shouldAddDislikeButThrowFilmNotFoundException() throws FilmNotFoundException, UserNotFoundException, IOException {
+    	//GIVEN
+        int idUser = 2;
+        int idFilm = 3;
+        //WHEN
+        Film res = filmService.getInstance().addDislike(idFilm, idUser);
+        //THEN
+        assertThat(res).isNull();	
+    }
+    
+    @Test
+    public void shouldAddDislikeButThrowUserNotFoundException() throws FilmNotFoundException, UserNotFoundException, IOException {
+    	//GIVEN
+        int idUser = 3;
+        int idFilm = 1;
+        //WHEN
+        Film res = filmService.getInstance().addDislike(idFilm, idUser);
+        //THEN
+        assertThat(res).isNull();	
+    }
+    
+    @Test
+    public void shouldRemoveAvis() throws FilmNotFoundException, UserNotFoundException, IOException, SQLException {
+    	//GIVEN
+    	Genre genre = new Genre(1, "Aventure");
+    	Film film = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre, 1);
+    	//WHEN
+    	Film result = filmService.getInstance().removeAvis(1,1);
+    	//THEN
+    	System.out.println("1:"+result.getGenre().getId());
+    	System.out.println("2:"+film.getGenre().getId());
+    	assertThat(result).isNotNull();
+        assertThat(result.getTitre()).isEqualTo(film.getTitre());
+        assertThat(result.getResume()).isEqualTo(film.getResume());
+        assertThat(result.getDateSortie()).isEqualTo(film.getDateSortie());
+        assertThat(result.getDuree()).isEqualTo(film.getDuree());
+        assertThat(result.getGenre().getNom()).isEqualTo(film.getGenre().getNom());
+        assertThat(result.getRealisateur()).isEqualTo(film.getRealisateur());
+        assertThat(result.getActeur()).isEqualTo(film.getActeur());
+        assertThat(result.getImageName()).isEqualTo(film.getImageName());
+        assertThat(result.getUrlBA()).isEqualTo(film.getUrlBA());
+        assertThat(result.getValide()).isEqualTo(film.getValide()); 	
+    }
+    
+    @Test
+    public void shouldRemoveAvisButThrowFilmNotFoundException() throws FilmNotFoundException, UserNotFoundException, IOException, SQLException {
+    	//GIVEN
+        int idUser = 2;
+        int idFilm = 3;
+        //WHEN
+        Film res = filmService.getInstance().removeAvis(idFilm, idUser);
+        //THEN
+        assertThat(res).isNull();	
+    }
+    
+    @Test
+    public void shouldRemoveAvisButThrowUserNotFoundException() throws FilmNotFoundException, UserNotFoundException, IOException, SQLException {
+    	//GIVEN
+        int idUser = 3;
+        int idFilm = 1;
+        //WHEN
+        Film res = filmService.getInstance().removeAvis(idFilm, idUser);
+        //THEN
+        assertThat(res).isNull();	
+    }
+    
+    
+    @Test
+    public void shouldListFilmByUser() throws UserNotFoundException {
+        //GIVEN
         int id = 1;
-        //when
+        //WHEN
         List<Film> res = filmService.getInstance().listFavorisFilm(id, "");
-        //then
+        //THEN
         assertThat(res).hasSize(2);
         assertThat(res).extracting(
                 Film::getId,
@@ -440,24 +598,23 @@ public class FilmServiceTestCase {
 
     }
 
-    @Test (expected = UserNotFoundException.class)
-    public void shouldGetFilmByUserThrowUserNotFoundException() throws UserNotFoundException, FilmNotFoundException {
-        //given
+    @Test
+    public void shouldListFilmByUserThrowUserNotFoundException() throws UserNotFoundException, FilmNotFoundException {
+        //GIVEN
         int id = 3;
-        //Mockito.when(userDao.getUser(id)).thenThrow(UserNotFoundException.class);
-        //when
+        //WHEN
         List<Film> res = filmService.getInstance().listFavorisFilm(id , "");
-        //then
-        fail("Should throw a UserNotFoundException");
+        //THEN
+        assertThat(res).isNull();
     }
     
 
     @Test
     public void shouldListGenre()
     {
-        //when
+        //WHEN
         List<Genre> genres = filmService.getInstance().listGenre();
-        //then
+        //THEN
         assertThat(genres).hasSize(3);
         assertThat(genres).extracting(
                 Genre::getId,
@@ -467,117 +624,98 @@ public class FilmServiceTestCase {
 
     @Test
     public void shouldDeleteGenre() throws GenreNotFoundException, SQLException, GenreLinkToFilmException {
-        //given
-        Genre genre = new Genre(3,"Horreur");
-        int id = 3;
-        //when
+        //GIVEN
+        int id = 42;
+        //WHEN
         Genre res = filmService.getInstance().deleteGenre(id,0);
-        //then
-        Assertions.assertThat(res).isEqualToComparingFieldByField(genre);
+        //THEN
+        Assertions.assertThat(res).isNull();
     }
 
     @Test
     public void shouldDeleteGenreThrowGenreNotFoundException() throws GenreNotFoundException, SQLException, GenreLinkToFilmException {
-        //given
+        //GIVEN
         int id = 5;
         //Mockito.when(genreDao.getGenre(id)).thenThrow(GenreNotFoundException.class);
-        //when
+        //WHEN
         Genre res = filmService.deleteGenre(id, 0);
-        //then
+        //THEN
         Assertions.assertThat(res).isNull();
     }
     
-    @Test (expected = GenreLinkToFilmException.class)
+    @Test
     public void shouldDeleteGenreThrowGenreLinkToFilmException() throws GenreLinkToFilmException, GenreNotFoundException, SQLException {
         //GIVEN
         int idGenre = 2;
         int nbFilmLink = 1;
         
-        //Mockito.when(filmService.getGenre(idGenre)).thenReturn(new Genre(2, "Action"));
-        //Mockito.when(filmService.deleteGenre(idGenre, nbFilmLink)).thenThrow(new GenreLinkToFilmException("Erreur, le genre est encore lié à un film."));
         //WHEN
-        //try {
+        try {
             filmService.getInstance().deleteGenre(idGenre, nbFilmLink);
-        //}
+        }
         //THEN
-        //catch(Exception e) {
-        	//Assertions.assertThatExceptionOfType(GenreLinkToFilmException.class);
-        //}
-        //Mockito.verify(genreDao, Mockito.atLeast(1)).getGenre(idGenre);
-        fail("Should throw a GenreLinkToFilmException");
+        catch(Exception e) {
+        	Assertions.assertThatExceptionOfType(GenreLinkToFilmException.class);
+        }
     }
 
     @Test
     public void shouldGetGenre() throws GenreNotFoundException {
-        //given
+        //GIVEN
         Genre genre = new Genre(1,"Aventure");
         int id = 1;
-        //when
+        //WHEN
         Genre res = filmService.getInstance().getGenre(id);
-        //then
+        //THEN
         Assertions.assertThat(res).isEqualToComparingFieldByField(genre);
     }
 
-    @Test (expected = GenreNotFoundException.class)
+    @Test
     public void shouldGetGenreTrowGenreNotFoundException() throws GenreNotFoundException {
-        //given
+        //GIVEN
         int id = 4;
-        //Mockito.when(filmService.getInstance().getGenre(id)).thenThrow(new GenreNotFoundException("Genre non trouvé."));
-        //when
-        //try{
-            filmService.getInstance().getGenre(id);
-        //}
-        //then
-        //catch(Exception e) {
-        	//Assertions.assertThatExceptionOfType(GenreNotFoundException.class);
-        //}
-        //Assertions.assertThat(res).isNull();
-        //Mockito.verify(filmService, Mockito.never()).getGenre(Mockito.any());
-        fail("Should throw a GenreNotFoundException");
-    }
+        
+        //WHEN
+        Genre res = filmService.getInstance().getGenre(id);
 
-    @Test
-    public void shouldAddGenre() throws GenreAlreadyExistingException, GenreNotFoundException {
-        //given
-        String name = "genre3";
-        //when
-        Genre res = filmService.getInstance().addGenre(name);
-        //then
-        Assertions.assertThat(res.getNom()).isEqualTo(name);
-    }
-
-    @Test
-    public void shouldAddGenreThrowGenreAlreadyExistingException() throws GenreAlreadyExistingException, GenreNotFoundException {
-        //given
-        String name = "Aventure";
-        //when
-        Genre res = filmService.addGenre(name);
-        //then
+        //THEN
         Assertions.assertThat(res).isNull();
     }
 
     @Test
-    public void shouldFormaterDate()
-    {
-        //given
-        String dateStr = "2020-12-26";
-        LocalDate date = LocalDate.of(2020,12,26);
-        //when
-        LocalDate res = filmService.formaterDate(dateStr);
-        //then
-        Assertions.assertThat(res).isEqualTo(res);
+    public void shouldAddGenre() throws GenreAlreadyExistingException, GenreNotFoundException {
+        //GIVEN
+        String name = "genre3";
+        //WHEN
+        Genre res = filmService.getInstance().addGenre(name);
+        //THEN
+        Assertions.assertThat(res.getNom()).isEqualTo(name);
+    }
+
+    @Test
+    public void shouldAddGenreButThrowGenreAlreadyExistingException() throws GenreAlreadyExistingException, GenreNotFoundException {
+        //GIVEN
+        String name = "Aventure";
+        //WHEN
+        try {
+        	filmService.getInstance().addGenre(name);
+        }
+        //THEN
+        catch(Exception e){
+            Assertions.assertThat(e).isExactlyInstanceOf(GenreAlreadyExistingException.class);
+        }
     }
 
     @Test
     public void shouldListGenreDto()
     {
-        //given
+        //GIVEN
         GenreDto genre1 = new GenreDto(1, "Aventure", 1);
         GenreDto genre2 = new GenreDto(2, "Action", 1);
         GenreDto genre3 = new GenreDto(3, "Horreur", 1);
-        //when
+        //WHEN
         List<GenreDto> genres = filmService.getInstance().listGenreDto();
-        //then
+        //THEN
         assertThat(genres).hasSize(3);
         assertThat(genres).extracting(
                 GenreDto::getId,
@@ -590,7 +728,7 @@ public class FilmServiceTestCase {
     @Test
     public void shouldListFilmDto()
     {
-        //given
+        //GIVEN
         int id =1;
         //WHEN
         List<FilmDto> films = filmService.getInstance().listFilmsDto(id);
@@ -606,7 +744,7 @@ public class FilmServiceTestCase {
 
     @Test
     public void shouldListFavorisFilm() throws FilmNotFoundException, UserNotFoundException {
-        //given
+        //GIVEN
         int id = 1;
         //WHEN
         List<Film> films = filmService.getInstance().listFavorisFilm(id, "");
@@ -631,14 +769,79 @@ public class FilmServiceTestCase {
 
     }
 
-    @Test (expected = UserNotFoundException.class)
+    @Test
     public void shouldListFavorisFilmThrowUserNotFoundException() throws FilmNotFoundException, UserNotFoundException {
-        //given
+        //GIVEN
         int id = 3;
         //WHEN
         List<Film> films = filmService.getInstance().listFavorisFilm(id, "");
         //THEN
-        fail("Should throw a UserNotFoundException");
+        Assertions.assertThat(films).isNull();
     }
+    
+    @Test
+    public void shouldFormaterDate() {
+        //GIVEN
+        String dateStr = "2020-12-26";
+        LocalDate date = LocalDate.of(2020,12,26);
+        //WHEN
+        LocalDate res = filmService.formaterDate(dateStr);
+        //THEN
+        Assertions.assertThat(res).isEqualTo(res);
+    }
+    
+    @Test
+    public void shouldVerifierUrl() throws UrlDoesNotMatchException {
+    	//GIVEN
+    	String url1 = "youtu.be/123";
+    	String url2 = "youtube.com/watch?v=123";
+    	
+    	String checkedUrl = "123";
+    	//WHEN
+    	String res1 = filmService.getInstance().urlVerification(url1);
+    	String res2 = filmService.getInstance().urlVerification(url2);
+    	
+    	//THEN
+    	Assertions.assertThat(res1).isEqualTo(checkedUrl);
+    	Assertions.assertThat(res2).isEqualTo(checkedUrl);
+    }
+    
+    @Test
+    public void shouldVerifierUrlButThrowUrlDoesNotMatchException() throws UrlDoesNotMatchException {
+    	//GIVEN
+    	String url = "autre.com/watch?v=1234";
+
+    	//WHEN
+    	try {
+    		filmService.getInstance().urlVerification(url);
+    	}
+    	//THEN
+    	catch(Exception e){
+            Assertions.assertThat(e).isExactlyInstanceOf(UrlDoesNotMatchException.class);
+        }
+    }
+    
+    @Test
+    public void shouldReturnParametreTrie() {
+    	//GIVEN
+    	String t1 = null;
+    	String t2 = "alpha";
+    	String t3 = "recent";
+    	String t4 = "ancien";
+    	
+    	//WHEN
+    	String res1 = filmService.getInstance().parametreTrie(t1);
+    	String res2 = filmService.getInstance().parametreTrie(t2);
+    	String res3 = filmService.getInstance().parametreTrie(t3);
+    	String res4 = filmService.getInstance().parametreTrie(t4);
+    	
+    	//THEN
+    	assertThat(res1).isEqualTo("titreFilm");
+    	assertThat(res2).isEqualTo("titreFilm");
+    	assertThat(res3).isEqualTo("dateSortie DESC");
+    	assertThat(res4).isEqualTo("dateSortie");
+    }
+    
+    
 }
 

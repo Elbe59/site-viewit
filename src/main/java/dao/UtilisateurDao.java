@@ -20,6 +20,6 @@ public interface UtilisateurDao {
 
     public Utilisateur getUserByEmail(String email) throws UserNotFoundException;
     public Utilisateur changeRoleUser(String action,Integer id) throws SQLException, UserAlreadyAdminException, UserAlreadyDownException;
-    public int getSqlIdUser(Utilisateur user) throws UserNotFoundException;
+    //public int getSqlIdUser(Utilisateur user) throws UserNotFoundException;
 
 }

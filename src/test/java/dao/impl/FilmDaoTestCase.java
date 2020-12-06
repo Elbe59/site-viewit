@@ -266,7 +266,7 @@ public class FilmDaoTestCase {
 		fail("Film not found not throw as expected");
 	}
 
-	@Test
+/*	@Test
 	public void shouldGetSqlIdFilm() throws IOException, FilmNotFoundException {
 		//given
 		Genre genre = new Genre(1,"action");
@@ -287,7 +287,7 @@ public class FilmDaoTestCase {
 		//then
 		fail("Film not found not throw as expected");
 	}
-
+*/
 	@Test
 	public void shouldGetFilmByUtilisateur() throws SQLException, FilmNotFoundException, UserNotFoundException {
 		//given

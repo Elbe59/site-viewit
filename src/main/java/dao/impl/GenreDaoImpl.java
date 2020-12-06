@@ -42,7 +42,6 @@ public class GenreDaoImpl implements GenreDao {
                         }
                     }
                 }
-
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,48 +69,38 @@ public class GenreDaoImpl implements GenreDao {
         return genre;
     }
 
-    public Genre deleteGenre(Integer id) throws GenreNotFoundException {
+    public Genre deleteGenre(Integer id) {
         Genre genre = null;
-        genre = getGenre(id);
         try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
             try (PreparedStatement pStm = co.prepareStatement("DELETE FROM genre WHERE idGenre = ?;")) {
                 pStm.setInt(1, id);
                 pStm.executeUpdate();
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return genre;
     }
 
     @Override
-    public Genre addGenre(String name) throws GenreAlreadyExistingException, GenreNotFoundException {
-        List<Genre> genres = listGenre();
-        boolean existing = false;
+    public Genre addGenre(String name) throws GenreAlreadyExistingException {
         Genre res = new Genre(name);
-        for (int i = 0; i < genres.size(); i++) {
-            if (genres.get(i).getNom().toLowerCase().equals(name.toLowerCase())) {
-                existing = true;
-            }
-        }
         try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
-            if (existing) {
-                throw new GenreAlreadyExistingException("Le genre que vous essayé d'ajouter existe déjà.");
-            } else {
-                try (PreparedStatement pStm = co.prepareStatement("INSERT INTO Genre (nomGenre) VALUES (?);")) {
-                    pStm.setString(1, name);
-                    pStm.executeUpdate();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+        	try (PreparedStatement pStm = co.prepareStatement("INSERT INTO Genre (nomGenre) VALUES (?);", Statement.RETURN_GENERATED_KEYS)) {
+        		pStm.setString(1, name);
+                pStm.executeUpdate();
+                ResultSet ids = pStm.getGeneratedKeys();
+                if(ids.next()) {
+                	res.setId(ids.getInt(1));
                 }
-            }
+            }    
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        res.setId(getSqlIdGenre(res));
+        //res.setId(getSqlIdGenre(res));
         return res;
     }
-
+/*
     public int getSqlIdGenre(Genre genre) throws GenreNotFoundException {
         Integer id = null;
         try(Connection co = DataSourceProvider.getDataSource().getConnection()){
@@ -127,8 +116,8 @@ public class GenreDaoImpl implements GenreDao {
             e.printStackTrace();
         }
         if (id == null)
-            throw new GenreNotFoundException("L'id du genre que vous essayez de récupérer est introuvable.");
+            throw new GenreNotFoundException("Erreur lors de l'ajout du genre " + genre.getNom() + " : Introuvable dans la base de données");
         else
             return id;
-    }
+    }*/
 }

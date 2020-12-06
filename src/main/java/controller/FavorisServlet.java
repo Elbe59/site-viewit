@@ -33,7 +33,7 @@ public class FavorisServlet extends ServletGenerique {
 				listOfFilms = FilmService.getInstance().listFavorisFilm(utilisateur.getId(), trier);
 				context.setVariable("listUser", listOfFilms);
 
-			} catch (FilmNotFoundException | UserNotFoundException e) {
+			} catch (UserNotFoundException e) {
 				e.printStackTrace();
 			}
 		}

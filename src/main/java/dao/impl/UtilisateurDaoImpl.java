@@ -74,7 +74,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
         try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
             if (existing)
                 throw new UserAlreadyExistingException("Utilisateur déjà existant");
-            try (PreparedStatement pStm = co.prepareStatement("INSERT INTO utilisateur ( prenomUtilisateur, nomUtilisateur, email, mdp,mdpHash, admin) VALUES (?,?,?,?,?,?);")) {
+            try (PreparedStatement pStm = co.prepareStatement("INSERT INTO utilisateur ( prenomUtilisateur, nomUtilisateur, email, mdp,mdpHash, admin) VALUES (?,?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS)) {
                 pStm.setString(1, user.getPrenom());
                 pStm.setString(2, user.getNom());
                 pStm.setString(3, user.getEmail());
@@ -82,6 +82,10 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
                 pStm.setString(5, user.getMdpHash());
                 pStm.setInt(6, user.isAdmin()?1:0);
                 pStm.executeUpdate();
+                ResultSet ids = pStm.getGeneratedKeys();
+                if(ids.next()) {
+                	user.setId(ids.getInt(1));
+                }
             }
         }catch (SQLException e) {
             e.printStackTrace();
@@ -181,7 +185,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
         return user;
     }
 
-    public int getSqlIdUser(Utilisateur user) throws UserNotFoundException {
+   /* public int getSqlIdUser(Utilisateur user) throws UserNotFoundException {
         Integer id = null;
         try(Connection co = DataSourceProvider.getDataSource().getConnection()){
             try(PreparedStatement pStm = co.prepareStatement("SELECT idUtilisateur FROM utilisateur WHERE nomUtilisateur =? AND prenomUtilisateur =? AND email =? AND mdp = ? ")) {
@@ -202,5 +206,5 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
             throw new UserNotFoundException("Id de l'utilisateur non trouvé");
         else
             return id;
-    }
+    }*/
 }

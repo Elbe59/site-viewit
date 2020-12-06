@@ -35,10 +35,6 @@ public class FilmService {
 		return FilmHolder.instance;
 	}
 	
-	/*private FilmService() {
-		
-	}*/
-	
 	/*--------- METHODE FILM ------------*/
 	
 	//ListFilm sans paramètre
@@ -47,23 +43,8 @@ public class FilmService {
 	}
 	
 	//ListFilm avec paramètre
-	public List<Film> listFilms(String colonne) {
-		String param = "";
-		if(colonne == null)
-			param = "titreFilm";
-		else if(colonne.equals("alpha"))
-			param = "titreFilm";
-		else if (colonne.equals("recent"))
-			param = "dateSortie DESC";
-		else if (colonne.equals("ancien"))
-			param = "dateSortie";
-		else if (colonne.equals("genre"))
-			param = "nomGenre";
-		else if (colonne.contentEquals("valide"))
-			param = "valide";
-		else {
-			param = "valide";//popularité
-		}
+	public List<Film> listFilms(String trie) {
+		String param = parametreTrie(trie);
 		LOG.info("Liste les films");
 		return filmDao.listFilms(param);
 	}
@@ -72,29 +53,43 @@ public class FilmService {
 		try{
 			return filmDao.getFilm(id);
 		}catch (FilmNotFoundException e){
-			throw new FilmNotFoundException("Film non trouvé.");
+			return null;
 		}
 	}
 
 	//Ajout d'un film
-	public Film addFilm(String titre,String resume,String dateSortieStr,int duree,String realisateur,String acteur,String imageName,String urlBA,Genre genre1) throws FilmAlreadyExistingException, FilmNotFoundException, IOException {
-		//Film res = null;
+	public Film addFilm(String titre,String resume,String dateSortieStr,int duree,String realisateur,String acteur,String imageName,String url,Genre genre1) throws FilmAlreadyExistingException, IOException {
 		LocalDate dateSortie = formaterDate(dateSortieStr);
-		Film film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,0);
-		try{
-			return filmDao.addFilm(film);
-		}catch (FilmAlreadyExistingException e)
-		{
-			throw new FilmAlreadyExistingException("Le film " + titre + " existe déjà.");
+		String urlBA = "";
+		try {
+			urlBA = urlVerification(url);
+		} catch (UrlDoesNotMatchException e) {
+			return null;
 		}
-		//return res;
+		Film film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,0);
+		List<Film> films = listFilms();
+		boolean existing  = false;
+		
+		for (int i = 0; i<films.size(); i++){
+			if (films.get(i).getTitre().equals(film.getTitre())){
+				if(films.get(i).getDateSortie().equals(film.getDateSortie()))
+					existing = true;
+			}
+		}
+		
+		if (existing) {
+			throw new FilmAlreadyExistingException("Le film que vous essayez d'ajouter existe déjà.");
+		}
+		else {
+			return filmDao.addFilm(film);
+		}
 	}
 	
 	public Film deleteFilm(int id) throws FilmNotFoundException {
 		try{
 			return filmDao.deleteFilm(id);
 		}catch (FilmNotFoundException e){
-			throw new FilmNotFoundException("Le film que vous essayez de supprimer n'existe pas.");
+			return null;
 		}
 	}
 
@@ -104,11 +99,8 @@ public class FilmService {
 		try {
 			return filmDao.activeFilm(id);
 		}
-		catch(FilmNotFoundException e){
-			throw new FilmNotFoundException("Film non trouvé lors de la tentative d'activation");
-		}
-		catch(FilmAlreadyActiveException e) {
-			throw new FilmAlreadyActiveException("Film déjà activé.");
+		catch(FilmNotFoundException | FilmAlreadyActiveException e){
+			return null;
 		}
 	}
 
@@ -118,11 +110,8 @@ public class FilmService {
 		try{
 			return filmDao.desactiveFilm(id);
 		}
-		catch (FilmAlreadyDesactiveException e){
-			throw new FilmAlreadyDesactiveException("Film déjà désactivé.");
-		}
-		catch(FilmNotFoundException e) {
-			throw new FilmNotFoundException("Film non trouvé lors de la tentative de désactivation");
+		catch (FilmAlreadyDesactiveException | FilmNotFoundException e){
+			return null;
 		}
 	}
 	
@@ -131,11 +120,8 @@ public class FilmService {
 		try{
 			return filmDao.addFavori(idFilm,idUtilisateur);
 		}
-		catch (FilmNotFoundException e){
-			throw new FilmNotFoundException("Film non trouvé lors de la tentative d'ajout aux favoris");
-		}
-		catch(UserNotFoundException e){
-			throw new UserNotFoundException("Impossible de trouvé l'utilisateur pour l'ajout d'un favori");
+		catch (FilmNotFoundException | UserNotFoundException e){
+			return null;
 		}
 	}
 
@@ -143,11 +129,8 @@ public class FilmService {
 		try{
 			return filmDao.suppFavori(idFilm,idUtilisateur);
 		}
-		catch (FilmNotFoundException e){
-			throw new FilmNotFoundException("Film non trouvé lors de la tentative pour retirer le film aux favoris");
-		}
-		catch(UserNotFoundException e){
-			throw new UserNotFoundException("Impossible de trouvé l'utilisateur pour retirer le film aux favoris");
+		catch (FilmNotFoundException | UserNotFoundException e){
+			return null;
 		}
 	}
 	
@@ -157,11 +140,8 @@ public class FilmService {
 		try{
 			return filmDao.addLike(idFilm,idUtilisateur);
 		}
-		catch (FilmNotFoundException e){
-			throw new FilmNotFoundException("Film non trouvé lors de la tentative d'ajout au favori");
-		}
-		catch(UserNotFoundException e){
-			throw new UserNotFoundException("Impossible de trouvé l'utilisateur pour retirer le film des favoris");
+		catch (FilmNotFoundException | UserNotFoundException e){
+			return null;
 		}
 	}
 
@@ -170,11 +150,8 @@ public class FilmService {
 		try{
 			return filmDao.addDislike(idFilm,idUtilisateur);
 		}
-		catch (FilmNotFoundException e){
-			throw new FilmNotFoundException("Film non trouvé lors de la tentative d'un dislike");
-		}
-		catch(UserNotFoundException e){
-			throw new UserNotFoundException("Impossible de trouvé l'utilisateur lors de la tentative d'un dislike");
+		catch (FilmNotFoundException | UserNotFoundException e){
+			return null;
 		}
 	}
 	
@@ -183,11 +160,8 @@ public class FilmService {
 		try{
 			return filmDao.removeAvis(idFilm,idUtilisateur);
 		}
-		catch (FilmNotFoundException e){
-			throw new FilmNotFoundException("Film non trouvé lors de la tentative d'un retrait d'un like ou dislike");
-		}
-		catch(UserNotFoundException e){
-			throw new UserNotFoundException("Impossible de trouvé l'utilisateur lors de la tentative d'un retrait d'un like ou dislike");
+		catch (FilmNotFoundException | UserNotFoundException e){
+			return null;
 		}
 	}
 	
@@ -195,36 +169,34 @@ public class FilmService {
 		return filmDao.listFilmsDto(idUtilisateur);
 	}
 
-	public List<Film> listFavorisFilm(Integer idUtilisateur, String trie) throws FilmNotFoundException, UserNotFoundException
+	public List<Film> listFavorisFilm(Integer idUtilisateur, String trie) throws UserNotFoundException
 	{
-		String param = "";
-		if(trie == null)
-			param = "titreFilm";
-		else if(trie.equals("alpha"))
-			param = "titreFilm";
-		else if (trie.equals("recent"))
-			param = "dateSortie DESC";
-		else if (trie.equals("ancien"))
-			param = "dateSortie";
-		else {
-			param = "titreFilm";
-		}
+		String param = parametreTrie(trie);
+		
 		System.out.println("list : " + param);
 		try{
 			return filmDao.listFavorisFilm(idUtilisateur, param);
 		}
 		catch(UserNotFoundException e){
-			throw new UserNotFoundException("Impossible de trouvé l'utilisateur pour lister ses favoris");
+			return null;
 		}
 	}
 
 	/*--------- METHODE GENRE ------------*/
-	public Genre addGenre(String name) throws GenreAlreadyExistingException, GenreNotFoundException {
-		try{
-			return genreDao.addGenre(name);
-		}catch (GenreAlreadyExistingException e){
-			throw new GenreAlreadyExistingException("Echec de l'ajout d'un Genre : Genre déjà existant.");
-		}
+	public Genre addGenre(String name) throws GenreAlreadyExistingException {
+        List<Genre> genres = listGenre();
+        boolean existing = false;
+        for (int i = 0; i < genres.size(); i++) {
+            if (genres.get(i).getNom().toLowerCase().equals(name.toLowerCase())) {
+                existing = true;
+            }
+        }
+        if (existing) {
+            throw new GenreAlreadyExistingException("Le genre que vous essayé d'ajouter existe déjà.");
+        }
+        else {
+    		return genreDao.addGenre(name);
+        }
 	}
 	
 	public Genre deleteGenre(Integer id,int nbFilmLie) throws GenreNotFoundException, SQLException, GenreLinkToFilmException {
@@ -232,9 +204,10 @@ public class FilmService {
 			throw new GenreLinkToFilmException("Le genre que vous essayez de supprimer est lié à " + nbFilmLie + " film(s).");
 		} else {
 			try {
+				genreDao.getGenre(id);
 				return genreDao.deleteGenre(id);
 			} catch (GenreNotFoundException e) {
-				throw new GenreNotFoundException("Echec de suppresion d'un Genre : Genre non trouvé.");
+				return null;
 			}
 		}
 	}
@@ -243,7 +216,7 @@ public class FilmService {
 		try{
 			return genreDao.getGenre(id);
 		}catch (GenreNotFoundException e){
-			throw new GenreNotFoundException("Le genre que vous essayez de récupérer n'a pas été trouvé.");
+			return null;
 		}
 	}
 	
@@ -264,7 +237,7 @@ public class FilmService {
 		return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 	}
 	
-	public String urlVerification(String url) throws UrlDoesNotMatch {
+	public String urlVerification(String url) throws UrlDoesNotMatchException {
 		if(url.contains("youtu.be/") || url.contains("youtube.com/")) {
 			String urlCheck = "";
 			String way = "";
@@ -292,11 +265,25 @@ public class FilmService {
 			return urlCheck;
 		}
 		else {
-			throw new UrlDoesNotMatch(url);
+			throw new UrlDoesNotMatchException(url);
 		}
 	}
 	
 	public Integer getPourcentageFilm (Integer id) throws FilmNotFoundException {
 		return filmDao.getPourcentageFilm(id);
+	}
+	
+	public String parametreTrie(String choix) {
+		if(choix == null)
+			return ("titreFilm");
+		else if(choix.equals("alpha"))
+			return ("titreFilm");
+		else if (choix.equals("recent"))
+			return ("dateSortie DESC");
+		else if (choix.equals("ancien"))
+			return ("dateSortie");
+		else {
+			return ("titreFilm");
+		}
 	}
 }

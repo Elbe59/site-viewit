@@ -13,5 +13,5 @@ public interface GenreDao {
     public List<GenreDto> listGenreDto(List<Genre> genreList);
     public Genre getGenre(Integer id) throws GenreNotFoundException;
     public Genre deleteGenre(Integer id) throws GenreNotFoundException, SQLException;
-    public Genre addGenre(String name) throws GenreAlreadyExistingException, GenreNotFoundException;
+    public Genre addGenre(String name) throws GenreAlreadyExistingException;
 }

@@ -48,7 +48,7 @@ public class GestionGenreServlet extends ServletGenerique {
             System.out.println("Ajout genre: " + new_genre);
             try {
                 FilmService.getInstance().addGenre(new_genre);
-            } catch (GenreAlreadyExistingException | GenreNotFoundException throwables) {
+            } catch (GenreAlreadyExistingException throwables) {
                 throwables.printStackTrace();
             }
         }

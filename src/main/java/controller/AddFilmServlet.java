@@ -68,14 +68,14 @@ public class AddFilmServlet extends ServletGenerique {
 			//urlBA = urlBA.substring( urlBA.lastIndexOf( '=' ) + 1 );
 			try {
 				FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,fileNameForStorage,urlBA,genre1);
-			} catch (FilmAlreadyExistingException | FilmNotFoundException e) {
+			} catch (FilmAlreadyExistingException e) {
 				e.printStackTrace();
 			}
 		}
 		else {
 			try {
 				FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,fileNameForStorage,null,genre1);
-			} catch (FilmAlreadyExistingException | FilmNotFoundException e) {
+			} catch (FilmAlreadyExistingException e) {
 				e.printStackTrace();
 			}
 		}
