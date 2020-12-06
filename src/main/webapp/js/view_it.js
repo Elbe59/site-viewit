@@ -222,7 +222,7 @@ let removeAvis = function (filmId,action){
 	removeAvisRequest.open("PATCH", url, true);
 	removeAvisRequest.onload = function () {
 		if(this.status===409){
-			alert("Vous essayez d'effectuer une action inexistante");
+			alert("Vous \351ssayez d'effectuer une action in\350xistante");
 		}
 		else{
 			getFilmInfo(filmId);
@@ -236,7 +236,7 @@ let addAvis = function (filmId,action){
 	addAvisRequest.open("PATCH", url, true);
 	addAvisRequest.onload = function () {
 		if(this.status===409){
-			alert("Vous essayez d'effectuer une action inexistante");
+			alert("Vous essayez d'effectuer une action in\350xistante");
 		}
 		else{
 			getFilmInfo(filmId);
@@ -266,7 +266,7 @@ let changeRole = function (user){
 	changeRoleRequest.open("PATCH", url, true);
 	changeRoleRequest.onload = function () {
 		if(this.status===409){
-			alert("Vous essayez de modifier le role d'un utilisateur inexistant");
+			alert("Vous essayez de modifier le r\364le d'un utilisateur in\351xistant");
 		}
 		else{
 			listUsers();
@@ -304,12 +304,12 @@ let validModifUser = function (user){
 			modifUserRequest.open("PATCH", url, true);
 			modifUserRequest.onload = function () {
 				if(this.status===409){
-					alert("Vous ne pouvez pas modifier un utilisateur inexistant");
+					alert("Vous ne pouvez pas modifier un utilisateur in\351xistant");
 				}
 				else if(this.status===405){
 					alert("Le Mot de Passe actuel saisi n'est pas correct");
 				} else if (this.status===404) {
-					alert("Vous ne pouvez pas modifier un utilisateur par une adresse mail existante");
+					alert("Vous ne pouvez pas modifier un utilisateur par une adresse mail d\351j\340 \351xistante");
 				} else{
 					document.getElementById("bloc_modif_utilisateur").hidden=true;
 					listUsers();
@@ -331,7 +331,7 @@ let deleteUser = function (user){
 
 	deleteUserRequest.onload = function (){
 		if(this.status===409){
-			alert("Vous essayez de supprimer un utilisateur inexistant");
+			alert("Vous essayez de supprimer un utilisateur in\350xistant");
 		}
 		else {
 			listUsers()
@@ -355,7 +355,7 @@ let verifyAjoutForm = function (user) {
 			ajoutUserRequest.open("POST", url, true);
 			ajoutUserRequest.onload = function () {
 				if(this.status== 409){
-					alert("Vous ne pouvez pas ajouter deux utilisateur avec la même adresse e-mail.")
+					alert("Vous ne pouvez pas ajouter deux utilisateurs avec la m\352me adresse e-mail.")
 				}
 				else{
 					listUsers();
@@ -376,19 +376,19 @@ let verifEntry = function (email,name,surname,password,previous_password){
 	if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
 	} else {
 		booleanVerif = false;
-		alert("Vous avez rentré une mauvaise adresse email.");
+		alert("Vous avez rentr\351 une mauvaise adresse email.");
 	}
 	if (password.length >0 && password.length < 7) {
 		booleanVerif = false;
-		alert("Votre mot de passe doit contenir au minimum 7 caractères.")
+		alert("Votre mot de passe doit contenir au minimum 7 caract\350res.")
 	}
 	if (name.length ===0) {
 		booleanVerif = false;
-		alert("Vous n'avez pas rentré de prénom.")
+		alert("Vous n'avez pas rentr\351 de pr\351nom.")
 	}
 	if (surname.length ===0) {
 		booleanVerif = false;
-		alert("Vous n'avez pas rentré de nom de famille.")
+		alert("Vous n'avez pas rentr\351 de nom de famille.")
 	}
 	return booleanVerif;
 }
@@ -452,7 +452,7 @@ let buildUserTableLine = function (user,compteur) {
 		setRoleButton.classList.add("btn-delete");
 		setRoleButton.title = new_role;
 		setRoleButton.onclick = function () {
-			if(confirm('Etes vous sur de vouloir changer le rôle de cet utilisateur ?')) {
+			if(confirm('Etes vous sur de vouloir changer le r\364le de cet utilisateur ?')) {
 				changeRole(user);
 			}
 			else{ return false;}
