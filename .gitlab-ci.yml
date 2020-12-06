@@ -3,12 +3,18 @@ hello-world:
   script: echo "Hello World"
 
 stages:
+  - test
   - package
   - install
 
+test-java-job:
+  image: maven:3.6.2-jdk-11
+  script: mvn test
+  stage: test
+
 package-java-job:
   image: maven:latest
-  script: mvn package -DskipTests
+  script: mvn package
   stage: package
   artifacts:
     paths: 
