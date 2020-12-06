@@ -2,6 +2,19 @@ hello-world:
   image : alpine:latest
   script: echo "Hello World"
 
+services:
+  - mysql
+
+variables:
+  # Configure mysql service (https://hub.docker.com/_/mysql/)
+  MYSQL_DATABASE: test_viewit
+  MYSQL_ROOT_PASSWORD:
+
+connect:
+  image: mysql
+  script:
+    - echo "SELECT 'OK';" | mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql "$MYSQL_DATABASE
+
 stages:
   - test
   - package
