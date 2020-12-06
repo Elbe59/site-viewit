@@ -2,28 +2,11 @@ hello-world:
   image : alpine:latest
   script: echo "Hello World"
 
-services:
-  - mysql
-
-variables:
-  # Configure mysql service (https://hub.docker.com/_/mysql/)
-  MYSQL_DATABASE: test_viewit
-  MYSQL_ROOT_PASSWORD: root
-
-connect:
-  image: mysql
-  script:
-    - echo "SELECT 'OK';" | mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql "$MYSQL_DATABASE
-
 stages:
   - test
   - package
   - install
 
-test-java-job:
-  image: maven:3.6.2-jdk-11
-  script: mvn test
-  stage: test
 
 package-java-job:
   image: maven:latest
