@@ -1,4 +1,4 @@
-package dao.impl;
+/*package dao.impl;
 
 import dao.FilmDao;
 import entity.Film;
@@ -287,7 +287,7 @@ public class FilmDaoTestCase {
 		//then
 		fail("Film not found not throw as expected");
 	}
-*/
+
 	@Test
 	public void shouldGetFilmByUtilisateur() throws SQLException, FilmNotFoundException, UserNotFoundException {
 		//given
@@ -331,3 +331,4 @@ public class FilmDaoTestCase {
 		fail("User not found not throw as expected");
 	}
 }
+*/
