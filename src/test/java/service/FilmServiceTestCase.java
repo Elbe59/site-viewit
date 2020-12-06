@@ -107,17 +107,15 @@ public class FilmServiceTestCase {
 */
     
     @Test
-    public void shouldListFilm()
+    public void shouldListFilm() throws IOException
     {
     	//GIVEN
     	Film film1 = new Film();
     	Film film2 = new Film();
-    	try {
-			film1 = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", new Genre(1,"Aventure"), 1);
-			film2 = new Film(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", new Genre(2,"Action"), 0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+		film1 = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", new Genre(1,"Aventure"), 1);
+		film2 = new Film(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtube.com/2", new Genre(2,"Action"), 0);
+
     	List<Film> films = new ArrayList<Film>();
     	films.add(film1);
     	films.add(film2);
@@ -237,8 +235,6 @@ public class FilmServiceTestCase {
         
         //THEN
         Assertions.assertThat(res).isNull();
-        
-        //Mockito.verify(filmDao, Mockito.never()).getSqlIdFilm(film);
     }
 
     @Test
@@ -276,6 +272,48 @@ public class FilmServiceTestCase {
         Assertions.assertThat(res).isNull();
     }
     
+    @Test
+    public void shouldUpdateFilm() throws IOException, FilmAlreadyExistingException, FilmNotFoundException, UrlDoesNotMatchException {
+        //GIVEN
+        Genre genre = new Genre(1,"aventure");
+
+        Film film = new Film(1,"titre3","resume3",LocalDate.of(2019,12,20), 120, "realisateur3","acteur3","image3.png","3",genre,1);
+        //WHEN
+        Film res = filmService.getInstance().updateFilm(1,"newTitre3","resume3","2019-12-20", 120,"realisateur3","acteur3","image3.png","youtu.be/3",genre);
+
+        //THEN
+        assertThat(res).isNotNull();
+        assertThat(res.getTitre()).isEqualTo("newTitre3");
+        assertThat(res.getResume()).isEqualTo(film.getResume());
+        assertThat(res.getDateSortie()).isEqualTo(film.getDateSortie());
+        assertThat(res.getDuree()).isEqualTo(film.getDuree());
+        assertThat(res.getRealisateur()).isEqualTo(film.getRealisateur());
+        assertThat(res.getActeur()).isEqualTo(film.getActeur());
+        assertThat(res.getImageName()).isEqualTo(film.getImageName());
+        assertThat(res.getUrlBA()).isEqualTo(film.getUrlBA());
+        assertThat(res.getValide()).isEqualTo(film.getValide());
+    }
+    
+    @Test
+    public void shouldUpdateFilmTrowFilmNotFoundException() throws FilmNotFoundException, IOException {
+        //GIVEN
+    	Genre genre = new Genre(1, "Aventure");
+        //WHEN
+        Film res = filmService.getInstance().updateFilm(4,"titre 1", "resume 1", "2020-11-11", 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", genre);
+        //THEN
+        Assertions.assertThat(res).isNull();
+    }
+    
+    @Test
+    public void shouldUpdateFilmButThrowUrlDoesNotMatchException() throws IOException, FilmAlreadyExistingException, UrlDoesNotMatchException, FilmNotFoundException {
+        //GIVEN
+        Genre genre = new Genre(1, "Aventure");
+        //WHEN
+        Film res = filmService.getInstance().updateFilm(1,"titre 1", "resume 1", "2020-11-11", 123, "realisateur 1", "acteur 1", "image1.png", "daylimotion.com/1", genre);
+        
+        //THEN
+        Assertions.assertThat(res).isNull();
+    }
     
     @Test
     public void shouldActiveFilm() throws FilmAlreadyActiveException, FilmNotFoundException {
@@ -842,6 +880,40 @@ public class FilmServiceTestCase {
     	assertThat(res4).isEqualTo("dateSortie");
     }
     
+    @Test
+    public void shouldReturnPourcentageFilm() throws IOException, FilmNotFoundException {
+    	//GIVEN
+        int id = 1;
+    	//WHEN
+    	int res = filmService.getInstance().getPourcentageFilm(id);
+    	//THEN
+    	assertThat(res).isEqualTo(100);
+    }
     
+    @Test
+    public void shouldReturnPourcentageFilmButThrowFilmNotFoundException() throws IOException, FilmNotFoundException {
+    	//GIVEN
+        int id = 5;
+    	//WHEN
+    	int res = filmService.getInstance().getPourcentageFilm(id);
+    	//THEN
+    	assertThat(res).isEqualTo(-1);
+    }
+    
+    @Test
+    public void shouldTrierListFilms () throws IOException {
+    	//GIVEN
+    	FilmDto f1 = new FilmDto(1, "A-titre 1", "positif", true, 100);
+    	FilmDto f2 = new FilmDto(2, "B-titre 2", "negatif", true, 0);
+    	List<FilmDto> listFilmsDto = new ArrayList<FilmDto>();
+    	listFilmsDto.add(f1);
+    	listFilmsDto.add(f2);
+    	
+    	//WHEN
+    	List<FilmDto> res = filmService.getInstance().trierListFilms(listFilmsDto);
+    	
+    	//THEN
+        assertThat(res).containsExactlyElementsOf(listFilmsDto);
+    }
 }
 

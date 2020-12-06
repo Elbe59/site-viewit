@@ -85,10 +85,21 @@ public class FilmService {
 		}
 	}
 
-	public Film updateFilm(Integer idFilm,String titre,String resume,String dateSortieStr,int duree,String realisateur,String acteur,String imageName,String urlBA,Genre genre1) throws FilmNotFoundException, IOException {
-		Film film = getFilm(idFilm);
+	public Film updateFilm(Integer idFilm,String titre,String resume,String dateSortieStr,int duree,String realisateur,String acteur,String imageName,String url,Genre genre) throws FilmNotFoundException, IOException {
+		Film film = null;
+		try{
+			film = filmDao.getFilm(idFilm);
+		}catch (FilmNotFoundException e){
+			return null;
+		}
 		LocalDate dateSortie = formaterDate(dateSortieStr);
-		Film new_film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,film.getValide());
+		String urlBA = "";
+		try {
+			urlBA = urlVerification(url);
+		} catch (UrlDoesNotMatchException e) {
+			return null;
+		}
+		Film new_film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre,film.getValide());
 		return filmDao.updateFilm(new_film,idFilm);
 	}
 	
@@ -277,6 +288,11 @@ public class FilmService {
 	}
 	
 	public Integer getPourcentageFilm (Integer id) throws FilmNotFoundException {
+		try {
+			filmDao.getFilm(id);
+		}catch(FilmNotFoundException e) {
+			return -1;
+		}
 		return filmDao.getPourcentageFilm(id);
 	}
 	

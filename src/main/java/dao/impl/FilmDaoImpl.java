@@ -194,23 +194,23 @@ public class FilmDaoImpl implements FilmDao {
 
 	public Film updateFilm(Film newFilm, Integer previousidFilm) throws FilmNotFoundException {
 		Film nouveau = newFilm;
-		try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
+		try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
 			String sqlQuery = "UPDATE `film` SET titreFilm = ?, resumeFilm = ?, dateSortie = ?, dureeFilm = ?, realisateur = ?, acteur = ?, urlBA = ?, idGenre=?, valide=?, imgFilm=? WHERE `film`.`idFilm` = ? ";
-			PreparedStatement statement = connection.prepareStatement(sqlQuery);
-			statement.setString(1, newFilm.getTitre());
-			statement.setString(2, newFilm.getResume());
-			statement.setTimestamp(3, Timestamp.valueOf(newFilm.getDateSortie().atStartOfDay()));
-			statement.setInt(4, newFilm.getDuree());
-			statement.setString(5, newFilm.getRealisateur());
-			statement.setString(6, newFilm.getActeur());
-			statement.setString(7, newFilm.getUrlBA());
-			statement.setInt(8, newFilm.getGenre().getId());
-			statement.setInt(9, newFilm.getValide());
-			statement.setString(10, newFilm.getImageName());
-			statement.setInt(11, previousidFilm);
-			int nb = statement.executeUpdate();
-			statement.close();
-
+			try(PreparedStatement pStm = co.prepareStatement(sqlQuery)){
+				pStm.setString(1, newFilm.getTitre());
+				pStm.setString(2, newFilm.getResume());
+				pStm.setTimestamp(3, Timestamp.valueOf(newFilm.getDateSortie().atStartOfDay()));
+				pStm.setInt(4, newFilm.getDuree());
+				pStm.setString(5, newFilm.getRealisateur());
+				pStm.setString(6, newFilm.getActeur());
+				pStm.setString(7, newFilm.getUrlBA());
+				pStm.setInt(8, newFilm.getGenre().getId());
+				pStm.setInt(9, newFilm.getValide());
+				pStm.setString(10, newFilm.getImageName());
+				pStm.setInt(11, previousidFilm);
+				pStm.executeUpdate();
+				pStm.close();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

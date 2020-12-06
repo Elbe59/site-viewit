@@ -31,5 +31,4 @@ public class ListFilmServlet extends ServletGenerique {
         String filmJson = MAPPER.writeValueAsString(listFilm);
         resp.getWriter().print(filmJson);
     }
-	
 }
