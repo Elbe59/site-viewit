@@ -8,7 +8,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import dao.FilmDao;
 import dao.GenreDao;
 import dao.impl.FilmDaoImpl;
@@ -22,7 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class FilmService {
-	private final Logger LOG = LogManager.getLogger();
+	private final Logger LOGGER = LogManager.getLogger();
 
 	private FilmDao filmDao = new FilmDaoImpl();
 	private GenreDao genreDao = new GenreDaoImpl();
@@ -45,7 +46,6 @@ public class FilmService {
 	//ListFilm avec paramètre
 	public List<Film> listFilms(String trie) {
 		String param = parametreTrie(trie);
-		LOG.info("Liste les films");
 		return filmDao.listFilms(param);
 	}
 	
@@ -53,6 +53,8 @@ public class FilmService {
 		try{
 			return filmDao.getFilm(id);
 		}catch (FilmNotFoundException e){
+			LOGGER.error("Could not find film "+id);
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -64,6 +66,7 @@ public class FilmService {
 		try {
 			urlBA = urlVerification(url);
 		} catch (UrlDoesNotMatchException e) {
+			LOGGER.error("Url does not match requierment");
 			return null;
 		}
 		Film film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,0);
@@ -90,6 +93,7 @@ public class FilmService {
 		try{
 			film = filmDao.getFilm(idFilm);
 		}catch (FilmNotFoundException e){
+			LOGGER.error("Could not find film "+idFilm);
 			return null;
 		}
 		LocalDate dateSortie = formaterDate(dateSortieStr);
@@ -97,6 +101,7 @@ public class FilmService {
 		try {
 			urlBA = urlVerification(url);
 		} catch (UrlDoesNotMatchException e) {
+			LOGGER.error("Url does not match requierment");
 			return null;
 		}
 		Film new_film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre,film.getValide());
@@ -107,6 +112,7 @@ public class FilmService {
 		try{
 			return filmDao.deleteFilm(id);
 		}catch (FilmNotFoundException e){
+			LOGGER.error("Could not find film "+id);
 			return null;
 		}
 	}
@@ -118,6 +124,7 @@ public class FilmService {
 			return filmDao.activeFilm(id);
 		}
 		catch(FilmNotFoundException | FilmAlreadyActiveException e){
+			LOGGER.error("Could not activate film "+id);
 			return null;
 		}
 	}
@@ -129,6 +136,7 @@ public class FilmService {
 			return filmDao.desactiveFilm(id);
 		}
 		catch (FilmAlreadyDesactiveException | FilmNotFoundException e){
+			LOGGER.error("Could not deactivate film "+id);
 			return null;
 		}
 	}
@@ -139,6 +147,7 @@ public class FilmService {
 			return filmDao.addFavori(idFilm,idUtilisateur);
 		}
 		catch (FilmNotFoundException | UserNotFoundException e){
+			LOGGER.error("Could not add film "+idFilm+" to favoris of user "+idUtilisateur);
 			return null;
 		}
 	}
@@ -148,6 +157,7 @@ public class FilmService {
 			return filmDao.suppFavori(idFilm,idUtilisateur);
 		}
 		catch (FilmNotFoundException | UserNotFoundException e){
+			LOGGER.error("Could not delete film "+idFilm+" from favoris of user "+idUtilisateur);
 			return null;
 		}
 	}
@@ -159,6 +169,7 @@ public class FilmService {
 			return filmDao.addLike(idFilm,idUtilisateur);
 		}
 		catch (FilmNotFoundException | UserNotFoundException e){
+			LOGGER.error("Could not add a like to film "+idFilm+" from user "+idUtilisateur);
 			return null;
 		}
 	}
@@ -169,6 +180,7 @@ public class FilmService {
 			return filmDao.addDislike(idFilm,idUtilisateur);
 		}
 		catch (FilmNotFoundException | UserNotFoundException e){
+			LOGGER.error("Could not add a dislike to film "+idFilm+" from user "+idUtilisateur);
 			return null;
 		}
 	}
@@ -179,6 +191,7 @@ public class FilmService {
 			return filmDao.removeAvis(idFilm,idUtilisateur);
 		}
 		catch (FilmNotFoundException | UserNotFoundException e){
+			LOGGER.error("Could not remove avis of film "+idFilm+" from user "+idUtilisateur);
 			return null;
 		}
 	}
@@ -196,6 +209,7 @@ public class FilmService {
 			return filmDao.listFavorisFilm(idUtilisateur, param);
 		}
 		catch(UserNotFoundException e){
+			LOGGER.error("user "+idUtilisateur+" not found");
 			return null;
 		}
 	}
@@ -225,6 +239,7 @@ public class FilmService {
 				genreDao.getGenre(id);
 				return genreDao.deleteGenre(id);
 			} catch (GenreNotFoundException e) {
+				LOGGER.error("Could not delete genre "+id);
 				return null;
 			}
 		}
@@ -234,6 +249,7 @@ public class FilmService {
 		try{
 			return genreDao.getGenre(id);
 		}catch (GenreNotFoundException e){
+			LOGGER.error("Could not get genre "+id);
 			return null;
 		}
 	}
@@ -291,6 +307,7 @@ public class FilmService {
 		try {
 			filmDao.getFilm(id);
 		}catch(FilmNotFoundException e) {
+			LOGGER.error("Could not found film "+id);
 			return -1;
 		}
 		return filmDao.getPourcentageFilm(id);

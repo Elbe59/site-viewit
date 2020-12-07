@@ -58,7 +58,7 @@ public class UtilisateurService {
     	try {
     		utilisateurDao.getUser(user.getId());
     	}catch(UserNotFoundException e) {
-    		LOGGER.error("error modifing user nb "+user.getId());
+    		LOGGER.error("could not find user "+user.getId());
     		return null;
     	}
     	List<Utilisateur> users = listUser();
@@ -103,6 +103,7 @@ public class UtilisateurService {
     		return utilisateurDao.getUser(id);
     	}
         catch(UserNotFoundException e) {
+            LOGGER.error("could not find user "+id);
         	return null;
         }
     }
@@ -111,6 +112,7 @@ public class UtilisateurService {
         try{
             return utilisateurDao.getUserByEmail(email);
         }catch (UserNotFoundException e){
+            LOGGER.error("could not find user "+email);
             return null;
         }
     }
@@ -120,6 +122,7 @@ public class UtilisateurService {
         	utilisateurDao.getUser(id);
         }
         catch(UserNotFoundException e) {
+            LOGGER.error("could not find user "+id);
         	return null;
         }
         return utilisateurDao.deleteUser(id);
@@ -129,11 +132,13 @@ public class UtilisateurService {
     	try {
     		utilisateurDao.getUser(id);
     	}catch(UserNotFoundException e) {
+            LOGGER.error("could not find user "+id);
     		return null;
     	}
     	try {
     		return utilisateurDao.changeRoleUser(action,id);
     	}catch(UserAlreadyAdminException | UserAlreadyDownException e) {
+            LOGGER.error("User already at that role ");
     		return null;
     	}
         
