@@ -85,7 +85,12 @@ public class GenreDaoImpl implements GenreDao {
     public Genre deleteGenre(Integer id) {
         LOGGER.debug("Trying to delete genre nb "+id);
         Genre genre = null;
-        try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
+        try {
+			genre = getGenre(id);
+		} catch (GenreNotFoundException e) {
+			e.printStackTrace();
+		}
+        try (Connection co = DataSourceProvider.getDataSource().getConnection()) {    	
             try (PreparedStatement pStm = co.prepareStatement("DELETE FROM genre WHERE idGenre = ?;")) {
                 pStm.setInt(1, id);
                 pStm.executeUpdate();
@@ -94,7 +99,11 @@ public class GenreDaoImpl implements GenreDao {
             LOGGER.error("error while deleting genre nb "+id);
             e.printStackTrace();
         }
-        LOGGER.info("genre "+genre.getNom()+" has been delete");
+        if (genre != null) {
+        	LOGGER.info("genre "+genre.getNom()+" has been delete");
+        } else {
+        	LOGGER.error("Ce genre est inexistant");
+        }
         return genre;
     }
 

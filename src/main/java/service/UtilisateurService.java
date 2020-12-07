@@ -35,7 +35,7 @@ public class UtilisateurService {
 
     }
     public Utilisateur addUser(Utilisateur user) throws UserAlreadyExistingException {
-    	List<Utilisateur> users = listUser();
+    	List<Utilisateur> users = utilisateurDao.listUser();
         boolean existing  = false;
         for (int i = 0; i<users.size(); i++)
         {
@@ -58,10 +58,10 @@ public class UtilisateurService {
     	try {
     		utilisateurDao.getUser(user.getId());
     	}catch(UserNotFoundException e) {
-    		LOGGER.error("could not find user "+user.getId());
+    		LOGGER.error("error modifing user nb "+user.getId());
     		return null;
     	}
-    	List<Utilisateur> users = listUser();
+    	List<Utilisateur> users = utilisateurDao.listUser();
         boolean existing  = false;
         for (int i = 0; i<users.size(); i++)
         {
@@ -78,7 +78,7 @@ public class UtilisateurService {
         	String password=user.getMdpHash();
             String passwordHash= MotDePasseUtils.genererMotDePasse(password);
             user.setMdpHash(passwordHash);
-            utilisateurDao.modifyUser(user);
+            user = utilisateurDao.modifyUser(user);
             return user;
         }
     }
@@ -103,7 +103,6 @@ public class UtilisateurService {
     		return utilisateurDao.getUser(id);
     	}
         catch(UserNotFoundException e) {
-            LOGGER.error("could not find user "+id);
         	return null;
         }
     }
@@ -112,7 +111,6 @@ public class UtilisateurService {
         try{
             return utilisateurDao.getUserByEmail(email);
         }catch (UserNotFoundException e){
-            LOGGER.error("could not find user "+email);
             return null;
         }
     }
@@ -122,25 +120,19 @@ public class UtilisateurService {
         	utilisateurDao.getUser(id);
         }
         catch(UserNotFoundException e) {
-            LOGGER.error("could not find user "+id);
         	return null;
         }
         return utilisateurDao.deleteUser(id);
     }
 
     public Utilisateur changeRoleUser(String action,Integer id) throws SQLException, UserAlreadyDownException, UserAlreadyAdminException, UserNotFoundException {
-    	try {
-    		utilisateurDao.getUser(id);
-    	}catch(UserNotFoundException e) {
-            LOGGER.error("could not find user "+id);
-    		return null;
-    	}
-    	try {
-    		return utilisateurDao.changeRoleUser(action,id);
-    	}catch(UserAlreadyAdminException | UserAlreadyDownException e) {
-            LOGGER.error("User already at that role ");
-    		return null;
-    	}
-        
+        Utilisateur user= utilisateurDao.getUser(id);
+        if(action.contentEquals("up") && user.isAdmin()) {
+            throw new UserAlreadyAdminException("Utilisateur actuellement admin");
+        } else if(action.contentEquals("down") && !user.isAdmin()){
+            throw new UserAlreadyDownException("Utilisateur actuellement non admin");
+        }
+        user = utilisateurDao.changeRoleUser(action,id);
+        return user;
     }
 }

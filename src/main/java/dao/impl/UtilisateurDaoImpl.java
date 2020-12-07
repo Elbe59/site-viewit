@@ -73,7 +73,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
         return user;
     }
 
-    public Utilisateur addUser(Utilisateur user) throws UserAlreadyExistingException {
+    public Utilisateur addUser(Utilisateur user) {
         LOGGER.debug("Trying to add user "+user.getEmail());
         try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
             try (PreparedStatement pStm = co.prepareStatement("INSERT INTO utilisateur ( prenomUtilisateur, nomUtilisateur, email, mdp,mdpHash, admin) VALUES (?,?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS)) {

@@ -2,9 +2,9 @@ version : "3"
 services:
   application:
     container_name: ViewIt-webapp
+    image: registry.gitlab.com/hei-projet/hei-projet-2020/site-viewit
     depends_on:
       - database
-    build: .
     ports:
       - "8888:8080"
     volumes:
