@@ -2,6 +2,7 @@ package service;
 import dao.impl.FileStorageProvider;
 import exception.FileStorageException;
 import exception.FilmNotFoundException;
+
 import org.apache.commons.io.FilenameUtils;
 import org.thymeleaf.util.StringUtils;
 
@@ -14,28 +15,37 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class FileStorageService {
+	
+	private static class FileStorageHolder {
+		private final static FileStorageService instance = new FileStorageService();
+	}
+	 
+	public static FileStorageService getInstance() {
+		return FileStorageHolder.instance;
+	}
+	
     public static String storeFile(String filmTitle, InputStream file,String extension) throws FileStorageException {
         if(!extension.contentEquals("png")&&!extension.contentEquals("jpeg")&&!extension.contentEquals("jpg")){
             return "";
         }
         else{
             Path storageLocation = Paths.get(FileStorageProvider.getUploadDir()).toAbsolutePath().normalize();
-            // Normalize file name
+            // Normalisation du nom du fichier
             String fileName = filmTitle.replace(" ","");
             fileName = fileName.replace(":","");
             fileName = fileName.replace("!","");
             fileName = fileName.replace("'","")+"."+extension;
             try {
-                // Check if the file's name contains invalid characters
+                // Vérification de caractère invalide dans le nom du fichier
                 if(fileName.contains("..")) {
-                    throw new FileStorageException("Le nom de ce fichier n'est pas valide" + fileName);
+                    throw new FileStorageException("Le nom de ce fichier n'est pas valide " + fileName);
                 }
-                // Copy file to the target location (Replacing existing file with the same name)
+                // Copier le fichier dans la targetLocation (Remplace si un même nom existe déjà)
                 Path targetLocation = storageLocation.resolve(fileName);
                 Files.copy(file, targetLocation, StandardCopyOption.REPLACE_EXISTING);
                 return fileName;
             } catch (IOException | FileStorageException ex) {
-                throw new FileStorageException("Could not store file " + fileName + ". Please try again!");
+                throw new FileStorageException("Impossible de stocker le fichier " + fileName + ". Essayez encore !");
             }
         }
 
@@ -63,7 +73,7 @@ public class FileStorageService {
                 System.out.println(pathToImage + "/" + FilmService.getInstance().getFilm(filmId).getImageName());
             }
         } catch (FilmNotFoundException | FileNotFoundException e) {
-            e.printStackTrace();
+            return null;
         }
         return image;
     }

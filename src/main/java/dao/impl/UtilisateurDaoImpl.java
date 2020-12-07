@@ -75,16 +75,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
 
     public Utilisateur addUser(Utilisateur user) throws UserAlreadyExistingException {
         LOGGER.debug("Trying to add user "+user.getEmail());
-        List<Utilisateur> users = listUser();
-        boolean existing  = false;
-        for (int i = 0; i<users.size(); i++)
-        {
-            if (users.get(i).getEmail().equals(user.getEmail()))
-                existing = true;
-        }
         try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
-            if (existing)
-                throw new UserAlreadyExistingException("Utilisateur déjà existant");
             try (PreparedStatement pStm = co.prepareStatement("INSERT INTO utilisateur ( prenomUtilisateur, nomUtilisateur, email, mdp,mdpHash, admin) VALUES (?,?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS)) {
                 pStm.setString(1, user.getPrenom());
                 pStm.setString(2, user.getNom());
@@ -108,22 +99,21 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
 
     public Utilisateur deleteUser(Integer id) throws UserNotFoundException, SQLException {
         LOGGER.debug("Trying to delete user nb "+id);
-        Utilisateur user = null;
-            user = getUser(id);
-            try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
-                try (PreparedStatement pStm = co.prepareStatement("DELETE FROM utilisateur WHERE idUtilisateur = ?;")) {
-                    pStm.setInt(1, id);
-                    pStm.executeUpdate();
-                } catch (SQLException e) {
-                    LOGGER.error("error deleting user  "+id);
-                    e.printStackTrace();
-                }
+        Utilisateur user = getUser(id);
+        try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
+        	try (PreparedStatement pStm = co.prepareStatement("DELETE FROM utilisateur WHERE idUtilisateur = ?;")) {
+        		pStm.setInt(1, id);
+                pStm.executeUpdate();
+            } catch (SQLException e) {
+                LOGGER.error("error deleting user  "+id);
+                e.printStackTrace();
             }
-        LOGGER.info("Succesfully deleted user  "+user.getEmail());
+        }
+        LOGGER.info("Succesfully deleted user  "+ user.getEmail());
         return user;
     }
 
-    public Utilisateur changeRoleUser(String action,Integer id) throws SQLException, UserAlreadyAdminException, UserAlreadyDownException {
+    public Utilisateur changeRoleUser(String action,Integer id) throws SQLException, UserAlreadyAdminException, UserAlreadyDownException, UserNotFoundException {
         LOGGER.debug("Trying to change role of user "+id+", action is: "+action);
         Utilisateur user = null;
         String sqlQuery;
@@ -159,31 +149,19 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
 
     @Override
     public Utilisateur modifyUser(Utilisateur user) throws SQLException, UserAlreadyExistingException {
-    	List<Utilisateur> users = listUser();
-        boolean existing  = false;
-        for (int i = 0; i<users.size(); i++)
-        {
-            if (users.get(i).getEmail().equals(user.getEmail()))
-                existing = true;
-        }
-    	try {
-            getUser(user.getId());
-            if (existing)
-                throw new UserAlreadyExistingException("Utilisateur déjà existant");
-            try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
-                String sqlQuery = "UPDATE `utilisateur` SET email = ?, prenomUtilisateur = ?, nomUtilisateur = ?, mdpHash = ? WHERE idUtilisateur = ?";
-                try (PreparedStatement pStm = connection.prepareStatement(sqlQuery)) {
-                    pStm.setString(1, user.getEmail());
-                    pStm.setString(2, user.getPrenom());
-                    pStm.setString(3, user.getNom());
-                    pStm.setString(4, user.getMdpHash());
-                    pStm.setInt(5, user.getId());
-                    pStm.executeUpdate();
-                }
+        try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
+            String sqlQuery = "UPDATE `utilisateur` SET email = ?, prenomUtilisateur = ?, nomUtilisateur = ?, mdpHash = ? WHERE idUtilisateur = ?";
+            try (PreparedStatement pStm = connection.prepareStatement(sqlQuery)) {
+                pStm.setString(1, user.getEmail());
+                pStm.setString(2, user.getPrenom());
+                pStm.setString(3, user.getNom());
+                pStm.setString(4, user.getMdpHash());
+                pStm.setInt(5, user.getId());
+                pStm.executeUpdate();
             }
-        } catch (UserNotFoundException e) {
-            LOGGER.error("error modifing user nb "+user.getId());
-            e.printStackTrace();
+        }catch(SQLException e) {
+        	LOGGER.error("Error modify user nb "+user.getId());
+        	e.printStackTrace();
         }
         LOGGER.info("Succesfully modified user nb "+user.getId());
         return user;

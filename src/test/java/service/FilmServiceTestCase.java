@@ -225,7 +225,7 @@ public class FilmServiceTestCase {
         }
         //Mockito.verify(filmDao, Mockito.never()).getSqlIdFilm(film);
     }
-    
+     
     @Test
     public void shouldAddFilmButThrowUrlDoesNotMatchException() throws IOException, FilmAlreadyExistingException, UrlDoesNotMatchException {
         //GIVEN
@@ -526,8 +526,6 @@ public class FilmServiceTestCase {
     	//WHEN
     	Film result = filmService.getInstance().addDislike(1,1);
     	//THEN
-    	System.out.println("1:"+result.getGenre().getId());
-    	System.out.println("2:"+film.getGenre().getId());
     	assertThat(result).isNotNull();
         assertThat(result.getTitre()).isEqualTo(film.getTitre());
         assertThat(result.getResume()).isEqualTo(film.getResume());
@@ -663,9 +661,9 @@ public class FilmServiceTestCase {
     @Test
     public void shouldDeleteGenre() throws GenreNotFoundException, SQLException, GenreLinkToFilmException {
         //GIVEN
-        int id = 42;
+    	Genre genre = new Genre(1, "Aventure");
         //WHEN
-        Genre res = filmService.getInstance().deleteGenre(id,0);
+        Genre res = filmService.deleteGenre(1,0);
         //THEN
         Assertions.assertThat(res).isNull();
     }
@@ -676,7 +674,7 @@ public class FilmServiceTestCase {
         int id = 5;
         //Mockito.when(genreDao.getGenre(id)).thenThrow(GenreNotFoundException.class);
         //WHEN
-        Genre res = filmService.deleteGenre(id, 0);
+        Genre res = filmService.getInstance().deleteGenre(id, 0);
         //THEN
         Assertions.assertThat(res).isNull();
     }

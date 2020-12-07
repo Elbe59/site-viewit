@@ -47,6 +47,8 @@ public class Utilisateur {
 		this.admin = admin;
 	}
 	
+	public Utilisateur() {}
+
 	public Integer getId() {
 		return id;
 	}
