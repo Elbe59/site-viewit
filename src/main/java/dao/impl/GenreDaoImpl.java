@@ -59,7 +59,6 @@ public class GenreDaoImpl implements GenreDao {
         return listOfGenresDto;
     }
 
-    @Override
     public Genre getGenre(Integer id) throws GenreNotFoundException {
         LOGGER.debug("Trying to get genre nb "+id);
         Genre genre = null;
@@ -107,7 +106,6 @@ public class GenreDaoImpl implements GenreDao {
         return genre;
     }
 
-    @Override
     public Genre addGenre(String name) throws GenreAlreadyExistingException {
         LOGGER.debug("Trying to add genre "+name);
         Genre res = new Genre(name);

@@ -30,7 +30,6 @@ public class FavorisServlet extends ServletGenerique {
 		WebContext context = new WebContext(req, resp, req.getServletContext());
 		Utilisateur utilisateur = (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
 		String trier = req.getParameter("trier");
-		System.out.println("get : " + trier);
 		List<Film> listOfFilms = null;
 		if(utilisateur != null){
 			LOGGER.debug("loading page favoris of user "+utilisateur.getEmail());
@@ -47,14 +46,12 @@ public class FavorisServlet extends ServletGenerique {
 		}
 		TemplateEngine engine = createTemplateEngine(req.getServletContext());
 		engine.process("favoris", context, resp.getWriter());
-		//resp.sendRedirect("accueil");
 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("utilisateurConnecte");
 		String trier = request.getParameter("trier");
-		//System.out.println("post : " + trier);
 		try {
 			if(utilisateur != null){
 				List<Film> listOfFilms = FilmService.getInstance().listFavorisFilm(utilisateur.getId(), trier);

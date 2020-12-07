@@ -56,7 +56,6 @@ public class AddFilmServlet extends ServletGenerique {
 		Genre genre1=listGenre.get(genreIndex);
 		Utilisateur utilisateur= (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
 		String fileNameForStorage = "filmInconnu.jpg";
-		//Files.copy(in,Paths.get(FileStorageProvider.getUploadDir()+part.getSubmittedFileName()));
 		if(utilisateur.isAdmin()){
 			LOGGER.debug("Film add by admin "+utilisateur.getEmail());
 			Part part = req.getPart("fichier");
@@ -68,7 +67,6 @@ public class AddFilmServlet extends ServletGenerique {
 				e.printStackTrace();
 			}
 			String urlBA = req.getParameter("url");
-			//urlBA = urlBA.substring( urlBA.lastIndexOf( '=' ) + 1 );
 			try {
 				FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,fileNameForStorage,urlBA,genre1);
 			} catch (FilmAlreadyExistingException e) {

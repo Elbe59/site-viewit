@@ -23,7 +23,6 @@ public class FilmDaoImpl implements FilmDao {
 	private UtilisateurDao userDao = new UtilisateurDaoImpl();
 	static final Logger LOGGER = LogManager.getLogger();
 
-	@Override
 	public List<Film> listFilms() {
 		List<Film> listOfFilms = new ArrayList<Film>();
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
@@ -54,16 +53,13 @@ public class FilmDaoImpl implements FilmDao {
 		return listOfFilms;
 	}
 
-	@Override
 	public List<Film> listFilms(String param) {
-		System.out.println(param);
 		List<Film> listOfFilms = new ArrayList<Film>();
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			if (param == "Popularite") {
 				for (int i=0;i<listFilmsDto(0).size();i++) {
 					try {
 						listOfFilms.add(getFilm(listFilmsDto(0).get(i).getId()));
-						System.out.println(getFilm(listFilmsDto(0).get(i).getId()));
 					} catch (FilmNotFoundException e) {
 						e.printStackTrace();
 					}	
@@ -91,7 +87,6 @@ public class FilmDaoImpl implements FilmDao {
 		return listOfFilms;
 	}
 	
-	@Override
 	public Film getFilm(Integer id) throws FilmNotFoundException{
 		Film film = null;
 		LOGGER.debug("Looking for film nb "+id);
@@ -125,12 +120,10 @@ public class FilmDaoImpl implements FilmDao {
 		return film;
 	}
 
-	@Override
 	public List<Film> listFavorisFilm(Integer idUtilisateur, String param) throws UserNotFoundException {
 		List<Film> listOfFilms = new ArrayList<Film>();
 		LOGGER.debug("Looking for list favoris of user id: "+idUtilisateur+", order by parameter: "+param);
 		userDao.getUser(idUtilisateur);
-		//boolean notFound = true;
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(PreparedStatement pStm = co.prepareStatement("SELECT preferer.idFilm FROM preferer JOIN film ON film.idFilm = preferer.idFilm WHERE idUtilisateur=? AND favoris = 1 ORDER BY "+param)) {
 				pStm.setInt(1, idUtilisateur);
@@ -151,7 +144,6 @@ public class FilmDaoImpl implements FilmDao {
 		return listOfFilms;
 	}
 	
-	@Override
 	public Film addFilm(Film film) throws FilmAlreadyExistingException {
 		LOGGER.debug("Adding film "+film.getTitre()+" ...");
 		String sqlQuerry = "INSERT INTO film (titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide) VALUES (?,?,?,?,?,?,?,?,?,?);";
@@ -217,7 +209,6 @@ public class FilmDaoImpl implements FilmDao {
 			String sqlQuery = "UPDATE `film` SET `valide` = '1' WHERE `film`.`idFilm` = ?";
 			PreparedStatement statement = connection.prepareStatement(sqlQuery);
 			statement.setInt(1, id);
-			int nb = statement.executeUpdate();
 			statement.close();
 
 		} catch (SQLException e) {
@@ -254,7 +245,6 @@ public class FilmDaoImpl implements FilmDao {
 		return film;
 	}
 
-	@Override
 	public Film deleteFilm(Integer id) throws FilmNotFoundException{
 		Film film = null;
 		LOGGER.debug("Trying to delete film nb "+id);
@@ -277,7 +267,6 @@ public class FilmDaoImpl implements FilmDao {
 		LOGGER.debug("Getting list of film whith dto format, for user "+idUtilisateur);
 		List<Film> listOfFilms = listFilms();
 		List<FilmDto> listOfFilmsCo = new ArrayList<FilmDto>();
-
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			String sqlQuery = "SELECT film.idFilm,film.titreFilm,preferer.idUtilisateur,preferer.favoris,preferer.liker FROM film JOIN preferer ON film.idFilm = preferer.idFilm WHERE preferer.idUtilisateur=?;";
 			try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
@@ -341,7 +330,6 @@ public class FilmDaoImpl implements FilmDao {
 	public Film addFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
 		LOGGER.debug("Trying to add film nb "+idFilm+" to favoris of user nb"+idUtilisateur);
 		Film film = getFilm(idFilm);
-		System.out.println("ds add favoris");
 		boolean verification = false;
 		userDao.getUser(idUtilisateur);
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
@@ -351,7 +339,6 @@ public class FilmDaoImpl implements FilmDao {
 				try(ResultSet rs = pstm.executeQuery()) {
 					if(rs.next()) {
 						verification = true;
-						System.out.println("verif = true");
 					}
 				}
 			} 
@@ -419,7 +406,6 @@ public class FilmDaoImpl implements FilmDao {
 	public Film addLike (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
 		LOGGER.debug("Trying to add a like to films "+idFilm+" from user nb"+idUtilisateur);
 		Film film = getFilm(idFilm);
-		System.out.println("ds add like");
 		boolean verification = false;
 		userDao.getUser(idUtilisateur);
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
@@ -429,7 +415,6 @@ public class FilmDaoImpl implements FilmDao {
 				try(ResultSet rs = pstm.executeQuery()) {
 					if(rs.next()) {
 						verification = true;
-						System.out.println("verif ) true");
 					}
 				}
 			} 
@@ -475,7 +460,6 @@ public class FilmDaoImpl implements FilmDao {
 	public Film addDislike (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
 		LOGGER.debug("Trying to add a dislike to films "+idFilm+" from user nb"+idUtilisateur);
 		Film film = getFilm(idFilm);
-		System.out.println("ds add like");
 		boolean verification = false;
 		userDao.getUser(idUtilisateur);
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
@@ -485,7 +469,6 @@ public class FilmDaoImpl implements FilmDao {
 				try(ResultSet rs = pstm.executeQuery()) {
 					if(rs.next()) {
 						verification = true;
-						System.out.println("verif ) true");
 					}
 				}
 			} 

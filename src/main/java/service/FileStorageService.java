@@ -56,7 +56,6 @@ public class FileStorageService {
         Path targetLocation = storageLocation.resolve(fileName);
         File file = new File(String.valueOf(targetLocation));
         file.delete();
-        System.out.println("Suppression du précédent fichier");
         return fileName;
     }
 
@@ -70,7 +69,6 @@ public class FileStorageService {
             }
             else{
                 image = new FileInputStream(pathToImage + "/" + imageName);
-                System.out.println(pathToImage + "/" + FilmService.getInstance().getFilm(filmId).getImageName());
             }
         } catch (FilmNotFoundException | FileNotFoundException e) {
             return null;

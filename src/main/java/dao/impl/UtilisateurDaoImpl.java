@@ -15,11 +15,9 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
 
     static final Logger LOGGER = LogManager.getLogger();
 
-    @Override
     public List<Utilisateur> listUser() {
         LOGGER.debug("Getting list of users");
         List<Utilisateur> listUser = new ArrayList<Utilisateur>();
-
         try(Connection co = DataSourceProvider.getDataSource().getConnection()){
             try(Statement stm = co.createStatement()) {
                 try(ResultSet rs = stm.executeQuery("SELECT * FROM utilisateur ORDER BY nomUtilisateur;")) {
@@ -43,7 +41,6 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
         return listUser;
     }
 
-    @Override
     public Utilisateur getUser(Integer id) throws UserNotFoundException{
         LOGGER.debug("Trying to get user nb "+id);
         Utilisateur user = null;
@@ -147,7 +144,6 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
         return user;
     }
 
-    @Override
     public Utilisateur modifyUser(Utilisateur user) throws SQLException, UserAlreadyExistingException {
         try (Connection connection = DataSourceProvider.getDataSource().getConnection()) {
             String sqlQuery = "UPDATE `utilisateur` SET email = ?, prenomUtilisateur = ?, nomUtilisateur = ?, mdpHash = ? WHERE idUtilisateur = ?";
@@ -167,7 +163,6 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
         return user;
     }
 
-    @Override
     public Utilisateur getUserByEmail(String email) throws UserNotFoundException{
         LOGGER.debug("Getting user "+email);
         Utilisateur user = null;

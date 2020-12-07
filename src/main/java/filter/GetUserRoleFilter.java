@@ -23,18 +23,15 @@ public class GetUserRoleFilter extends HttpFilter {
         int id = 0;
         Utilisateur utilisateur = (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
         if (utilisateur==null) {
-            System.out.println("Personne n'est connecté");
             role="0";
             user="Personne Personne";
         }
         else{
         	id=utilisateur.getId();
             if(utilisateur.isAdmin() == false){
-                System.out.println("Vous êtes simple utilisateur");
                 role="1";
             }
             else{
-                System.out.println("Vous êtes admin suprême");
                 role="2";
             }
             try {
@@ -47,8 +44,5 @@ public class GetUserRoleFilter extends HttpFilter {
         req.setAttribute("utilisateur",user);
         req.setAttribute("userCoId",id);
         super.doFilter(req,resp,chain);
-
     }
-
-
 }

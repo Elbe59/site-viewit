@@ -45,7 +45,6 @@ public class HomeServlet extends ServletGenerique {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//System.out.println(request.getParameter("trier"));
 		String trie = request.getParameter("trier");
 		Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("utilisateurConnecte");
 		List<Film> listOfFilms = FilmService.getInstance().listFilms(trie);
@@ -82,8 +81,6 @@ public class HomeServlet extends ServletGenerique {
 				}
 			}
 		}
-		
-		//response.sendRedirect("accueil");
 		doGet(request,response);
 	}
 

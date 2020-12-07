@@ -95,7 +95,6 @@ function ListOfFilms_Recherche (listOfFilms, recherche) {
 };
 
 function ListOfFilms_Trier (listOfFilms, trier) {
-	console.log(trier);
 	let new_list = [];
 	if(trier == "Genre") {
 		new_list.push(listOfFilms.sort());
@@ -106,22 +105,18 @@ function ListOfFilms_Trier (listOfFilms, trier) {
 function Rechercher () {
 	let input = document.getElementById("recherche").value.toLowerCase();
 	let listOfFilms = ListOfFilms_search();
-	let newList = ListOfFilms_Recherche(listOfFilms, input);
-	console.log(newList);
+	ListOfFilms_Recherche(listOfFilms, input);
 }
 
 function Trier() {
 	let listOfFilms = ListOfFilms();
 	let select = document.getElementById("trier");
 	let selectOption = select.options[select.selectedIndex].value;
-	let newList = ListOfFilms_Trier(listOfFilms, selectOption);
-	console.log(newList);
+	ListOfFilms_Trier(listOfFilms, selectOption);
 }
 
 function addFilmForm(){
-	let form=document.querySelectorAll("div.infoAddBlock");
-	console.log(form);
-
+	document.querySelectorAll("div.infoAddBlock");
 }
 
 window.onload = function() {
@@ -130,16 +125,10 @@ window.onload = function() {
 
 	if(window.location.pathname==="/accueil" || window.location.pathname==="/" || window.location.pathname==="/user/favoris"){
 		listFilmJSON();
-		let listOfFilms = ListOfFilms();
+		ListOfFilms();
 		addFilmForm();
-		console.log(listOfFilms);
 	}
 
-	/*let element=document.getElementById("header_gestion_user");
-	element.addEventListener("click",function(){
-		console.log("cc");
-		listUsers();
-	});*/
 	if(window.location.pathname==="/film"){
 		let filmId = parseInt(document.getElementsByClassName('filmDetail')[0].getAttribute('id'))
 		if(ACTUAL_USER_ID !== "0"){
@@ -162,7 +151,6 @@ let getFilmInfo = function (filmId){
 	infoFilmRequest.onload = function () {
 		let filmDetail = this.response;
 		remplirFilmIcone(filmDetail);
-		console.log(filmDetail);
 	};
 	infoFilmRequest.send();
 }
@@ -254,7 +242,6 @@ let listUsers = function () {
 
 	usersRequest.onload = function () {
 		let users = this.response;
-		console.log(users)
 		refreshTable(users);
 	};
 	usersRequest.send();
@@ -340,7 +327,7 @@ let deleteUser = function (user){
 	deleteUserRequest.send();
 }
 
-let verifyAjoutForm = function (user) {
+let verifyAjoutForm = function () {
 	let email = document.getElementById("ajout_mail").value.toLowerCase();
 	let name = document.getElementById("ajout_prenom").value.toLowerCase();
 	name = name.charAt(0).toLocaleUpperCase() + name.substring(1);
@@ -370,7 +357,7 @@ let verifyAjoutForm = function (user) {
 	}
 }
 
-let verifEntry = function (email,name,surname,password,previous_password){
+let verifEntry = function (email,name,surname,password){
 	let booleanVerif = true;
 	// A compléter pour vérifier les champs du formulaire.
 	if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
@@ -404,7 +391,7 @@ let refreshTable = function (users) {
 	document.getElementById("ajout_user_send").onclick = function (){
 		verifyAjoutForm()
 	}
-	let modifUserElement= document.querySelector(".conteneur-genre")
+	document.querySelector(".conteneur-genre")
 	let tableElement = document.querySelector(".tablelist tbody");
 	var newTableElement = tableElement.cloneNode(false);
 	let compteur = 0;
@@ -505,7 +492,6 @@ let buildUserTableLine = function (user,compteur) {
 	if (user.id == ACTUAL_USER_ID) {
 		let nomUser = document.getElementById("userCo="+ACTUAL_USER_ID);
 		nomUser.innerText = user.prenom + " " + user.nom;
-		console.log(nomUser.innerText)
 	}
 	return lineElement;
 };

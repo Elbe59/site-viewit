@@ -75,7 +75,6 @@ public class ModifFilmServlet extends ServletGenerique {
 		Part part = req.getPart("fichier");
 
 		String urlBA = req.getParameter("url");
-		//urlBA = urlBA.substring( urlBA.lastIndexOf( '=' ) + 1 );
 		String extension = FilenameUtils.getExtension(part.getSubmittedFileName());
 		InputStream in = part.getInputStream();
 		String fileNameForStorage = "";
