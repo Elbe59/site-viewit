@@ -29,11 +29,11 @@ public class FavorisServlet extends ServletGenerique {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		WebContext context = new WebContext(req, resp, req.getServletContext());
 		Utilisateur utilisateur = (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
-		LOGGER.debug("loading page favoris of user "+utilisateur.getEmail());
 		String trier = req.getParameter("trier");
 		System.out.println("get : " + trier);
 		List<Film> listOfFilms = null;
 		if(utilisateur != null){
+			LOGGER.debug("loading page favoris of user "+utilisateur.getEmail());
 			try {
 				listOfFilms = FilmService.getInstance().listFavorisFilm(utilisateur.getId(), trier);
 				context.setVariable("listUser", listOfFilms);
@@ -42,6 +42,8 @@ public class FavorisServlet extends ServletGenerique {
 				LOGGER.error("User not found");
 				e.printStackTrace();
 			}
+		} else {
+			LOGGER.error("Vous n'êtes pas connecté");
 		}
 		TemplateEngine engine = createTemplateEngine(req.getServletContext());
 		engine.process("favoris", context, resp.getWriter());
@@ -51,11 +53,11 @@ public class FavorisServlet extends ServletGenerique {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("utilisateurConnecte");
-		//String trier = request.getParameter("trier");
+		String trier = request.getParameter("trier");
 		//System.out.println("post : " + trier);
 		try {
-			List<Film> listOfFilms = FilmService.getInstance().listFavorisFilm(utilisateur.getId(), null);
 			if(utilisateur != null){
+				List<Film> listOfFilms = FilmService.getInstance().listFavorisFilm(utilisateur.getId(), trier);
 				if(request.getParameter("suppfavori")!=null) {
 					int index = Integer.parseInt(request.getParameter("suppfavori"));
 					int idFilm = listOfFilms.get(index).getId();
@@ -66,7 +68,6 @@ public class FavorisServlet extends ServletGenerique {
 			e.printStackTrace();
 		}
 		doGet(request, response);
-		//response.sendRedirect("favoris");
 	}
 	
 }
