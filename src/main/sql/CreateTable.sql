@@ -13,7 +13,6 @@ CREATE TABLE UTILISATEUR(
 	prenomUtilisateur Varchar (50) NOT NULL ,
     nomUtilisateur    Varchar (50) NOT NULL ,
     email             Varchar (266) NOT NULL ,
-    mdp               Varchar (50) NOT NULL ,
     mdpHash           Varchar (1000) NOT NULL ,
     admin             Int(1) NOT NULL,
 	CONSTRAINT UTILISATEUR_PK PRIMARY KEY (idUtilisateur)
