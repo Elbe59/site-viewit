@@ -28,7 +28,7 @@ CREATE TABLE GENRE(
 CREATE TABLE FILM(
     idFilm      Int(5)  Auto_increment  NOT NULL ,
     titreFilm   Varchar (100) NOT NULL ,
-    resumeFilm  Varchar (500) NOT NULL ,
+    resumeFilm  Varchar (1000) NOT NULL ,
     dateSortie  Date NOT NULL ,
 	dureeFilm   Int(3) NOT NULL,
 	realisateur Varchar(100) NOT NULL,
