@@ -25,7 +25,7 @@ public class DisplayImageServlet extends HttpServlet {
         response.setContentType("image/jpeg");
         ServletOutputStream out;
         out = response.getOutputStream();
-        FileInputStream fin= FileStorageService.displayImage(idFilm);
+        FileInputStream fin= FileStorageService.getInstance().displayImage(idFilm);
         BufferedInputStream bin = new BufferedInputStream(fin);
         BufferedOutputStream bout = new BufferedOutputStream(out);
         int ch = 0;

@@ -58,7 +58,7 @@ public class AddFilmServlet extends ServletGenerique {
 			String extension= FilenameUtils.getExtension(part.getSubmittedFileName());
 			InputStream in=part.getInputStream();
 			try {
-				fileNameForStorage = FileStorageService.storeFile(titre,in,extension);
+				fileNameForStorage = FileStorageService.getInstance().storeFile(titre,in,extension);
 			} catch (FileStorageException e) {
 				e.printStackTrace();
 			}

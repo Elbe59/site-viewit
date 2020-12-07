@@ -11,7 +11,14 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 
+import dao.FilmDao;
+import dao.UtilisateurDao;
+import dao.impl.FilmDaoImpl;
+import dao.impl.UtilisateurDaoImpl;
+import entity.Film;
+import entity.Genre;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -23,20 +30,30 @@ import dao.impl.DataSourceProvider;
 import dao.impl.FileStorageProvider;
 import exception.FileStorageException;
 import exception.FilmNotFoundException;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import tools.FileManager;
 
+@RunWith(MockitoJUnitRunner.class)
 public class FileStorageServiceTestCase {
+
+	@InjectMocks
+	FileStorageService fileStorageService;
+	@Mock
+	FilmDao filmDao=new FilmDaoImpl();
 	
 	private static final File dataDirectory = new File("data/filmImages");
     private static File tmpDirectory;
-	FileStorageService fileService;
 	
 	@BeforeClass
     public static void createOnceBeforeClass() throws IOException {
     	tmpDirectory = FileManager.createTmpDirectory();
     }
 	
-	 @Before
+	 /*@Before
 	 public void createBeforeTestMethod() throws IOException, SQLException {
 	    FileManager.duplicateDataToDirectory(dataDirectory, tmpDirectory);
 	    if(fileService == null) {
@@ -56,7 +73,7 @@ public class FileStorageServiceTestCase {
 	                            + "(2, 'titre 2', 'resume 2', '2020-11-12', 123, 'realisateur 2', 'acteur 2', 'image2.test', 'youtu.be/2', 2, 0),"
 	                            + "(3, 'titre 3', 'resume 3', '2020-11-12', 123, 'realisateur 3', 'acteur 3', 'notHere.png', 'youtu.be/3', 3, 0);");
 	        }
-	 }
+	 }*/
 
 	@Test
 	public void shouldStoreImageAndReturnFileName() throws FileStorageException {
@@ -65,9 +82,9 @@ public class FileStorageServiceTestCase {
 		String fileName2 = "image2.jpeg";
 		String fileName3 = "image3.jpg";
 		//WHEN
-		String result1 = fileService.getInstance().storeFile("image1", InputStream.nullInputStream(), "png");
-		String result2 = fileService.getInstance().storeFile("image2", InputStream.nullInputStream(), "jpeg");
-		String result3 = fileService.getInstance().storeFile("image3", InputStream.nullInputStream(), "jpg");
+		String result1 = fileStorageService.storeFile("image1", InputStream.nullInputStream(), "png");
+		String result2 = fileStorageService.storeFile("image2", InputStream.nullInputStream(), "jpeg");
+		String result3 = fileStorageService.storeFile("image3", InputStream.nullInputStream(), "jpg");
 		//THEN
 		Assertions.assertThat(result1).isEqualTo(fileName1);
 		Assertions.assertThat(result2).isEqualTo(fileName2);
@@ -78,7 +95,7 @@ public class FileStorageServiceTestCase {
 	public void shouldStoreImageAndReturnFileNameButWrongExtension() throws FileStorageException {
 		//GIVEN
 		//WHEN
-		String result = fileService.getInstance().storeFile("hulk", InputStream.nullInputStream(), "exe");
+		String result = fileStorageService.storeFile("hulk", InputStream.nullInputStream(), "exe");
 		//THEN
 		Assertions.assertThat(result).isEqualTo("");
 	}
@@ -89,7 +106,7 @@ public class FileStorageServiceTestCase {
 		
 		//WHEN
 		try {
-			String result = fileService.getInstance().storeFile("tho..r", InputStream.nullInputStream(), "jpg");
+			String result = fileStorageService.storeFile("tho..r", InputStream.nullInputStream(), "jpg");
 		}
 		//THEN
 		catch(FileStorageException e) {
@@ -102,40 +119,71 @@ public class FileStorageServiceTestCase {
 		//GIVEN
 		String fileName = "test1.jpg";	
 		//WHEN
-		String result = fileService.getInstance().deleteFile(fileName);
+		String result = fileStorageService.deleteFile(fileName);
 		//THEN
 		Assertions.assertThat(result).isEqualTo(fileName);
 	}
 	
 	@Test
-	public void shouldDisplayImageAndReturnFileInputStream() throws FileNotFoundException, FilmNotFoundException {
-		//GIVEN
-		int filmId1 = 1;
-		int filmId2 = 2;
-		String pathToImage = FileStorageProvider.getUploadDir();
-		FileInputStream image1 = new FileInputStream(pathToImage + "/image1.png");
-		FileInputStream image2 = new FileInputStream(pathToImage + "/filmInconnu.jpg");
-		
-		//WHEN
-		FileInputStream result1 = fileService.getInstance().displayImage(filmId1);
-		FileInputStream result2 = fileService.getInstance().displayImage(filmId2);
-		
-		//THEN
-		Assertions.assertThat(result1).hasSameContentAs(image1);
-		Assertions.assertThat(result2).hasSameContentAs(image2);
-	}
-	
-	@Test
-	public void shouldDisplayImageAndReturnFileInputStreamButThrowFilmNotFoundException() throws FilmNotFoundException, FileNotFoundException {
-		//GIVEN
+	public void shouldDisplayImageAndReturnFileInputStream() throws IOException, FilmNotFoundException {
 		int filmId = 3;
+		Film film1 = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", new Genre(1,"Aventure"), 1);
 		String pathToImage = FileStorageProvider.getUploadDir();
-		
+		Mockito.when(filmDao.getFilm(Mockito.anyInt())).thenReturn(film1);
+		FileInputStream image = new FileInputStream(pathToImage + "/image1.png");
 		//WHEN
-		FileInputStream result = fileService.getInstance().displayImage(filmId);
-		
+		FileInputStream result = fileStorageService.displayImage(filmId);
+
+		//THEN
+		Assertions.assertThat(result).hasSameContentAs(image);
+		Mockito.verify(filmDao,Mockito.times(1)).getFilm(Mockito.any());
+	}
+
+	@Test
+	public void shouldDisplayImageButThrowFilmNotFoundException() throws IOException, FilmNotFoundException {
+		int filmId = 3;
+		Film film1 = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", new Genre(1,"Aventure"), 1);
+		String pathToImage = FileStorageProvider.getUploadDir();
+		FileInputStream image = new FileInputStream(pathToImage + "/image1.png");
+		Mockito.when(filmDao.getFilm(Mockito.anyInt())).thenThrow(new FilmNotFoundException("Ce film n'existe pas"));
+
+		//WHEN
+		FileInputStream result = fileStorageService.displayImage(filmId);
+
 		//THEN
 		Assertions.assertThat(result).isNull();
+		Mockito.verify(filmDao,Mockito.times(1)).getFilm(Mockito.any());
+	}
+
+	@Test
+	public void shouldDisplayImageAndReturnFileInputStreamButThrowFilmNotFoundException() throws FilmNotFoundException, IOException {
+		//GIVEN
+		int filmId = 3;
+		Film film1 = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image5.png", "youtube.com/1", new Genre(1,"Aventure"), 1);
+		String pathToImage = FileStorageProvider.getUploadDir();
+		Mockito.when(filmDao.getFilm(Mockito.anyInt())).thenReturn(film1);
+		//WHEN
+		FileInputStream result = fileStorageService.displayImage(filmId);
+		
+		//THEN
+		Assertions.assertThatExceptionOfType(FileNotFoundException.class);
+		Assertions.assertThat(result).isNull();
+		Mockito.verify(filmDao,Mockito.times(1)).getFilm(Mockito.any());
+	}
+	@Test
+	public void shouldDisplayUnknownImage() throws FilmNotFoundException, IOException {
+		//GIVEN
+		int filmId = 3;
+		Film film1 = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "imag5", "youtube.com/1", new Genre(1,"Aventure"), 1);
+		String pathToImage = FileStorageProvider.getUploadDir();
+		FileInputStream image = new FileInputStream(pathToImage + "/filmInconnu.jpg");
+		Mockito.when(filmDao.getFilm(Mockito.anyInt())).thenReturn(film1);
+		//WHEN
+		FileInputStream result = fileStorageService.displayImage(filmId);
+
+		//THEN
+		Assertions.assertThat(result).hasSameContentAs(image);
+		Mockito.verify(filmDao,Mockito.times(1)).getFilm(Mockito.any());
 	}
 
     //Après

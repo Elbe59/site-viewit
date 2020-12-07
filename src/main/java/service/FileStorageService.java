@@ -1,9 +1,18 @@
 package service;
+import dao.FilmDao;
+import dao.UtilisateurDao;
 import dao.impl.FileStorageProvider;
+import dao.impl.FilmDaoImpl;
+import dao.impl.UtilisateurDaoImpl;
+import entity.Film;
 import exception.FileStorageException;
 import exception.FilmNotFoundException;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.thymeleaf.util.StringUtils;
+
 
 import java.io.*;
 import java.nio.file.Files;
@@ -12,16 +21,23 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class FileStorageService {
+
+    static final Logger LOGGER = LogManager.getLogger();
+    private FilmDao filmDao = new FilmDaoImpl();
+
+    private static class FileStorageHolder {
+        private final static FileStorageService instance = new FileStorageService();
+    }
+
+    public static FileStorageService getInstance() {
+        return FileStorageService.FileStorageHolder.instance;
+    }
+
+    private FileStorageService() {
+
+    }
 	
-	private static class FileStorageHolder {
-		private final static FileStorageService instance = new FileStorageService();
-	}
-	 
-	public static FileStorageService getInstance() {
-		return FileStorageHolder.instance;
-	}
-	
-    public static String storeFile(String filmTitle, InputStream file,String extension) throws FileStorageException {
+    public String storeFile(String filmTitle, InputStream file,String extension) throws FileStorageException {
         if(!extension.contentEquals("png")&&!extension.contentEquals("jpeg")&&!extension.contentEquals("jpg")){
             return "";
         }
@@ -48,7 +64,7 @@ public class FileStorageService {
 
     }
 
-    public static String deleteFile(String fileName) throws FileStorageException {
+    public String deleteFile(String fileName) throws FileStorageException {
         Path storageLocation = Paths.get(FileStorageProvider.getUploadDir()).toAbsolutePath().normalize();
         Path targetLocation = storageLocation.resolve(fileName);
         File file = new File(String.valueOf(targetLocation));
@@ -56,11 +72,12 @@ public class FileStorageService {
         return fileName;
     }
 
-    public static FileInputStream displayImage(int filmId){
+    public FileInputStream displayImage(int filmId){
         String pathToImage = FileStorageProvider.getUploadDir();
         FileInputStream image = null;
         try {
-            String imageName= FilmService.getInstance().getFilm(filmId).getImageName();
+            Film film=filmDao.getFilm(filmId);
+            String imageName=  film.getImageName();
             if(!FilenameUtils.getExtension(imageName).contentEquals("png")&&!FilenameUtils.getExtension(imageName).contentEquals("jpeg")&&!FilenameUtils.getExtension(imageName).contentEquals("jpg") ){
                 image = new FileInputStream(pathToImage + "/filmInconnu.jpg");
             }
