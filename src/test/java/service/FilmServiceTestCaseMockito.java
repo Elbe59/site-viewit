@@ -174,6 +174,7 @@ public class FilmServiceTestCaseMockito {
         
         //THEN
         Assertions.assertThat(res).isNull();
+        Assertions.assertThatExceptionOfType(UrlDoesNotMatchException.class);
     }
 
     @Test
@@ -201,6 +202,8 @@ public class FilmServiceTestCaseMockito {
         Film res = filmService.deleteFilm(id);
         //THEN
         Assertions.assertThat(res).isNull();
+        Assertions.assertThatExceptionOfType(FileNotFoundException.class);
+
     }
     
     @Test
@@ -236,6 +239,8 @@ public class FilmServiceTestCaseMockito {
         Film res = filmService.updateFilm(1, "newTitre3", "resume3", "2019-12-20", 120, "realisateur3", "acteur3", "image3.png", "youtu.be/3", genre);
         //THEN
         Assertions.assertThat(res).isNull();
+        Assertions.assertThatExceptionOfType(FileNotFoundException.class);
+
     }
     
     @Test
@@ -249,6 +254,8 @@ public class FilmServiceTestCaseMockito {
         Film res = filmService.updateFilm(1, "newTitre3", "resume3", "2019-12-20", 120, "realisateur3", "acteur3", "image3.png", "1234567", genre);
         //THEN
         Assertions.assertThat(res).isNull();
+        Assertions.assertThatExceptionOfType(UrlDoesNotMatchException.class);
+
     }
     
     @Test
@@ -278,6 +285,8 @@ public class FilmServiceTestCaseMockito {
         Film res = filmService.activeFilm(id);
         //THEN
         Assertions.assertThat(res).isNull();
+        Assertions.assertThatExceptionOfType(FilmAlreadyActiveException.class);
+
     }
 
     @Test 
@@ -292,6 +301,8 @@ public class FilmServiceTestCaseMockito {
         Film res = filmService.activeFilm(id);
         //THEN
         Assertions.assertThat(res).isNull();
+        Assertions.assertThatExceptionOfType(FileNotFoundException.class);
+
     }
 
     @Test
@@ -307,6 +318,7 @@ public class FilmServiceTestCaseMockito {
         //THEN
         Assertions.assertThat(res.getValide()).isEqualTo(0);
         Assertions.assertThat(res).isEqualToComparingFieldByField(film);
+
     }
 
     @Test
@@ -321,6 +333,8 @@ public class FilmServiceTestCaseMockito {
         Film res = filmService.desactiveFilm(id);
         //THEN
         Assertions.assertThat(res).isNull();
+        Assertions.assertThatExceptionOfType(FilmAlreadyDesactiveException.class);
+
     }
 
     @Test
