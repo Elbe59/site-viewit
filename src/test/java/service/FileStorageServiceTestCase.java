@@ -5,28 +5,18 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 
 import dao.FilmDao;
-import dao.UtilisateurDao;
 import dao.impl.FilmDaoImpl;
-import dao.impl.UtilisateurDaoImpl;
 import entity.Film;
 import entity.Genre;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import dao.impl.DataSourceProvider;
 import dao.impl.FileStorageProvider;
 import exception.FileStorageException;
 import exception.FilmNotFoundException;
@@ -52,28 +42,6 @@ public class FileStorageServiceTestCase {
     public static void createOnceBeforeClass() throws IOException {
     	tmpDirectory = FileManager.createTmpDirectory();
     }
-	
-	 /*@Before
-	 public void createBeforeTestMethod() throws IOException, SQLException {
-	    FileManager.duplicateDataToDirectory(dataDirectory, tmpDirectory);
-	    if(fileService == null) {
-	    	fileService = fileService.getInstance();
-	    }
-	    try (Connection co = DataSourceProvider.getDataSource().getConnection();
-	             Statement stm = co.createStatement()) {
-	            stm.executeUpdate("DELETE FROM film");
-	            stm.executeUpdate("DELETE FROM genre");
-	            stm.executeUpdate("INSERT INTO genre (idGenre, nomGenre) "
-	                    + "VALUES (1,'Aventure'), "
-	                    +"(2,'Action'),"
-	                    +"(3,'Horreur');");
-	            stm.executeUpdate(
-	                    "INSERT INTO film(idFilm, titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide) "
-	                            + "VALUES (1, 'titre 1', 'resume 1', '2020-11-11', 123, 'realisateur 1', 'acteur 1', 'image1.png', 'youtu.be/1', 1, 1),"
-	                            + "(2, 'titre 2', 'resume 2', '2020-11-12', 123, 'realisateur 2', 'acteur 2', 'image2.test', 'youtu.be/2', 2, 0),"
-	                            + "(3, 'titre 3', 'resume 3', '2020-11-12', 123, 'realisateur 3', 'acteur 3', 'notHere.png', 'youtu.be/3', 3, 0);");
-	        }
-	 }*/
 
 	@Test
 	public void shouldStoreImageAndReturnFileName() throws FileStorageException {
@@ -106,7 +74,7 @@ public class FileStorageServiceTestCase {
 		
 		//WHEN
 		try {
-			String result = fileStorageService.storeFile("tho..r", InputStream.nullInputStream(), "jpg");
+			fileStorageService.storeFile("tho..r", InputStream.nullInputStream(), "jpg");
 		}
 		//THEN
 		catch(FileStorageException e) {
@@ -142,9 +110,6 @@ public class FileStorageServiceTestCase {
 	@Test
 	public void shouldDisplayImageButThrowFilmNotFoundException() throws IOException, FilmNotFoundException {
 		int filmId = 3;
-		Film film1 = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtube.com/1", new Genre(1,"Aventure"), 1);
-		String pathToImage = FileStorageProvider.getUploadDir();
-		FileInputStream image = new FileInputStream(pathToImage + "/image1.png");
 		Mockito.when(filmDao.getFilm(Mockito.anyInt())).thenThrow(new FilmNotFoundException("Ce film n'existe pas"));
 
 		//WHEN
@@ -160,7 +125,6 @@ public class FileStorageServiceTestCase {
 		//GIVEN
 		int filmId = 3;
 		Film film1 = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image5.png", "youtube.com/1", new Genre(1,"Aventure"), 1);
-		String pathToImage = FileStorageProvider.getUploadDir();
 		Mockito.when(filmDao.getFilm(Mockito.anyInt())).thenReturn(film1);
 		//WHEN
 		FileInputStream result = fileStorageService.displayImage(filmId);
@@ -196,5 +160,9 @@ public class FileStorageServiceTestCase {
     public static void createOnceAfterClass() throws IOException {
     	FileManager.removeDirectory(tmpDirectory);
     }
+
+	public static File getDatadirectory() {
+		return dataDirectory;
+	}
 	
 }

@@ -1,9 +1,7 @@
 package service;
 import dao.FilmDao;
-import dao.UtilisateurDao;
 import dao.impl.FileStorageProvider;
 import dao.impl.FilmDaoImpl;
-import dao.impl.UtilisateurDaoImpl;
 import entity.Film;
 import exception.FileStorageException;
 import exception.FilmNotFoundException;
@@ -11,7 +9,6 @@ import exception.FilmNotFoundException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.thymeleaf.util.StringUtils;
 
 
 import java.io.*;

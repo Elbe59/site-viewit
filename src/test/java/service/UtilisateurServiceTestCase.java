@@ -1,19 +1,14 @@
 package service;
 
 import dao.UtilisateurDao;
-import dao.impl.DataSourceProvider;
 import dao.impl.UtilisateurDaoImpl;
-import entity.FilmDto;
 import entity.Utilisateur;
 import entity.UtilisateurDto;
-import exception.FilmAlreadyExistingException;
 import exception.UserAlreadyAdminException;
 import exception.UserAlreadyDownException;
 import exception.UserAlreadyExistingException;
 import exception.UserNotFoundException;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -22,13 +17,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import utils.MotDePasseUtils;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
@@ -39,19 +31,6 @@ public class UtilisateurServiceTestCase {
     UtilisateurService userService;
     @Mock
     UtilisateurDao userDao = new UtilisateurDaoImpl();
-
-    /*@Before
-    public void initDb() throws Exception {
-        try (Connection co = DataSourceProvider.getDataSource().getConnection();
-             Statement stm = co.createStatement()) {
-            stm.executeUpdate("DELETE FROM preferer");
-            stm.executeUpdate("DELETE FROM UTILISATEUR");
-            stm.executeUpdate(
-                    "INSERT INTO UTILISATEUR ( idUtilisateur, prenomUtilisateur, nomUtilisateur, email, mdp, mdpHash, admin) "
-                            + "VALUES (1,'prenom1', 'nom1', 'email1@gmail.com', 'mdp1', 'mdpHash1', 0),"
-                            + "(2,'prenom2', 'nom2', 'email2@gmail.com', 'mdp2', 'mdpHash2', 1);");
-        }
-    }*/
 
     @Test
     public void shouldAddUser() throws UserAlreadyExistingException {
@@ -83,7 +62,7 @@ public class UtilisateurServiceTestCase {
         Mockito.when(userDao.listUser()).thenReturn(utilisateurs);
         //WHEN
         try{
-            Utilisateur res = userService.addUser(user);
+            userService.addUser(user);
         }
         catch (UserAlreadyExistingException e){
             Assertions.assertThatExceptionOfType(UserAlreadyExistingException.class);
@@ -173,7 +152,6 @@ public class UtilisateurServiceTestCase {
     public void shouldDeleteInexistantUserAndThrowUserNotFoundException() throws UserNotFoundException, SQLException {
         //GIVEN
         int id = 1;
-        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", false);
         Mockito.when(userDao.getUser(id)).thenThrow(new UserNotFoundException("Utilisateur inexistant"));
         try{
             userService.deleteUser(id);
@@ -252,7 +230,6 @@ public class UtilisateurServiceTestCase {
     public void shouldChangeRoleUserAndThrowUserNotFoundException() throws UserAlreadyAdminException, SQLException, UserAlreadyDownException, UserNotFoundException {
         //GIVEN
         int id = 1;
-        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", false);
         Mockito.when(userDao.getUser(id)).thenThrow(new UserNotFoundException("Utilisateur inexistant"));
         try{
             userService.deleteUser(id);
@@ -291,7 +268,6 @@ public class UtilisateurServiceTestCase {
     public void shouldModifyUserButThrowUserNotFoundException() throws SQLException, UserAlreadyExistingException, UserNotFoundException {
         //GIVEN
         int id = 1;
-        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", false);
         Utilisateur new_user = new Utilisateur(1,"pren", "no", "ema1@gmail.com", "mp1","mdpash1", false);
         Mockito.when(userDao.getUser(id)).thenThrow(new UserNotFoundException("Utilisateur inexistant"));
 

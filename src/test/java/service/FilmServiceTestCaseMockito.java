@@ -3,9 +3,7 @@ package service;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +11,6 @@ import java.util.List;
 import dao.FilmDao;
 import dao.GenreDao;
 import dao.UtilisateurDao;
-import dao.impl.DataSourceProvider;
 import dao.impl.FilmDaoImpl;
 import dao.impl.GenreDaoImpl;
 import dao.impl.UtilisateurDaoImpl;
@@ -23,7 +20,6 @@ import entity.Genre;
 import entity.GenreDto;
 import exception.*;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -37,7 +33,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
-import static org.junit.Assert.fail;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FilmServiceTestCaseMockito {
@@ -51,61 +46,6 @@ public class FilmServiceTestCaseMockito {
     GenreDao genreDao = new GenreDaoImpl();
     @Mock
     UtilisateurDao userDao = new UtilisateurDaoImpl();
-
-    /*@Before
-    public void initDb() throws Exception {
-        try (Connection co = DataSourceProvider.getDataSource().getConnection();
-             Statement stm = co.createStatement()) {
-            stm.executeUpdate("DELETE FROM film");
-            stm.executeUpdate("DELETE FROM genre");
-            stm.executeUpdate("DELETE FROM preferer");
-            stm.executeUpdate("DELETE FROM UTILISATEUR");
-            stm.executeUpdate(
-                    "INSERT INTO UTILISATEUR ( idUtilisateur, prenomUtilisateur, nomUtilisateur, email, mdp, mdpHash, admin) "
-                            + "VALUES (1,'prenom1', 'nom1', 'email1@gmail.com', 'mdp1', 'mdpHash1', 0),"
-                            + "(2,'prenom2', 'nom2', 'email2@gmail.com', 'mdp2', 'mdpHash2', 1);");
-            stm.executeUpdate("INSERT INTO genre (idGenre, nomGenre) "
-                    + "VALUES (1,'Aventure'), "
-                    +"(2,'Action'),"
-                    +"(3,'Horreur');");
-            stm.executeUpdate(
-                    "INSERT INTO film(idFilm, titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide) "
-                            + "VALUES (1, 'titre 1', 'resume 1', '2020-11-11', 123, 'realisateur 1', 'acteur 1', 'image1.png', 'youtu.be/1', 1, 1),"
-                            + "(2, 'titre 2', 'resume 2', '2020-11-12', 123, 'realisateur 2', 'acteur 2', 'image2.png', 'youtu.be/2', 2, 0);");
-
-            stm.executeUpdate(
-                    "INSERT INTO preferer (favoris, idFilm, idUtilisateur, liker) VALUES (1, 1, 1,1);");
-            stm.executeUpdate(
-                    "INSERT INTO preferer (favoris, idFilm, idUtilisateur, liker) VALUES (1, 2, 1,1);");
-        }
-    }*/
-/*
-    @Test
-    public void shouldListFilm()
-    {
-        //WHEN
-        List<Film> films = filmService.getInstance().listFilms();
-        //THEN
-        assertThat(films).hasSize(2);
-        assertThat(films).extracting(
-                Film::getId,
-                Film::getTitre,
-                Film::getResume,
-                Film::getDateSortie,
-                Film::getDuree,
-                Film::getRealisateur,
-                Film::getActeur,
-                Film::getImageName,
-                Film::getUrlBA,
-                Film -> Film.getGenre().getId(),
-                Film -> Film.getGenre().getNom(),
-
-                Film::getValide).containsOnly(
-                tuple(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image1.png", "youtu.be/1", 1, "Aventure", 1),
-                tuple(2, "titre 2", "resume 2", LocalDate.of(2020, 11, 12), 123, "realisateur 2", "acteur 2", "image2.png", "youtu.be/2", 2, "Action", 0));
-
-    }
-*/
     
     @Test
     public void shouldListFilm() throws IOException

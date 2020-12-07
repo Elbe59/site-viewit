@@ -41,5 +41,9 @@ public class FileManager {
         File file = new File(directory, fileName);
         return  file.exists();
     }
+
+	public static File getDatadirectory() {
+		return dataDirectory;
+	}
     
 }
