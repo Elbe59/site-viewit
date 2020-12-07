@@ -22,10 +22,9 @@ import service.FilmService;
 
 @WebServlet("/user/favoris")
 public class FavorisServlet extends ServletGenerique {
-
+	private static final long serialVersionUID = 1L;
 	static final Logger LOGGER = LogManager.getLogger();
 
-	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		WebContext context = new WebContext(req, resp, req.getServletContext());
 		Utilisateur utilisateur = (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
@@ -46,7 +45,6 @@ public class FavorisServlet extends ServletGenerique {
 		}
 		TemplateEngine engine = createTemplateEngine(req.getServletContext());
 		engine.process("favoris", context, resp.getWriter());
-
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -65,6 +63,5 @@ public class FavorisServlet extends ServletGenerique {
 			e.printStackTrace();
 		}
 		doGet(request, response);
-	}
-	
+	}	
 }

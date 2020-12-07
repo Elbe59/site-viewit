@@ -1,7 +1,5 @@
 package controller;
 
-import entity.Film;
-import entity.Genre;
 import entity.GenreDto;
 import exception.*;
 import org.thymeleaf.TemplateEngine;
@@ -23,7 +21,6 @@ public class GestionGenreServlet extends ServletGenerique {
     private static final long serialVersionUID = 1L;
     static final Logger LOGGER = LogManager.getLogger();
 
-    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         LOGGER.debug("Loading gestion genres");
         WebContext context = new WebContext(req, resp, req.getServletContext());

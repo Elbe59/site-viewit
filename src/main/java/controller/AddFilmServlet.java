@@ -14,7 +14,6 @@ import entity.Genre;
 import entity.Utilisateur;
 import exception.FileStorageException;
 import exception.FilmAlreadyExistingException;
-import exception.FilmNotFoundException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,8 +22,6 @@ import org.thymeleaf.context.WebContext;
 
 import service.FileStorageService;
 import service.FilmService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @MultipartConfig
 @WebServlet("/user/ajoutfilm")
@@ -32,14 +29,13 @@ public class AddFilmServlet extends ServletGenerique {
 	private static final long serialVersionUID = 1L;
 	private FilmService filmService = FilmService.getInstance();
 	static final Logger LOGGER = LogManager.getLogger();
-	@Override
+
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		LOGGER.debug("doGet add film, building the web page");
 		WebContext context = new WebContext(req, resp, req.getServletContext());
         context.setVariable("genres", filmService.listGenre());
         TemplateEngine engine = createTemplateEngine(req.getServletContext());
         engine.process("ajoutFilm", context, resp.getWriter());
-
 	}
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -22,7 +22,6 @@ public class ListFilmServlet extends ServletGenerique {
 	private static final ObjectMapper MAPPER = new ObjectMapper();
 	static final Logger LOGGER = LogManager.getLogger(HomeServlet.class);
 	
-	@Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<FilmDto> listFilm = new ArrayList<FilmDto>();
 		Utilisateur utilisateur = (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");

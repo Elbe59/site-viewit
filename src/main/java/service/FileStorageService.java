@@ -4,11 +4,8 @@ import exception.FileStorageException;
 import exception.FilmNotFoundException;
 
 import org.apache.commons.io.FilenameUtils;
-import org.thymeleaf.util.StringUtils;
-
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

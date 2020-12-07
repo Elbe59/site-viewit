@@ -1,9 +1,6 @@
 package controller;
 
 import entity.Utilisateur;
-import exception.UserNotFoundException;
-import service.UtilisateurService;
-import utils.MotDePasseUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,8 +13,8 @@ import org.apache.logging.log4j.Logger;
 
 @WebServlet("/deconnection")
 public class DeconnectionServlet extends HttpServlet {
-
-    static final Logger LOGGER = LogManager.getLogger();
+	private static final long serialVersionUID = 1L;
+	static final Logger LOGGER = LogManager.getLogger();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Utilisateur utilisateur = null;

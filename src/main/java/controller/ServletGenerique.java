@@ -11,8 +11,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 public abstract class ServletGenerique extends HttpServlet {
-    private static final long serialVersionUID = -7342768479603279018L;
-
+    private static final long serialVersionUID = 1L;
 
     protected TemplateEngine createTemplateEngine(ServletContext context) {
         // conf du resolver pour retrouver les templates

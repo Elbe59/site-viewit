@@ -2,7 +2,6 @@ package dao.impl;
 
 import dao.UtilisateurDao;
 import entity.Utilisateur;
-import entity.UtilisateurDto;
 import exception.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

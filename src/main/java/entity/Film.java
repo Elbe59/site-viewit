@@ -1,7 +1,6 @@
 package entity;
 
 import java.io.IOException;
-import java.sql.Blob;
 import java.time.LocalDate;
 
 public class Film {

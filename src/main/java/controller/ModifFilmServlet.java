@@ -12,15 +12,10 @@ import javax.servlet.http.Part;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import dao.impl.DataSourceProvider;
 import entity.Film;
-import entity.Utilisateur;
 import exception.FileStorageException;
-import exception.FilmAlreadyActiveException;
-import exception.FilmAlreadyExistingException;
 import exception.FilmNotFoundException;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.logging.log4j.core.util.IOUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -35,7 +30,6 @@ public class ModifFilmServlet extends ServletGenerique {
 	private FilmService filmService = FilmService.getInstance();
 	static final Logger LOGGER = LogManager.getLogger(HomeServlet.class);
 
-	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		WebContext context = new WebContext(req, resp, req.getServletContext());
 		int id = Integer.parseInt(req.getParameter("id"));

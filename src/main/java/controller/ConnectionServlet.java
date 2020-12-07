@@ -16,8 +16,8 @@ import org.apache.logging.log4j.Logger;
 
 @WebServlet("/connection")
 public class ConnectionServlet extends HttpServlet {
-
-    static final Logger LOGGER = LogManager.getLogger();
+	private static final long serialVersionUID = 1L;
+	static final Logger LOGGER = LogManager.getLogger();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String email = request.getParameter("email");

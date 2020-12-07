@@ -34,7 +34,6 @@ public class GestionUserController {
         return UtilisateurService.getInstance().listUsersDto();
     }
 
-
     @PATCH
     @Path("/{userid}/change")
     public Response listUsers(@PathParam("userid") Integer userId){

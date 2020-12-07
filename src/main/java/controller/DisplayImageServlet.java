@@ -1,10 +1,6 @@
 package controller;
 
-import dao.impl.FileStorageProvider;
-import exception.FilmNotFoundException;
-import org.apache.commons.io.FilenameUtils;
 import service.FileStorageService;
-import service.FilmService;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +16,8 @@ import org.apache.logging.log4j.Logger;
 
 @WebServlet("/filmimage")
 public class DisplayImageServlet extends HttpServlet {
-    static final Logger LOGGER = LogManager.getLogger();
+	private static final long serialVersionUID = 1L;
+	static final Logger LOGGER = LogManager.getLogger();
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int idFilm = Integer.parseInt(request.getParameter("id"));

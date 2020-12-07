@@ -1,16 +1,12 @@
 package dao.impl;
 
 import dao.GenreDao;
-import entity.Film;
 import entity.Genre;
 import entity.GenreDto;
-import entity.Utilisateur;
 import exception.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

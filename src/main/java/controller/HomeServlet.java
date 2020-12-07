@@ -1,9 +1,7 @@
 package controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Base64;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,8 +15,6 @@ import entity.Utilisateur;
 import exception.FilmNotFoundException;
 import exception.UserNotFoundException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -30,9 +26,7 @@ public class HomeServlet extends ServletGenerique {
 	private static final long serialVersionUID = 1L;
 	static final Logger LOGGER = LogManager.getLogger(HomeServlet.class);
 
-	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//HttpServletRequest httpRequest = (HttpServletRequest) req;
 		LOGGER.debug("Loading home page");
 		String trier = req.getParameter("trier");
 		List<Film> listOfFilms = FilmService.getInstance().listFilms(trier);
@@ -83,5 +77,4 @@ public class HomeServlet extends ServletGenerique {
 		}
 		doGet(request,response);
 	}
-
 }

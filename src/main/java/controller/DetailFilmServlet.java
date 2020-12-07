@@ -1,17 +1,12 @@
 package controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import entity.Film;
-import entity.Utilisateur;
 import exception.FilmNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,10 +18,8 @@ import service.FilmService;
 @WebServlet("/film")
 public class DetailFilmServlet extends ServletGenerique {
 	private static final long serialVersionUID = 1L;
-
 	static final Logger LOGGER = LogManager.getLogger();
-       
-	@Override
+    
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String idStr = req.getParameter("id");
 		int filmId = -1;

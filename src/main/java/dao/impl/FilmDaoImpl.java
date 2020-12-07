@@ -1,11 +1,8 @@
 package dao.impl;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 import dao.FilmDao;
@@ -13,7 +10,6 @@ import dao.UtilisateurDao;
 import entity.Film;
 import entity.FilmDto;
 import entity.Genre;
-import entity.Utilisateur;
 import exception.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

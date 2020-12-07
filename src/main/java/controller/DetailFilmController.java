@@ -1,12 +1,9 @@
 package controller;
 
 import entity.FilmDto;
-import entity.Utilisateur;
-import entity.UtilisateurDto;
 import exception.FilmNotFoundException;
 import exception.UserNotFoundException;
 import service.FilmService;
-import service.UtilisateurService;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.*;

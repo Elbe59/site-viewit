@@ -1,11 +1,8 @@
 package filter;
 
-import dao.impl.FileStorageProvider;
 import entity.Utilisateur;
 import exception.UserNotFoundException;
 import service.UtilisateurService;
-
-import org.thymeleaf.context.WebContext;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -16,8 +13,9 @@ import java.io.IOException;
 
 @WebFilter("/*")
 public class GetUserRoleFilter extends HttpFilter {
+	private static final long serialVersionUID = 1L;
 
-    public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws ServletException, IOException {
+	public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws ServletException, IOException {
         String role="0";
         String user="";
         int id = 0;
