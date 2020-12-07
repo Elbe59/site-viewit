@@ -43,7 +43,6 @@ public class ConnectionServlet extends HttpServlet {
         }
         LOGGER.debug("redirecting user to home page");
         response.sendRedirect("accueil");
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
