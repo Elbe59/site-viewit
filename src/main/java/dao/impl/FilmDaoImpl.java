@@ -69,7 +69,7 @@ public class FilmDaoImpl implements FilmDao {
 					}	
 				}
 			} else {
-				String sqlQuery="SELECT film.idFilm FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre ORDER BY "+param;
+				String sqlQuery="SELECT film.idFilm FROM film JOIN genre ON film.idGenre = genre.idGenre ORDER BY "+param;
 				try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
 					try(ResultSet rs = pStm.executeQuery()) {
 						while(rs.next()) {
