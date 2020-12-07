@@ -69,27 +69,20 @@ public class FilmDaoImpl implements FilmDao {
 					}	
 				}
 			} else {
-				String sqlQuery="SELECT * FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre ORDER BY "+param;
+				String sqlQuery="SELECT film.idFilm FROM FILM JOIN GENRE ON film.idGenre = genre.idGenre ORDER BY "+param;
 				try(PreparedStatement pStm = co.prepareStatement(sqlQuery)) {
 					try(ResultSet rs = pStm.executeQuery()) {
 						while(rs.next()) {
-							listOfFilms.add(new Film(
-									rs.getInt("idFilm"),
-									rs.getString("titreFilm"),
-									rs.getString("resumeFilm"),
-									rs.getDate("dateSortie").toLocalDate(),
-									rs.getInt("dureeFilm"),
-									rs.getString("realisateur"),
-									rs.getString("acteur"),
-									rs.getString("imgFilm"),
-									rs.getString("urlBA"),
-									new Genre(rs.getInt("idGenre"),rs.getString("nomGenre")),
-									rs.getInt("valide")));
+							Integer idFilm = rs.getInt("idFilm");
+							Film film = getFilm(idFilm);
+							listOfFilms.add(film);
 						}
+					} catch (FilmNotFoundException e) {
+						e.printStackTrace();
 					}
 				}
 			}
-		} catch (SQLException | IOException e) {
+		} catch (SQLException e) {
 			LOGGER.error("Error while trying to return list of film, whith parameter "+param);
 			e.printStackTrace();
 		}
@@ -133,23 +126,19 @@ public class FilmDaoImpl implements FilmDao {
 	}
 
 	@Override
-	public List<Film> listFavorisFilm(Integer idUtilisateur, String trie) throws UserNotFoundException {
+	public List<Film> listFavorisFilm(Integer idUtilisateur, String param) throws UserNotFoundException {
 		List<Film> listOfFilms = new ArrayList<Film>();
-		Film film = null;
-		LOGGER.debug("Looking for list favoris of user id: "+idUtilisateur+", order by parameter: "+trie);
+		LOGGER.debug("Looking for list favoris of user id: "+idUtilisateur+", order by parameter: "+param);
 		userDao.getUser(idUtilisateur);
 		//boolean notFound = true;
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-			try(PreparedStatement pStm = co.prepareStatement("SELECT preferer.idfilm, titreFilm, dateSortie FROM preferer JOIN film ON film.idFilm = preferer.idFilm WHERE idUtilisateur=? AND favoris = 1 ORDER BY ?;")) {
+			try(PreparedStatement pStm = co.prepareStatement("SELECT preferer.idFilm FROM preferer JOIN film ON film.idFilm = preferer.idFilm WHERE idUtilisateur=? AND favoris = 1 ORDER BY "+param)) {
 				pStm.setInt(1, idUtilisateur);
-				pStm.setString(2, trie);
 				try(ResultSet rs = pStm.executeQuery()) {
 					while(rs.next()) {
-						//notFound = false;
 						Integer idFilm = rs.getInt("idFilm");
-						rs.getString("titreFilm");
-						rs.getDate("dateSortie").toLocalDate();
-						film = getFilm(idFilm);
+						System.out.println(idFilm);
+						Film film = getFilm(idFilm);
 						listOfFilms.add(film);
 					}
 				}

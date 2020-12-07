@@ -53,11 +53,11 @@ public class FavorisServlet extends ServletGenerique {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("utilisateurConnecte");
-		//String trier = request.getParameter("trier");
+		String trier = request.getParameter("trier");
 		//System.out.println("post : " + trier);
 		try {
-			List<Film> listOfFilms = FilmService.getInstance().listFavorisFilm(utilisateur.getId(), null);
 			if(utilisateur != null){
+				List<Film> listOfFilms = FilmService.getInstance().listFavorisFilm(utilisateur.getId(), trier);
 				if(request.getParameter("suppfavori")!=null) {
 					int index = Integer.parseInt(request.getParameter("suppfavori"));
 					int idFilm = listOfFilms.get(index).getId();
