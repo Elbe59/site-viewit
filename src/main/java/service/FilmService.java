@@ -322,6 +322,8 @@ public class FilmService {
 			return ("dateSortie DESC");
 		else if (choix.equals("ancien"))
 			return ("dateSortie");
+		else if (choix.equals("Popularite"))
+			return ("Popularite");
 		else {
 			return ("titreFilm");
 		}
