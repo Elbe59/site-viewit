@@ -205,8 +205,8 @@ public class FilmDaoImpl implements FilmDao {
 			String sqlQuery = "UPDATE `film` SET `valide` = '1' WHERE `film`.`idFilm` = ?";
 			PreparedStatement statement = connection.prepareStatement(sqlQuery);
 			statement.setInt(1, id);
+			statement.executeUpdate();
 			statement.close();
-
 		} catch (SQLException e) {
 			LOGGER.error("error while activating film "+id);
 			e.printStackTrace();
