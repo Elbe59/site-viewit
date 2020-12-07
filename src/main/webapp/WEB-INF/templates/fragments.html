@@ -11,42 +11,48 @@
 	<header th:fragment="header">
 		<div class="menu">
 			<ul>
-				<li id="header_accueil"><a href="../accueil">Accueil</a></li>
-				<li id="header_favoris" th:class="${role_value==0} ? hidden : ''"><a
-					href="../user/favoris">Favoris</a></li>
-				<li id="header_ajoutfilm" th:class="${role_value==0} ? hidden : ''"><a
-					href="../user/ajoutfilm"
-					th:text="${role_value==1} ? 'Demande de Film' : 'Ajout de Film'">Demande
-						de Film</a></li>
-				<li id="header_gestion" class="deroulant"
-					th:classappend="${role_value!=2} ? hidden : ''"><a href="#">Gestion
-						...</a>
+				<li id="header_accueil">
+					<a href="../accueil">Accueil</a>
+				</li>
+				<li id="header_favoris" th:class="${role_value==0} ? hidden : ''">
+					<a href="../user/favoris">Favoris</a>
+				</li>
+				<li id="header_ajoutfilm" th:class="${role_value==0} ? hidden : ''">
+					<a href="../user/ajoutfilm" th:text="${role_value==1} ? 'Demande de Film' : 'Ajout de Film'">Demande de Film</a>
+				</li>
+				<li id="header_gestion" class="deroulant" th:classappend="${role_value!=2} ? hidden : ''">
+					<a href="#">Gestion ...</a>
 					<ul class="sous">
-						<li><a href="../admin/gestionuser" id="header_gestion_user">Gestion
-								Utilisateur</a></li>
-						<li><a href="../admin/gestionfilm">Gestion Film</a></li>
-						<li><a href="../admin/gestiongenre">Gestion Genre</a></li>
-					</ul></li>
+						<li>
+							<a href="../admin/gestionuser" id="header_gestion_user">Gestion Utilisateur</a>
+						</li>
+						<li>
+							<a href="../admin/gestionfilm">Gestion Film</a>
+						</li>
+						<li>
+							<a href="../admin/gestiongenre">Gestion Genre</a>
+						</li>
+					</ul>
+				</li>
 			</ul>
 		</div>
-		<div class="conteneur_co"
-			th:style="${role_value != 0} ? 'display : none' : ''">
+		<div class="conteneur_co" th:style="${role_value != 0} ? 'display : none' : ''">
 			<form method="post" action="../connection" class="formulaire_co">
-				<label>Email: </label> <input type="email" name="email"> <label>Mot
-					de Passe: </label> <input type="password" name="mdp">
+				<label>Email: </label>
+				<input type="email" name="email">
+				<label>Mot de Passe: </label>
+				<input type="password" name="mdp">
 				<div class="btn_center">
 					<button class="btn_profil" type="Submit">Se connecter</button>
 				</div>
 			</form>
 		</div>
-		<div class="conteneur_deco"
-			th:style="${role_value == 0} ? 'display : none' : ''">
+		<div class="conteneur_deco" th:style="${role_value == 0} ? 'display : none' : ''">
 			<form method="post" action="../deconnection" class="formulaire_deco">
 				<label th:text="${utilisateur}" th:id="'userCo='+${userCoId}"></label>
 				<div class="btn_center">
 					<button class="btn_deco" type="Submit">Se déconnecter</button>
 				</div>
-
 			</form>
 		</div>
 	</header>
