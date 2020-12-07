@@ -84,7 +84,8 @@ public class FilmService {
 			throw new FilmAlreadyExistingException("Le film que vous essayez d'ajouter existe déjà.");
 		}
 		else {
-			return filmDao.addFilm(film);
+			Film res = filmDao.addFilm(film);
+			return res;
 		}
 	}
 
@@ -105,7 +106,8 @@ public class FilmService {
 			return null;
 		}
 		Film new_film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre,film.getValide());
-		return filmDao.updateFilm(new_film,idFilm);
+		Film res = filmDao.updateFilm(new_film,idFilm);
+		return res;
 	}
 	
 	public Film deleteFilm(int id) throws FilmNotFoundException {
