@@ -69,12 +69,12 @@ public class GestionUserController {
             }
             else{
                 if(new_password.length()>=7){
-                    utilisateur.setMdp(new_password);
+                    //utilisateur.setMdp(new_password);
                     utilisateur.setMdpHash(new_password);
                     LOGGER.debug("changed password");
                 }
                 else  {
-                    utilisateur.setMdp(previous_password);
+                    //utilisateur.setMdp(previous_password);
                     utilisateur.setMdpHash(previous_password);
                     LOGGER.debug("could not change password");
                 }
@@ -114,7 +114,7 @@ public class GestionUserController {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response listUsers(@FormParam("email") String email,@FormParam("name") String prenom,@FormParam("surname") String nom,@FormParam("password") String password){
-        Utilisateur user=new Utilisateur(1,prenom,nom,email,password,password,false);
+        Utilisateur user=new Utilisateur(1,prenom,nom,email,password,false);
         LOGGER.info("Adding new user "+email);
         try {
             UtilisateurService.getInstance().addUser(user);

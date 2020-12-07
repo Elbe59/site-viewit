@@ -26,7 +26,6 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
                                 rs.getString("prenomUtilisateur"),
                                 rs.getString("nomUtilisateur"),
                                 rs.getString("email"),
-                                rs.getString("mdp"),
                                 rs.getString("mdpHash"),
                                 rs.getInt("admin")==1?true:false));
                     }
@@ -53,7 +52,6 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
                                 rs.getString("prenomUtilisateur"),
                                 rs.getString("nomUtilisateur"),
                                 rs.getString("email"),
-                                rs.getString("mdp"),
                                 rs.getString("mdpHash"),
                                 rs.getInt("admin")==1?true:false);
                     }
@@ -72,13 +70,12 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
     public Utilisateur addUser(Utilisateur user) {
         LOGGER.debug("Trying to add user "+user.getEmail());
         try(Connection co = DataSourceProvider.getDataSource().getConnection()) {
-            try (PreparedStatement pStm = co.prepareStatement("INSERT INTO utilisateur ( prenomUtilisateur, nomUtilisateur, email, mdp,mdpHash, admin) VALUES (?,?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement pStm = co.prepareStatement("INSERT INTO utilisateur ( prenomUtilisateur, nomUtilisateur, email,mdpHash, admin) VALUES (?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS)) {
                 pStm.setString(1, user.getPrenom());
                 pStm.setString(2, user.getNom());
                 pStm.setString(3, user.getEmail());
-                pStm.setString(4, user.getMdp());
-                pStm.setString(5, user.getMdpHash());
-                pStm.setInt(6, user.isAdmin()?1:0);
+                pStm.setString(4, user.getMdpHash());
+                pStm.setInt(5, user.isAdmin()?1:0);
                 pStm.executeUpdate();
                 ResultSet ids = pStm.getGeneratedKeys();
                 if(ids.next()) {
@@ -176,7 +173,6 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
                                 rs.getString("prenomUtilisateur"),
                                 rs.getString("nomUtilisateur"),
                                 rs.getString("email"),
-                                rs.getString("mdp"),
                                 rs.getString("mdpHash"),
                                 rs.getInt("admin")==1?true:false);
                     }

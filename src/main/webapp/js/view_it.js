@@ -425,7 +425,7 @@ let buildUserTableLine = function (user,compteur) {
 		let new_role;
 		if(user.admin===true) {
 			imageValue = "down_user";
-			new_role = "Rétrograder utilisateur";
+			new_role = "R\351trograder cet utilisateur";
 		}
 		else {
 			imageValue = "up";

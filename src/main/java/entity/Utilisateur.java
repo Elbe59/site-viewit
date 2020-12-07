@@ -7,47 +7,19 @@ public class Utilisateur {
 	private String prenom;
 	private String nom;
 	private String email;
-	private String mdp;
 	private String mdpHash;
 	private boolean admin;
 	
-	public Utilisateur(Integer id, String prenom, String nom, String email, String mdp,String mdpHash, boolean admin) {
+	public Utilisateur(Integer id, String prenom, String nom, String email,String mdpHash, boolean admin) {
 		this.id = id;
 		this.prenom = prenom;
 		this.nom = nom;
 		this.email = email;
-		this.mdp = mdp;
-		this.mdpHash=mdpHash;
-		this.admin = admin;
-	}
-
-	public Utilisateur(Integer id, String prenom, String nom, String email, String mdp, boolean admin) {
-		this.id = id;
-		this.prenom = prenom;
-		this.nom = nom;
-		this.email = email;
-		this.mdp = mdp;
-		this.admin = admin;
-	}
-
-	public Utilisateur( String prenom, String nom, String email, String mdp, boolean admin) {
-		this.prenom = prenom;
-		this.nom = nom;
-		this.email = email;
-		this.mdp = mdp;
-		this.admin = admin;
-	}
-
-	public Utilisateur(String prenom, String nom, String email, String mdp,String mdpHash, boolean admin) {
-		this.prenom = prenom;
-		this.nom = nom;
-		this.email = email;
-		this.mdp = mdp;
 		this.mdpHash=mdpHash;
 		this.admin = admin;
 	}
 	
-	public Utilisateur() {}
+
 
 	public Integer getId() {
 		return id;
@@ -72,12 +44,6 @@ public class Utilisateur {
 	}
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	public String getMdp() {
-		return mdp;
-	}
-	public void setMdp(String mdp) {
-		this.mdp = mdp;
 	}
 	public boolean isAdmin() {
 		return admin;

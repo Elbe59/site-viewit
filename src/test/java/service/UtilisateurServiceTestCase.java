@@ -35,9 +35,9 @@ public class UtilisateurServiceTestCase {
     @Test
     public void shouldAddUser() throws UserAlreadyExistingException {
         //GIVEN
-        Utilisateur user = new Utilisateur("prenom3","nom3","email3@gmail.com","mdp3", MotDePasseUtils.genererMotDePasse("mdpHash3"),false);
-        Utilisateur user1=new Utilisateur("prenom1", "nom1", "email1@gmail.com", "mdp1", "mdpHash1", false);
-        Utilisateur user2=new Utilisateur("prenom2", "nom2", "email2@gmail.com", "mdp2", "mdpHash2", true);
+        Utilisateur user = new Utilisateur(1,"prenom3","nom3","email3@gmail.com","mdpHash3",false);
+        Utilisateur user1=new Utilisateur(2,"prenom1", "nom1", "email1@gmail.com", "mdpHash1", false);
+        Utilisateur user2=new Utilisateur(3,"prenom2", "nom2", "email2@gmail.com","mdpHash2", true);
         List<Utilisateur> utilisateurs=new ArrayList<Utilisateur>();
         utilisateurs.add(user1);
         utilisateurs.add(user2);
@@ -53,9 +53,9 @@ public class UtilisateurServiceTestCase {
     @Test
     public void shouldAddUserThrowUserAlreadyExistingException() throws UserAlreadyExistingException {
         //GIVEN
-        Utilisateur user = new Utilisateur("prenom3","nom3","email2@gmail.com","mdp3", "mdpHash3",false);
-        Utilisateur user1=new Utilisateur("prenom1", "nom1", "email1@gmail.com", "mdp1", "mdpHash1", false);
-        Utilisateur user2=new Utilisateur("prenom2", "nom2", "email2@gmail.com", "mdp2", "mdpHash2", true);
+        Utilisateur user = new Utilisateur(1,"prenom3","nom3","email2@gmail.com", "mdpHash3",false);
+        Utilisateur user1=new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdpHash1", false);
+        Utilisateur user2=new Utilisateur(1,"prenom2", "nom2", "email2@gmail.com", "mdpHash2", true);
         List<Utilisateur> utilisateurs=new ArrayList<Utilisateur>();
         utilisateurs.add(user1);
         utilisateurs.add(user2);
@@ -74,8 +74,8 @@ public class UtilisateurServiceTestCase {
 
     @Test
     public void shouldListUser() {
-        Utilisateur user1=new Utilisateur("prenom1", "nom1", "email1@gmail.com", "mdp1", "mdpHash1", false);
-        Utilisateur user2=new Utilisateur("prenom2", "nom2", "email2@gmail.com", "mdp2", "mdpHash2", false);
+        Utilisateur user1=new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com",  "mdpHash1", false);
+        Utilisateur user2=new Utilisateur(1,"prenom2", "nom2", "email2@gmail.com",  "mdpHash2", false);
         List<Utilisateur> utilisateurs=new ArrayList<Utilisateur>();
         utilisateurs.add(user1);
         utilisateurs.add(user2);
@@ -91,7 +91,7 @@ public class UtilisateurServiceTestCase {
     public void shouldGetAnExistantUser() throws UserNotFoundException {
         //GIVEN
         int id = 1;
-        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", false);
+        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com","mdpHash1", false);
         Mockito.when(userDao.getUser(id)).thenReturn(user);
         //WHEN
         Utilisateur get_user=userService.getUser(id);
@@ -115,7 +115,7 @@ public class UtilisateurServiceTestCase {
     public void shouldGetAnExistantUserByEmail() throws UserNotFoundException {
         //GIVEN
         String email="prenom.nom@gmail.com";
-        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", false);
+        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdpHash1", false);
         Mockito.when(userDao.getUserByEmail(email)).thenReturn(user);
         //WHEN
         Utilisateur get_user=userService.getUserByEmail(email);
@@ -139,7 +139,7 @@ public class UtilisateurServiceTestCase {
     public void shouldDeleteUser() throws UserNotFoundException, SQLException {
         //given
         int id = 1;
-        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", false);
+        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdpHash1", false);
         Mockito.when(userDao.getUser(id)).thenReturn(user);
         Mockito.when(userDao.deleteUser(id)).thenReturn(user);
         //when
@@ -166,8 +166,8 @@ public class UtilisateurServiceTestCase {
     public void shouldChangeRoleUserToAdmin() throws SQLException, UserAlreadyDownException, UserAlreadyAdminException, UserNotFoundException {
         //given
         int id=1;
-        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", false);
-        Utilisateur userUp = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", true);
+        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdpHash1", false);
+        Utilisateur userUp = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com","mdpHash1", true);
         Mockito.when(userDao.getUser(id)).thenReturn(user);
         Mockito.when(userDao.changeRoleUser("up",id)).thenReturn(userUp);
         //when
@@ -183,8 +183,8 @@ public class UtilisateurServiceTestCase {
     public void shouldChangeRoleUserToUser() throws SQLException, UserAlreadyDownException, UserAlreadyAdminException, UserNotFoundException {
         //given
         int id=1;
-        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", true);
-        Utilisateur userDown = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", false);
+        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com","mdpHash1", true);
+        Utilisateur userDown = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com","mdpHash1", false);
         Mockito.when(userDao.getUser(id)).thenReturn(user);
         Mockito.when(userDao.changeRoleUser("down",id)).thenReturn(userDown);
         //when
@@ -200,7 +200,7 @@ public class UtilisateurServiceTestCase {
     public void shouldChangeRoleUserToAdminAndThrowUserAlreadyAdminException() throws UserAlreadyAdminException, SQLException, UserAlreadyDownException, UserNotFoundException {
         //GIVEN
         int id = 1;
-        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", true);
+        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdpHash1", true);
         Mockito.when(userDao.getUser(id)).thenReturn(user);
         try{
             userService.changeRoleUser("up",id);
@@ -215,7 +215,7 @@ public class UtilisateurServiceTestCase {
     public void shouldChangeRoleUserToUserAndThrowUserAlreadyDownException() throws UserAlreadyAdminException, SQLException, UserAlreadyDownException, UserNotFoundException {
         //GIVEN
         int id = 1;
-        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", false);
+        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdpHash1", false);
         Mockito.when(userDao.getUser(id)).thenReturn(user);
         try{
             userService.changeRoleUser("down",id);
@@ -244,10 +244,10 @@ public class UtilisateurServiceTestCase {
     public void shouldModifyUser() throws SQLException, UserAlreadyExistingException, UserNotFoundException {
     	//GIVEN
         int id=1;
-    	Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", false);
-        Utilisateur new_user = new Utilisateur(1,"pren", "no", "ema1@gmail.com", "mp1","mdpash1", false);
-        Utilisateur user1=new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1", "mdpHash1", false);
-        Utilisateur user2=new Utilisateur(2,"prenom2", "nom2", "email2@gmail.com", "mdp2", "mdpHash2", false);
+    	Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com","mdpHash1", false);
+        Utilisateur new_user = new Utilisateur(1,"pren", "no", "ema1@gmail.com", "mdpash1", false);
+        Utilisateur user1=new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdpHash1", false);
+        Utilisateur user2=new Utilisateur(2,"prenom2", "nom2", "email2@gmail.com", "mdpHash2", false);
         List<Utilisateur> utilisateurs=new ArrayList<Utilisateur>();
         utilisateurs.add(user1);
         utilisateurs.add(user2);
@@ -268,7 +268,7 @@ public class UtilisateurServiceTestCase {
     public void shouldModifyUserButThrowUserNotFoundException() throws SQLException, UserAlreadyExistingException, UserNotFoundException {
         //GIVEN
         int id = 1;
-        Utilisateur new_user = new Utilisateur(1,"pren", "no", "ema1@gmail.com", "mp1","mdpash1", false);
+        Utilisateur new_user = new Utilisateur(1,"pren", "no", "ema1@gmail.com", "mdpash1", false);
         Mockito.when(userDao.getUser(id)).thenThrow(new UserNotFoundException("Utilisateur inexistant"));
 
         userService.modifyUser(new_user);
@@ -281,10 +281,10 @@ public class UtilisateurServiceTestCase {
     public void shouldModifyUserButThrowUserAlreadyExistingException() throws SQLException, UserAlreadyExistingException, UserNotFoundException {
         //GIVEN
         int id = 1;
-        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1","mdpHash1", false);
-        Utilisateur new_user = new Utilisateur(1,"pren", "no", "email2@gmail.com", "mp1","mdpash1", false);
-        Utilisateur user1=new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdp1", "mdpHash1", false);
-        Utilisateur user2=new Utilisateur(2,"prenom2", "nom2", "email2@gmail.com", "mdp2", "mdpHash2", false);
+        Utilisateur user = new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com", "mdpHash1", false);
+        Utilisateur new_user = new Utilisateur(1,"pren", "no", "email2@gmail.com", "mdpash1", false);
+        Utilisateur user1=new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com",  "mdpHash1", false);
+        Utilisateur user2=new Utilisateur(2,"prenom2", "nom2", "email2@gmail.com",  "mdpHash2", false);
         List<Utilisateur> utilisateurs=new ArrayList<Utilisateur>();
         utilisateurs.add(user1);
         utilisateurs.add(user2);
@@ -304,8 +304,8 @@ public class UtilisateurServiceTestCase {
     
     @Test
     public void shouldListUsersDto() {
-        Utilisateur user1=new Utilisateur("prenom1", "nom1", "email1@gmail.com", "mdp1", "mdpHash1", false);
-        Utilisateur user2=new Utilisateur("prenom2", "nom2", "email2@gmail.com", "mdp2", "mdpHash2", true);
+        Utilisateur user1=new Utilisateur(1,"prenom1", "nom1", "email1@gmail.com",  "mdpHash1", false);
+        Utilisateur user2=new Utilisateur(1,"prenom2", "nom2", "email2@gmail.com", "mdpHash2", true);
         List<Utilisateur> utilisateurs=new ArrayList<Utilisateur>();
         utilisateurs.add(user1);
         utilisateurs.add(user2);
@@ -315,12 +315,13 @@ public class UtilisateurServiceTestCase {
         //THEN
         Assertions.assertThat(usersDto).hasSize(2);
         Assertions.assertThat(usersDto).extracting(
+                UtilisateurDto::getId,
                 UtilisateurDto::getPrenom,
                 UtilisateurDto::getNom,
                 UtilisateurDto::getEmail,
                 UtilisateurDto::isAdmin).containsOnly(
-                tuple("prenom1", "nom1", "email1@gmail.com", false),
-                tuple("prenom2", "nom2", "email2@gmail.com", true));
+                tuple(1,"prenom1", "nom1", "email1@gmail.com",false),
+                tuple(1,"prenom2", "nom2", "email2@gmail.com",true));
     	
     }
 }
