@@ -27,17 +27,16 @@ public class ConnectionServlet extends HttpServlet {
         try {
             utilisateur = UtilisateurService.getInstance().getUserByEmail(email);
 
-        if(utilisateur !=null){
-            String pwdHache=utilisateur.getMdpHash();
-            LOGGER.debug("email existing in the db");
-            if(MotDePasseUtils.validerMotDePasse(pwd, pwdHache)) {
-                request.getSession().setAttribute("utilisateurConnecte", utilisateur);
-                LOGGER.info("psw correct, "+email+" logging in");
-            } else {
-                LOGGER.info("wrong password");
-            }
-
-        }
+	        if(utilisateur !=null){
+	            String pwdHache=utilisateur.getMdpHash();
+	            LOGGER.debug("email existing in the db");
+	            if(MotDePasseUtils.validerMotDePasse(pwd, pwdHache)) {
+	                request.getSession().setAttribute("utilisateurConnecte", utilisateur);
+	                LOGGER.info("psw correct, "+email+" logging in");
+	            } else {
+	                LOGGER.info("wrong password");
+	            }
+	        }
         } catch (UserNotFoundException e) {
             LOGGER.debug("email not found");
             e.printStackTrace();
