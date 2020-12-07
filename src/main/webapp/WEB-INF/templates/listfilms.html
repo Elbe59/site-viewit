@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head(ViewIt-GestionFilm)}"></head>
-  <body>
+<header th:replace="~{fragments :: header}"></header>
+<body>
 	<!-- Navigation menu -->
-	<header th:replace="~{fragments :: header}"></header>
-
 	<div class="container">
 		<div>
 			<div>
@@ -23,33 +22,58 @@
 						</tr>
 					</thead>
 					<tbody>
-					<tr th:each="film : ${listFilms}">
-						<td th:text="${filmStat.index +1}">1</td>
-						<td th:text="${film.titre}">Blade Runner 2049</td>
-						<td th:text="${film.genre.nom}">Science fiction</td>
-						<td th:text="${#temporals.format(film.dateSortie, 'd MMMM yyyy')}">4 october 2017</td>
-						<td th:text="${film.realisateur}">Denis Villeneuve</td>
-						<td class="small_column">
-							<form method="post" >
-								<button  onclick="if(confirm('Etes vous sur de vouloir activer / désactiver ce film ?')){}else{return false;}" th:name="${film.valide == 0}? 'active' : 'desactive'" th:value="${filmStat.index}" th:title="${film.valide == 0} ? ${'Activer '+film.titre} : ${'Désactiver '+film.titre}" class="btn-delete" type="submit" th:id="${filmStat.index}"><img class="img_liste" th:src="${film.valide == 0} ? '../images/icones/desactive_icon.png' : '../images/icones/active_icon.png'"></button>
-							</form>
-						</td>
-						<td  class="small_column"><a th:href="${'../film?id=' + film.id}" th:title="${'Détail de: ' +film.titre}"><img  th:alt="${'Détail de: ' +film.titre}" class="img_liste" src="../images/icones/loupe.png"></a></td>
-						<td class="small_column">
-							<div class="column-gestion">
-
-								<a th:title="${'Modifier ' +film.titre}" th:href="${'../admin/modifier_film?id='+film.id}" ><img class="img_liste" src="../images/icones/modification.png"></a>
-								<form method="post" >
-									<button  onclick="if(confirm('Etes vous sur de vouloir supprimer ce film ?')){}else{return false;}" name="supp" th:value="${filmStat.index}" th:title="${'Supprimer ' +film.titre}" class="btn-delete" type="submit" th:id="${filmStat.index}"><img class="img_liste" src="../images/icones/supprimer.png"></button>
+						<tr th:each="film : ${listFilms}">
+							<td th:text="${filmStat.index +1}">1</td>
+							<td th:text="${film.titre}">Blade Runner 2049</td>
+							<td th:text="${film.genre.nom}">Science fiction</td>
+							<td
+								th:text="${#temporals.format(film.dateSortie, 'd MMMM yyyy')}">4
+								october 2017</td>
+							<td th:text="${film.realisateur}">Denis Villeneuve</td>
+							<td class="small_column">
+								<form method="post" action="">
+									<button
+										onclick="if(confirm('Etes vous sur de vouloir activer / désactiver ce film ?')){}else{return false;}"
+										th:name="${film.valide == 0}? 'active' : 'desactive'"
+										th:value="${filmStat.index}"
+										th:title="${film.valide == 0} ? ${'Activer '+film.titre} : ${'Désactiver '+film.titre}"
+										class="btn-delete" type="submit" th:id="${filmStat.index}">
+										<img class="img_liste"
+											th:src="${film.valide == 0} ? '../images/icones/desactive_icon.png' : '../images/icones/active_icon.png'"
+											src="" alt="">
+									</button>
 								</form>
-							</div>
-						</td>
-					</tr>
+							</td>
+							<td class="small_column"><a
+								th:href="${'../film?id=' + film.id}"
+								th:title="${'Détail de: ' +film.titre}"><img
+									th:alt="${'Détail de: ' +film.titre}" class="img_liste"
+									src="../images/icones/loupe.png" alt=""></a></td>
+							<td class="small_column">
+								<div class="column-gestion">
+
+									<a th:title="${'Modifier ' +film.titre}"
+										th:href="${'../admin/modifier_film?id='+film.id}"><img
+										class="img_liste" src="../images/icones/modification.png"
+										alt=""></a>
+									<form method="post" action="">
+										<button
+											onclick="if(confirm('Etes vous sur de vouloir supprimer ce film ?')){}else{return false;}"
+											name="supp" th:value="${filmStat.index}"
+											th:title="${'Supprimer ' +film.titre}" class="btn-delete"
+											type="submit" th:id="${filmStat.index}">
+											<img class="img_liste" src="../images/icones/supprimer.png"
+												alt="">
+										</button>
+									</form>
+								</div>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
-    	</div>
+		</div>
 	</div>
-  </body>
-  <footer th:replace="~{fragments :: footer}"></footer>
+</body>
+<footer th:replace="~{fragments :: footer}"></footer>
 </html>

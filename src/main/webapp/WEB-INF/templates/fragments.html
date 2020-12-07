@@ -1,60 +1,65 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="head(pageName)">
-    <title th:text="${pageName}">ViewIt - Accueil</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../css/viewit.css">
-    <script src="../js/view_it.js" type="application/javascript"></script>
+	<title th:text="${pageName}">ViewIt - Accueil</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="../css/viewit.css">
+	<script src="../js/view_it.js" type="application/javascript"></script>
 </head>
 <body>
-<!--Création du pied de page-->
-    <header th:fragment="header" >
-        <div class="menu">
-            <ul>
-                <li id="header_accueil"><a href="../accueil">Accueil</a></li>
-                <li id="header_favoris" th:class="${role_value==0} ? hidden : ''"><a href="../user/favoris">Favoris</a></li>
-                <li id="header_ajoutfilm" th:class="${role_value==0} ? hidden : ''"><a href="../user/ajoutfilm" th:text="${role_value==1} ? 'Demande de Film' : 'Ajout de Film'">Demande de Film</a></li>
-                <li id="header_gestion" class="deroulant" th:classappend="${role_value!=2} ? hidden : ''"><a href="#">Gestion ...</a>
-                    <ul class="sous">
-                        <li><a  href="../admin/gestionuser" id="header_gestion_user">Gestion Utilisateur</a></li>
-                        <li><a href="../admin/gestionfilm">Gestion Film</a></li>
-                        <li><a href="../admin/gestiongenre">Gestion Genre</a></li>
-                       <!-- <li><a href="../user/ajoutfilm">Ajout de Film</a></li> -->
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div class="conteneur_co" th:style="${role_value != 0} ? 'display : none' : ''">
-            <form method="post" action="../connection" class="formulaire_co">
-                <label>Email: </label>
-                <input type="email" name="email">
-                <label>Mot de Passe: </label>
-                <input type="password" name="mdp">
-                <div class="btn_center">
-                    <button class="btn_profil" type="Submit">Se connecter</button>
-                </div>
-            </form>
-        </div>
-        <div class="conteneur_deco" th:style="${role_value == 0} ? 'display : none' : ''">
-            <form method="post" action="../deconnection" class="formulaire_deco">
-                <label th:text="${utilisateur}" th:id="'userCo='+${userCoId}"></label>
-                <div class="btn_center">
-                    <button class="btn_deco" type="Submit">Se déconnecter</button>
-                </div>
+	<!--Création du pied de page-->
+	<header th:fragment="header">
+		<div class="menu">
+			<ul>
+				<li id="header_accueil"><a href="../accueil">Accueil</a></li>
+				<li id="header_favoris" th:class="${role_value==0} ? hidden : ''"><a
+					href="../user/favoris">Favoris</a></li>
+				<li id="header_ajoutfilm" th:class="${role_value==0} ? hidden : ''"><a
+					href="../user/ajoutfilm"
+					th:text="${role_value==1} ? 'Demande de Film' : 'Ajout de Film'">Demande
+						de Film</a></li>
+				<li id="header_gestion" class="deroulant"
+					th:classappend="${role_value!=2} ? hidden : ''"><a href="#">Gestion
+						...</a>
+					<ul class="sous">
+						<li><a href="../admin/gestionuser" id="header_gestion_user">Gestion
+								Utilisateur</a></li>
+						<li><a href="../admin/gestionfilm">Gestion Film</a></li>
+						<li><a href="../admin/gestiongenre">Gestion Genre</a></li>
+					</ul></li>
+			</ul>
+		</div>
+		<div class="conteneur_co"
+			th:style="${role_value != 0} ? 'display : none' : ''">
+			<form method="post" action="../connection" class="formulaire_co">
+				<label>Email: </label> <input type="email" name="email"> <label>Mot
+					de Passe: </label> <input type="password" name="mdp">
+				<div class="btn_center">
+					<button class="btn_profil" type="Submit">Se connecter</button>
+				</div>
+			</form>
+		</div>
+		<div class="conteneur_deco"
+			th:style="${role_value == 0} ? 'display : none' : ''">
+			<form method="post" action="../deconnection" class="formulaire_deco">
+				<label th:text="${utilisateur}" th:id="'userCo='+${userCoId}"></label>
+				<div class="btn_center">
+					<button class="btn_deco" type="Submit">Se déconnecter</button>
+				</div>
 
-            </form>
-        </div>
-    </header>
-    <!--Création du pied de page-->
-    <footer id="footer" th:fragment="footer">
-        <p>Ce projet a été réalisé en groupe de projet ITI au semestre 7.</p>
-        <p>Membre du groupe:</p>
-        <ul>
-            <li>Kylian Barthelemot</li>
-            <li>Quentin Callens</li>
-            <li>Emile Mongenet</li>
-            <li>Pierre Sanchez</li>
-        </ul>
-    </footer>
+			</form>
+		</div>
+	</header>
+	<!--Création du pied de page-->
+	<footer id="footer" th:fragment="footer">
+		<p>Ce projet a été réalisé en groupe de projet ITI au semestre 7.</p>
+		<p>Membre du groupe:</p>
+		<ul>
+			<li>Kylian Barthelemot</li>
+			<li>Quentin Callens</li>
+			<li>Emile Mongenet</li>
+			<li>Pierre Sanchez</li>
+		</ul>
+	</footer>
 </body>
 </html>
