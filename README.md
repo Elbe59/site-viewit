@@ -70,9 +70,9 @@ Lorsque vous vous rendez sur la page détail d'un film, vous avez toujours la po
 Mais vous pouvez également liker ou disliker un film.
 Le pourcentage étant calculé à partir du nombre de like et de dislike, devrait se mettre à jour.
 
-### 3.3 Partager un film
+### 3.3 Demander l'ajout d'un film
 
-En tant qu'utilisateur vous avez égalment accès à une 3ème page permettant de partager un film.
+En tant qu'utilisateur vous avez égalment accès à une 3ème page permettant de demander l'ajout d'un film.
 Vous pouvez alors remplir les champs du film puis enregistrer.
 Votre film ne sera pas visible tout de suite car celui-ci doit d'abord être vérifié puis validé par un administrateur.
 
