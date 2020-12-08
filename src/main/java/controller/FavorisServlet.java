@@ -25,10 +25,10 @@ public class FavorisServlet extends ServletGenerique {
 	private static final long serialVersionUID = 1L;
 	static final Logger LOGGER = LogManager.getLogger();
 
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		WebContext context = new WebContext(req, resp, req.getServletContext());
-		Utilisateur utilisateur = (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
-		String trier = req.getParameter("trier");
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		WebContext context = new WebContext(request, response, request.getServletContext());
+		Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("utilisateurConnecte");
+		String trier = request.getParameter("trier");
 		List<Film> listOfFilms = null;
 		if(utilisateur != null){
 			LOGGER.debug("loading page favoris of user "+utilisateur.getEmail());
@@ -43,8 +43,8 @@ public class FavorisServlet extends ServletGenerique {
 		} else {
 			LOGGER.error("Vous n'êtes pas connecté");
 		}
-		TemplateEngine engine = createTemplateEngine(req.getServletContext());
-		engine.process("favoris", context, resp.getWriter());
+		TemplateEngine engine = createTemplateEngine(request.getServletContext());
+		engine.process("favoris", context, response.getWriter());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

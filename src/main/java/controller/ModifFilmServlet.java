@@ -30,9 +30,9 @@ public class ModifFilmServlet extends ServletGenerique {
 	private FilmService filmService = FilmService.getInstance();
 	static final Logger LOGGER = LogManager.getLogger(HomeServlet.class);
 
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		WebContext context = new WebContext(req, resp, req.getServletContext());
-		int id = Integer.parseInt(req.getParameter("id"));
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		WebContext context = new WebContext(request, response, request.getServletContext());
+		int id = Integer.parseInt(request.getParameter("id"));
 		LOGGER.debug("loading page modif film for film "+id);
 		Film filmToModif= null;
 		try {
@@ -45,12 +45,12 @@ public class ModifFilmServlet extends ServletGenerique {
 		context.setVariable("genres", filmService.listGenre());
 		context.setVariable("id", id);
 		context.setVariable("film", filmToModif);
-		TemplateEngine engine = createTemplateEngine(req.getServletContext());
-		engine.process("modifFilm", context, resp.getWriter());
+		TemplateEngine engine = createTemplateEngine(request.getServletContext());
+		engine.process("modifFilm", context, response.getWriter());
 	}
 
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Integer idFilm =Integer.parseInt(req.getParameter("id"));
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Integer idFilm =Integer.parseInt(request.getParameter("id"));
 		Film previousFilm = null;
 		try {
 			previousFilm = filmService.getFilm(idFilm);
@@ -58,17 +58,17 @@ public class ModifFilmServlet extends ServletGenerique {
 			e.printStackTrace();
 		}
 		List<Genre> listGenre = FilmService.getInstance().listGenre();
-		String titre = req.getParameter("titre");
-		String resume = req.getParameter("resume");
-		String dateSortieStr = req.getParameter("dateSortie");
-		int duree = Integer.parseInt(req.getParameter("duree"));
-		String realisateur = req.getParameter("realisateur");
-		String acteur = req.getParameter("acteur");
-		int genreIndex = Integer.parseInt(req.getParameter("genre"));
+		String titre = request.getParameter("titre");
+		String resume = request.getParameter("resume");
+		String dateSortieStr = request.getParameter("dateSortie");
+		int duree = Integer.parseInt(request.getParameter("duree"));
+		String realisateur = request.getParameter("realisateur");
+		String acteur = request.getParameter("acteur");
+		int genreIndex = Integer.parseInt(request.getParameter("genre"));
 		Genre genre1 = listGenre.get(genreIndex);
-		Part part = req.getPart("fichier");
+		Part part = request.getPart("fichier");
 
-		String urlBA = req.getParameter("url");
+		String urlBA = request.getParameter("url");
 		String extension = FilenameUtils.getExtension(part.getSubmittedFileName());
 		InputStream in = part.getInputStream();
 		String fileNameForStorage = "";
@@ -92,6 +92,6 @@ public class ModifFilmServlet extends ServletGenerique {
 			e.printStackTrace();
 		}
 		LOGGER.debug("redirecting user to gestion film");
-		resp.sendRedirect("../admin/gestionfilm");
+		response.sendRedirect("../admin/gestionfilm");
 	}
 }

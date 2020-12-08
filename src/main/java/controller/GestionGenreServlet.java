@@ -21,13 +21,13 @@ public class GestionGenreServlet extends ServletGenerique {
     private static final long serialVersionUID = 1L;
     static final Logger LOGGER = LogManager.getLogger();
 
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOGGER.debug("Loading gestion genres");
-        WebContext context = new WebContext(req, resp, req.getServletContext());
+        WebContext context = new WebContext(request, response, request.getServletContext());
         List<GenreDto> listOfGenres = FilmService.getInstance().listGenreDto();
         context.setVariable("listGenres", listOfGenres);
-        TemplateEngine engine = createTemplateEngine(req.getServletContext());
-        engine.process("listgenres", context, resp.getWriter());
+        TemplateEngine engine = createTemplateEngine(request.getServletContext());
+        engine.process("listgenres", context, response.getWriter());
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

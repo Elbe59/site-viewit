@@ -23,13 +23,13 @@ public class GestionFilmServlet extends ServletGenerique {
     static final Logger LOGGER = LogManager.getLogger();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOGGER.debug("Loading gestion film");
-        WebContext context = new WebContext(req, resp, req.getServletContext());
+        WebContext context = new WebContext(request, response, request.getServletContext());
         List<Film> listOfFilms = FilmService.getInstance().listFilms("valide");
         context.setVariable("listFilms", listOfFilms);
-        TemplateEngine engine = createTemplateEngine(req.getServletContext());
-        engine.process("listfilms", context, resp.getWriter());
+        TemplateEngine engine = createTemplateEngine(request.getServletContext());
+        engine.process("listfilms", context, response.getWriter());
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

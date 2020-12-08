@@ -26,16 +26,16 @@ public class HomeServlet extends ServletGenerique {
 	private static final long serialVersionUID = 1L;
 	static final Logger LOGGER = LogManager.getLogger(HomeServlet.class);
 
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		LOGGER.debug("Loading home page");
-		String trier = req.getParameter("trier");
+		String trier = request.getParameter("trier");
 		List<Film> listOfFilms = FilmService.getInstance().listFilms(trier);
-        WebContext context = new WebContext(req, resp, req.getServletContext());
+        WebContext context = new WebContext(request, response, request.getServletContext());
 
 		context.setVariable("listFilms", listOfFilms);
 		context.setVariable("trieSelect", trier);
-        TemplateEngine engine = createTemplateEngine(req.getServletContext());
-        engine.process("accueil", context, resp.getWriter());
+        TemplateEngine engine = createTemplateEngine(request.getServletContext());
+        engine.process("accueil", context, response.getWriter());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

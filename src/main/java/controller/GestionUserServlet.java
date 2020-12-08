@@ -19,16 +19,16 @@ public class GestionUserServlet extends ServletGenerique {
     static final Logger LOGGER = LogManager.getLogger();
     private static final long serialVersionUID = 1L;
 
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOGGER.debug("loading gestion user page");
-        WebContext context = new WebContext(req, resp, req.getServletContext());
-        Utilisateur utilisateur = (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
+        WebContext context = new WebContext(request, response, request.getServletContext());
+        Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("utilisateurConnecte");
         List<Utilisateur> listUser = UtilisateurService.getInstance().listUser();
         context.setVariable("listUsers", listUser);
         context.setVariable("utilisateurCo", utilisateur);
         if(utilisateur!=null){
-            TemplateEngine engine = createTemplateEngine(req.getServletContext());
-            engine.process("listuser", context, resp.getWriter());
+            TemplateEngine engine = createTemplateEngine(request.getServletContext());
+            engine.process("listuser", context, response.getWriter());
         }
     }
 }

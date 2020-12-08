@@ -22,9 +22,9 @@ public class ListFilmServlet extends ServletGenerique {
 	private static final ObjectMapper MAPPER = new ObjectMapper();
 	static final Logger LOGGER = LogManager.getLogger(HomeServlet.class);
 	
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<FilmDto> listFilm = new ArrayList<FilmDto>();
-		Utilisateur utilisateur = (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
+		Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("utilisateurConnecte");
 		if (utilisateur!=null){
 			listFilm = FilmService.getInstance().listFilmsDto(utilisateur.getId());
 			LOGGER.debug("loading list film for user "+utilisateur.getId());
@@ -32,6 +32,6 @@ public class ListFilmServlet extends ServletGenerique {
 			listFilm = FilmService.getInstance().listFilmsDto(0);
 		}
         String filmJson = MAPPER.writeValueAsString(listFilm);
-        resp.getWriter().print(filmJson);
+        response.getWriter().print(filmJson);
     }
 }

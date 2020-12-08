@@ -30,31 +30,31 @@ public class AddFilmServlet extends ServletGenerique {
 	private FilmService filmService = FilmService.getInstance();
 	static final Logger LOGGER = LogManager.getLogger();
 
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		LOGGER.debug("doGet add film, building the web page");
-		WebContext context = new WebContext(req, resp, req.getServletContext());
+		WebContext context = new WebContext(request, response, request.getServletContext());
         context.setVariable("genres", filmService.listGenre());
-        TemplateEngine engine = createTemplateEngine(req.getServletContext());
-        engine.process("ajoutFilm", context, resp.getWriter());
+        TemplateEngine engine = createTemplateEngine(request.getServletContext());
+        engine.process("ajoutFilm", context, response.getWriter());
 	}
 
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		LOGGER.debug("Send form to add a film");
 		List<Genre> listGenre=FilmService.getInstance().listGenre();
-		String titre = req.getParameter("titre");
+		String titre = request.getParameter("titre");
 		LOGGER.debug("title is "+titre);
-		String resume = req.getParameter("resume");
-		String dateSortieStr = req.getParameter("dateSortie");
-		int duree = Integer.parseInt(req.getParameter("duree"));
-		String realisateur = req.getParameter("realisateur");
-		String acteur = req.getParameter("acteur");
-		int genreIndex = Integer.parseInt(req.getParameter("genre"));
+		String resume = request.getParameter("resume");
+		String dateSortieStr = request.getParameter("dateSortie");
+		int duree = Integer.parseInt(request.getParameter("duree"));
+		String realisateur = request.getParameter("realisateur");
+		String acteur = request.getParameter("acteur");
+		int genreIndex = Integer.parseInt(request.getParameter("genre"));
 		Genre genre1=listGenre.get(genreIndex);
-		Utilisateur utilisateur= (Utilisateur) req.getSession().getAttribute("utilisateurConnecte");
+		Utilisateur utilisateur= (Utilisateur) request.getSession().getAttribute("utilisateurConnecte");
 		String fileNameForStorage = "filmInconnu.jpg";
 		if(utilisateur.isAdmin()){
 			LOGGER.debug("Film add by admin "+utilisateur.getEmail());
-			Part part = req.getPart("fichier");
+			Part part = request.getPart("fichier");
 			String extension= FilenameUtils.getExtension(part.getSubmittedFileName());
 			InputStream in=part.getInputStream();
 			try {
@@ -62,7 +62,7 @@ public class AddFilmServlet extends ServletGenerique {
 			} catch (FileStorageException e) {
 				e.printStackTrace();
 			}
-			String urlBA = req.getParameter("url");
+			String urlBA = request.getParameter("url");
 			try {
 				FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,fileNameForStorage,urlBA,genre1);
 			} catch (FilmAlreadyExistingException e) {
@@ -80,6 +80,6 @@ public class AddFilmServlet extends ServletGenerique {
 			}
 		}
 		LOGGER.debug("redirecting user to home page");
-		resp.sendRedirect("../accueil");
+		response.sendRedirect("../accueil");
 	}
 }
