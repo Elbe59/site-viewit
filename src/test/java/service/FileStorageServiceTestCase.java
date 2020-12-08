@@ -167,5 +167,9 @@ public class FileStorageServiceTestCase {
     public static void createOnceAfterClass() throws IOException {
     	FileManager.removeDirectory(tmpDirectory);
     }
+
+	public static File getDatadirectory() {
+		return dataDirectory;
+	}
 	
 }

@@ -15,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import utils.MotDePasseUtils;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
