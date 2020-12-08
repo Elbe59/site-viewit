@@ -1,22 +1,35 @@
 # Site-Viewit
 
-## Step 0 : Before using
+## Step 0 : Avant utilisation
 
-This web site is to share and list your favorite films, to look for films, see the synopsis and the resume.
+### Objectif du site
 
-## Step 1 : Initialization
+Ce site internet permet à un utilisateur de rechercher des films, d'en ajouter en favoris et de les noter.
 
-1. Download project
-2. Import project in Eclipse or IntellJ (Maven Project)
-3. Add dependencies with Maven :
+## Step 1 : Initialisation
 
-| groupId           | artifactId        | version   | scope |
-| -----------       |---------          | -----     | ----- |
-| `junit`           | `junit`           | `4.13`    | `test`|
-| `org.assertj`     | `assertj-core`    | `3.13.2`  | `test`|
-| `org.mockito`     | `mockito-core`    | `3.5.7`   | `test`|
+1. Télécharger le projet
 
-4. Initialize your images.properties
+Cloner ce projet : https://gitlab.com/hei-projet/hei-projet-2020/site-viewit.git.
+
+2. Importer le projet dans Eclipse ou IntellJ (Projet Maven)
+
+Ouvrir le projet avec un des logiciels.
+Vérifier que le chemin d'accés est bien "/" et non "viewit".
+
+3. Initialiser vos "images.properties"
+
+Se rendre dans le fichier "src/main/ressources/images.properties".
+Remplacer le chemin d'accés par votre propre chemin d'accés : "{your way}/data/filmImages".
+
+Vous pouvez trouver votre chemin dans vos properties.
+
+Faire de même dans le fichier "src/main/test/ressources/images.properties".
+Le chemin : "{your way}/src/test/resources/dataTest".
+
+
+
+
 
 ## Step 2 : Unknown user
 
