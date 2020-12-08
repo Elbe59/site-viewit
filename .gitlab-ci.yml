@@ -1,36 +1,36 @@
-hello-world:
-  image : alpine:latest
-  script: echo "Hello World"
+# hello-world:
+#   image : alpine:latest
+#   script: echo "Hello World"
 
-stages:
-  - test
-  - package
-  - install
+# stages:
+#   - test
+#   - package
+#   - install
 
 
 
-package-java-job:
-  image: maven:latest
-  script: mvn package -DskipTests
-  stage: package
-  artifacts:
-    paths: 
-      - target/viewit
-    expire_in: 1 hour
+# package-java-job:
+#   image: maven:latest
+#   script: mvn package -DskipTests
+#   stage: package
+#   artifacts:
+#     paths: 
+#       - target/viewit
+#     expire_in: 1 hour
 
-install-image-job:
-  stage: install
-  dependencies:
-    - package-java-job
-  services:
-    - docker:dind
-  variables:
-    CONTAINER_IMAGE: registry.gitlab.com/$CI_PROJECT_PATH
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_DRIVER: overlay2
-  before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-  image: docker:stable
-  script:
-    - docker build -t $CONTAINER_IMAGE:latest .
-    - docker push $CONTAINER_IMAGE:latest
+# install-image-job:
+#   stage: install
+#   dependencies:
+#     - package-java-job
+#   services:
+#     - docker:dind
+#   variables:
+#     CONTAINER_IMAGE: registry.gitlab.com/$CI_PROJECT_PATH
+#     DOCKER_HOST: tcp://docker:2375
+#     DOCKER_DRIVER: overlay2
+#   before_script:
+#     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+#   image: docker:stable
+#   script:
+#     - docker build -t $CONTAINER_IMAGE:latest .
+#     - docker push $CONTAINER_IMAGE:latest
