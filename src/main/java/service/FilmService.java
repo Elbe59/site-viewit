@@ -211,9 +211,22 @@ public class FilmService {
 		}
 	}
 
+	public Integer getPourcentageFilm (Integer id) throws FilmNotFoundException {
+		try {
+			filmDao.getFilm(id);
+		}catch(FilmNotFoundException e) {
+			LOGGER.error("Could not found film "+id);
+			return -1;
+		}
+		return filmDao.getPourcentageFilm(id);
+	}
+	public List<FilmDto> trierListFilms (List<FilmDto> listFilmsDto) {
+		return filmDao.trierListFilms(listFilmsDto);
+	}
+
 	/*--------- METHODE GENRE ------------*/
 	public Genre addGenre(String name) throws GenreAlreadyExistingException {
-        List<Genre> genres = listGenre();
+        List<Genre> genres = genreDao.listGenre();
         boolean existing = false;
         for (int i = 0; i < genres.size(); i++) {
             if (genres.get(i).getNom().toLowerCase().equals(name.toLowerCase())) {
@@ -256,7 +269,7 @@ public class FilmService {
 	}
 	
 	public List<GenreDto> listGenreDto(){
-		List<Genre> list=FilmService.getInstance().listGenre();
+		List<Genre> list=genreDao.listGenre();
 		return genreDao.listGenreDto(list);
 	}
 
@@ -300,15 +313,7 @@ public class FilmService {
 		}
 	}
 	
-	public Integer getPourcentageFilm (Integer id) throws FilmNotFoundException {
-		try {
-			filmDao.getFilm(id);
-		}catch(FilmNotFoundException e) {
-			LOGGER.error("Could not found film "+id);
-			return -1;
-		}
-		return filmDao.getPourcentageFilm(id);
-	}
+
 	
 	public String parametreTrie(String choix) {
 		if(choix == null)
@@ -326,7 +331,4 @@ public class FilmService {
 		}
 	}
 	
-	public List<FilmDto> trierListFilms (List<FilmDto> listFilmsDto) {
-		return filmDao.trierListFilms(listFilmsDto);
-	}
 }

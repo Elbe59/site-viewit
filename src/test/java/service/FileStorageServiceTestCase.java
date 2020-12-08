@@ -69,7 +69,7 @@ public class FileStorageServiceTestCase {
 	}
 	
 	@Test
-	public void shouldStoreImageAndReturnFileNameButThrowFileStorageException() throws FileStorageException {
+	public void shouldStoreImageAndReturnFileNameButThrowFileStorageException() {
 		//GIVEN
 		
 		//WHEN
@@ -108,12 +108,16 @@ public class FileStorageServiceTestCase {
 	}
 
 	@Test
-	public void shouldDisplayImageButThrowFilmNotFoundException() throws IOException, FilmNotFoundException {
+	public void shouldDisplayImageButThrowFilmNotFoundException() throws FilmNotFoundException {
 		int filmId = 3;
 		Mockito.when(filmDao.getFilm(Mockito.anyInt())).thenThrow(new FilmNotFoundException("Ce film n'existe pas"));
-
+		FileInputStream result=null;
 		//WHEN
-		FileInputStream result = fileStorageService.displayImage(filmId);
+		try{
+			result = fileStorageService.displayImage(filmId);
+		} catch (Exception e) {
+			Assertions.assertThatExceptionOfType(FilmNotFoundException.class);
+		}
 
 		//THEN
 		Assertions.assertThat(result).isNull();
@@ -126,11 +130,14 @@ public class FileStorageServiceTestCase {
 		int filmId = 3;
 		Film film1 = new Film(1, "titre 1", "resume 1", LocalDate.of(2020, 11, 11), 123, "realisateur 1", "acteur 1", "image5.png", "youtube.com/1", new Genre(1,"Aventure"), 1);
 		Mockito.when(filmDao.getFilm(Mockito.anyInt())).thenReturn(film1);
+		FileInputStream result=null;
 		//WHEN
-		FileInputStream result = fileStorageService.displayImage(filmId);
-		
+		try {
+			result = fileStorageService.displayImage(filmId);
+		} catch (Exception e) {
+			Assertions.assertThatExceptionOfType(FileNotFoundException.class);
+		}
 		//THEN
-		Assertions.assertThatExceptionOfType(FileNotFoundException.class);
 		Assertions.assertThat(result).isNull();
 		Mockito.verify(filmDao,Mockito.times(1)).getFilm(Mockito.any());
 	}
@@ -160,9 +167,5 @@ public class FileStorageServiceTestCase {
     public static void createOnceAfterClass() throws IOException {
     	FileManager.removeDirectory(tmpDirectory);
     }
-
-	public static File getDatadirectory() {
-		return dataDirectory;
-	}
 	
 }
