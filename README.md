@@ -16,6 +16,8 @@ This web site is to share and list your favorite films, to look for films, see t
 | `org.assertj`     | `assertj-core`    | `3.13.2`  | `test`|
 | `org.mockito`     | `mockito-core`    | `3.5.7`   | `test`|
 
+4. Initialize your images.properties
+
 ## Step 2 : Unknown user
 
 ### 2.1 Looking for a film by name
