@@ -118,3 +118,9 @@ Il est le seul à pouvoir modifier les informations concernant le nom, le préno
 De plus, seul l'administrateur à la possibilité de créer un nouvel utilisateur
 
 Il a également la possibilité de promouvoir un utilisateur en tant qu'administrateur ou de rétrograder un administrateur en tant qu'utilisateur.
+
+## Authors
+- [Kylian Barthelemot](https://gitlab.com/KBarth)
+- [Quentin Callens](https://gitlab.com/quentincallens)
+- [Emile Mongenet](https://gitlab.com/emilemongenet)
+- [Pierre Sanchez](https://gitlab.com/mado_io)
