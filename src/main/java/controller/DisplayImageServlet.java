@@ -21,7 +21,6 @@ public class DisplayImageServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int idFilm = Integer.parseInt(request.getParameter("id"));
-        LOGGER.debug("loading image of movie "+idFilm);
         response.setContentType("image/jpeg");
         ServletOutputStream out;
         out = response.getOutputStream();

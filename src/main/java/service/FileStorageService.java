@@ -82,7 +82,8 @@ public class FileStorageService {
                 image = new FileInputStream(pathToImage + "/" + imageName);
             }
         } catch (FilmNotFoundException | FileNotFoundException e) {
-            return null;
+            LOGGER.error("Impossible d'accéder à l'image: "+filmId);
+            e.printStackTrace();
         }
         return image;
     }
