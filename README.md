@@ -24,14 +24,27 @@ Vérifier que le 'context root' est bien "/" et non "/viewit".
 Se rendre dans le fichier "src/main/ressources/images.properties".
 Remplacer le chemin d'accés par votre propre chemin d'accés : "{your way}/data/filmImages".
 
-Vous pouvez trouver votre chemin dans vos properties.
+Faire de mêmes pour le fichier "src/test/ressources/images.properties".
+Remplacer le chemin d'accés par votre propre chemin d'accés : "{your way}/test/dataTest".
 
 Faire de même dans le fichier "src/main/test/ressources/images.properties".
 Le chemin : "{your way}/src/test/resources/dataTest".
 
 ### 1.2 Lancer le projet avec Docker
 
-### 1.3 Lancer le projet avec GitLabCI
+Nous avons mis en place Docker pour lancer notre site sur n'importe quel poste avec plus de facilitée.
+Notre fichier Docker-compose permet de lancer notre projet à partir d'une Image Tomcat et d'une image MariaDB.
+Pour lancer le projet sur Docker sans utiliser l'image crée à partir de gitlab-ci,
+il faut supprimer/commenter la ligne 5 du fichier docker-compose.yml (image: registry.gitlab.com/hei-projet/hei-projet-2020/site-viewit)
+Pour finir, sur GitBash ou autre console de commande, se placer à la racine du projet puis lancer la commande "docker-compose up".
+
+### 1.3 Lancer le projet avec Docker à partir de l'image GitLabCI
+
+Nous avons mis en place gitLab-CI pour notre projet afin de faire une vérification des tests après chaque push.
+La mise en place de cette CI nous a également permis de packager notre projet et de produire une image que l'on pourra ensuite utiliser avec Docker.
+il faut ajouter/décommenter la ligne 5 du fichier docker-compose.yml (image: registry.gitlab.com/hei-projet/hei-projet-2020/site-viewit).
+Pour finir, sur GitBash ou autre console de commande, se placer à la racine du projet puis lancer la commande "docker-compose up".
+
 
 ## Step 2 : Utilisation en tant que personne non connecté
 

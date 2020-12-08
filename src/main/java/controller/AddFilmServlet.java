@@ -73,7 +73,7 @@ public class AddFilmServlet extends ServletGenerique {
 		else {
 			LOGGER.debug("Film add by normal user "+utilisateur.getEmail());
 			try {
-				FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,fileNameForStorage,null,genre1);
+				FilmService.getInstance().addFilm(titre,resume,dateSortieStr,duree,realisateur,acteur,fileNameForStorage,"",genre1);
 			} catch (FilmAlreadyExistingException e) {
 				LOGGER.debug("Could not add film");
 				e.printStackTrace();

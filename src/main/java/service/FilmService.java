@@ -58,11 +58,13 @@ public class FilmService {
 	public Film addFilm(String titre,String resume,String dateSortieStr,int duree,String realisateur,String acteur,String imageName,String url,Genre genre1) throws FilmAlreadyExistingException, IOException {
 		LocalDate dateSortie = formaterDate(dateSortieStr);
 		String urlBA = "";
-		try {
-			urlBA = urlVerification(url);
-		} catch (UrlDoesNotMatchException e) {
-			LOGGER.error("Url does not match requierment");
-			return null;
+		if(!url.isBlank()) {
+			try {
+				urlBA = urlVerification(url);
+			} catch (UrlDoesNotMatchException e) {
+				LOGGER.error("Url does not match requierment");
+				return null;
+			}
 		}
 		Film film=new Film(1,titre,resume,dateSortie,duree,realisateur,acteur,imageName,urlBA,genre1,0);
 		List<Film> films = listFilms();
