@@ -119,7 +119,7 @@ De plus, seul l'administrateur à la possibilité de créer un nouvel utilisateu
 
 Il a également la possibilité de promouvoir un utilisateur en tant qu'administrateur ou de rétrograder un administrateur en tant qu'utilisateur.
 
-## Authors
+## Auteurs
 - [Kylian Barthelemot](https://gitlab.com/KBarth)
 - [Quentin Callens](https://gitlab.com/quentincallens)
 - [Emile Mongenet](https://gitlab.com/emilemongenet)
