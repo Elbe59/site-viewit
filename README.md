@@ -24,7 +24,8 @@ Vérifier que le 'context root' est bien "/" et non "/viewit".
 Se rendre dans le fichier "src/main/ressources/images.properties".
 Remplacer le chemin d'accés par votre propre chemin d'accés : "{your way}/data/filmImages".
 
-Vous pouvez trouver votre chemin dans vos properties.
+Faire de mêmes pour le fichier "src/test/ressources/images.properties".
+Remplacer le chemin d'accés par votre propre chemin d'accés : "{your way}/test/dataTest".
 
 Faire de même dans le fichier "src/main/test/ressources/images.properties".
 Le chemin : "{your way}/src/test/resources/dataTest".
