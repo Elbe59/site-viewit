@@ -22,7 +22,7 @@ public class FilmDaoImpl implements FilmDao {
 	//---------- Film ----------//
 	
 	public List<Film> listFilms() {
-		List<Film> listOfFilms = new ArrayList<Film>();
+		List<Film> listOfFilms = new ArrayList<>();
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(Statement stm = co.createStatement()) {
 				try(ResultSet rs = stm.executeQuery("SELECT * FROM film JOIN genre ON film.idGenre = genre.idGenre ORDER BY titreFilm;")) {
@@ -88,7 +88,6 @@ public class FilmDaoImpl implements FilmDao {
 	
 	public Film getFilm(Integer id) throws FilmNotFoundException{
 		Film film = null;
-		LOGGER.debug("Looking for film nb "+id);
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(PreparedStatement pStm = co.prepareStatement("SELECT * FROM film JOIN genre ON film.idGenre = genre.idGenre AND film.idFilm = ?;")) {
 				pStm.setInt(1, id);
@@ -115,7 +114,6 @@ public class FilmDaoImpl implements FilmDao {
 			LOGGER.error("Error trying to get the film;");
 			e.printStackTrace();
 		}
-		LOGGER.debug("Succesfully found "+film.getTitre()+", for id "+id);
 		return film;
 	}
 	
@@ -318,8 +316,7 @@ public class FilmDaoImpl implements FilmDao {
 						verification = true;
 					}
 				}
-			} 
-			co.close();
+			}
 		}
 		catch (Exception e) {
 			LOGGER.error("error while adding films "+idFilm+" to favoris of user nb"+idUtilisateur);
@@ -333,7 +330,6 @@ public class FilmDaoImpl implements FilmDao {
 					pstm.setInt(2, idUtilisateur);
 					pstm.executeUpdate();
 				}
-				co.close();
 			}
 			catch (Exception e) {
 				LOGGER.error("error while adding films "+idFilm+" to favoris of user nb"+idUtilisateur);
@@ -437,7 +433,6 @@ public class FilmDaoImpl implements FilmDao {
 					pstm.setInt(2, idUtilisateur);
 					pstm.executeUpdate();
 				}
-				co.close();
 			}
 			catch (Exception e) {
 				LOGGER.error("Error while adding a like to films "+idFilm+" from user nb"+idUtilisateur);
@@ -451,7 +446,6 @@ public class FilmDaoImpl implements FilmDao {
 					pstm.setInt(2, idUtilisateur);
 					pstm.executeUpdate();
 				}
-				co.close();
 			}
 			catch (Exception e) {
 				LOGGER.error("Error while adding a like to films "+idFilm+" from user nb"+idUtilisateur);
@@ -476,8 +470,7 @@ public class FilmDaoImpl implements FilmDao {
 						verification = true;
 					}
 				}
-			} 
-			co.close();
+			}
 		}
 		catch (Exception e) {
 			LOGGER.error("Error while adding a dislike to films "+idFilm+" from user nb"+idUtilisateur);
@@ -491,7 +484,6 @@ public class FilmDaoImpl implements FilmDao {
 					pstm.setInt(2, idUtilisateur);
 					pstm.executeUpdate();
 				}
-				co.close();
 			}
 			catch (Exception e) {
 				LOGGER.error("Error while adding a dislike to films "+idFilm+" from user nb"+idUtilisateur);
@@ -540,7 +532,6 @@ public class FilmDaoImpl implements FilmDao {
 	
 	//Récupération du taux de like/dislike d'un film
 	public Integer getPourcentageFilm (Integer id) throws FilmNotFoundException {
-		LOGGER.debug("Calculating percentage of film "+id);
 		Integer pourcentage = 0;
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
 			try(PreparedStatement pStm = co.prepareStatement("SELECT"
@@ -564,7 +555,6 @@ public class FilmDaoImpl implements FilmDao {
 			LOGGER.debug("error while calculating percentage of film "+id);
 			e.printStackTrace();
 		}
-		LOGGER.debug("Returned "+pourcentage+"% for film "+id);
 		return pourcentage;
 	}
 }

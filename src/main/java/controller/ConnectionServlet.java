@@ -33,6 +33,7 @@ public class ConnectionServlet extends HttpServlet {
 	            if(MotDePasseUtils.validerMotDePasse(pwd, pwdHache)) {
 	                request.getSession().setAttribute("utilisateurConnecte", utilisateur);
 	                LOGGER.info("psw correct, "+email+" logging in");
+                    LOGGER.debug("Returned user "+email);
 	            } else {
 	                LOGGER.info("wrong password");
 	            }

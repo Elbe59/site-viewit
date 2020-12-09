@@ -2,6 +2,8 @@ package filter;
 
 import entity.Utilisateur;
 import exception.UserNotFoundException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import service.UtilisateurService;
 
 import javax.servlet.*;
@@ -14,6 +16,7 @@ import java.io.IOException;
 @WebFilter("/*")
 public class GetUserRoleFilter extends HttpFilter {
 	private static final long serialVersionUID = 1L;
+    static final Logger LOGGER = LogManager.getLogger();
 
 	public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws ServletException, IOException {
         String role="0";
@@ -34,7 +37,8 @@ public class GetUserRoleFilter extends HttpFilter {
             }
             try {
 				user=UtilisateurService.getInstance().getUser(id).getPrenom() + " " + UtilisateurService.getInstance().getUser(id).getNom();
-			} catch (UserNotFoundException e) {
+
+            } catch (UserNotFoundException e) {
 				e.printStackTrace();
 			}  
         }

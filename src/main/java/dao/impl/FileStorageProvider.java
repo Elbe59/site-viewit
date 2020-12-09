@@ -13,15 +13,15 @@ public class FileStorageProvider {
 	static final Logger LOGGER = LogManager.getLogger();
 
 	private static Properties loadProperties() {
-		LOGGER.debug("Trying to load properties");
 		try (InputStream input = FileStorageProvider.class.getClassLoader().getResourceAsStream("images.properties")) {
 			if (input == null) {
+				LOGGER.error("Cannot find properties file");
 				throw new IllegalStateException("Properties file not found.");
 			}
 
 			Properties configuration = new Properties();
 			configuration.load(input);
-			LOGGER.info("Properties loaded");
+
 			return configuration;
 		} catch (IOException e) {
 			throw new RuntimeException("Problem when reading the properties file.", e);

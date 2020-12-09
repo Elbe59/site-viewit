@@ -49,10 +49,7 @@ public class HomeServlet extends ServletGenerique {
 				LOGGER.info("adding film "+idFilm+" to favoris of user "+utilisateur.getId());
 				try {
 					FilmService.getInstance().addFavori(idFilm, utilisateur.getId());
-				} catch (FilmNotFoundException e) {
-					LOGGER.error("could not add film to favoris");
-					e.printStackTrace();
-				} catch (UserNotFoundException e) {
+				} catch (FilmNotFoundException | UserNotFoundException e) {
 					LOGGER.error("could not add film to favoris");
 					e.printStackTrace();
 				}
@@ -63,13 +60,7 @@ public class HomeServlet extends ServletGenerique {
 				LOGGER.info("deleting film "+idFilm+" to favoris of user "+utilisateur.getId());
 				try {
 					FilmService.getInstance().suppFavori(idFilm, utilisateur.getId());
-				} catch (FilmNotFoundException e) {
-					LOGGER.error("could not delete film from favoris");
-					e.printStackTrace();
-				} catch (SQLException e) {
-					LOGGER.error("could not delete film from favoris");
-					e.printStackTrace();
-				} catch (UserNotFoundException e) {
+				} catch (FilmNotFoundException | SQLException | UserNotFoundException e) {
 					LOGGER.error("could not delete film from favoris");
 					e.printStackTrace();
 				}

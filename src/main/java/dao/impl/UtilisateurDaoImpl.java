@@ -40,7 +40,6 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
     }
 
     public Utilisateur getUser(Integer id) throws UserNotFoundException{
-        LOGGER.debug("Trying to get user nb "+id);
         Utilisateur user = null;
         try(Connection co = DataSourceProvider.getDataSource().getConnection()){
             try(PreparedStatement pStm = co.prepareStatement("SELECT * FROM utilisateur WHERE idUtilisateur = ?;")) {
@@ -63,7 +62,6 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
             LOGGER.error("error while trying to get user nb "+id);
             e.printStackTrace();
         }
-        LOGGER.debug("Returned user "+user.getEmail()+", for id="+id);
         return user;
     }
 
