@@ -149,7 +149,7 @@ Exemple :
 
 Vous pouvez alors modifier le film que vous avez créer plus tôt,
 
-Image de couverture : (Sélectionner l'image du film dans vos dossier)
+Image de couverture : (Sélectionner l'image du film dans le dossier "/data/filmImages")
 Lien vers la bande-annonce : https://www.youtube.com/watch?v=wV-Q0o2OQjQ
 
 ## Auteurs
