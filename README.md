@@ -159,7 +159,7 @@ Exemple :
 
 Vous pouvez alors modifier le film que vous avez créé en tant qu'utilisateur plus tôt,
 
-Image de couverture : (Sélectionner l'image du film que vous souhaitez ajouter (Pour l'exemple, vous pouvez sélectionner l'image dans le dossier /data/filmImages))
+Image de couverture : Enregistrer l'image du film dans votre ordinateur puis sélectionner cette image.
 Lien vers la bande-annonce : https://www.youtube.com/watch?v=wV-Q0o2OQjQ
 
 ## Auteurs
