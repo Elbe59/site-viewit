@@ -135,7 +135,6 @@ INSERT INTO preferer (idFilm, idUtilisateur, liker, favoris) VALUES
 (14, 7, 1, 0),
 (14, 9, 1, 0),
 (14, 10, 1, 0),
-(14, 10, 1, 0);
 (15, 6, 1, 1),
 (17, 2, 1, 1),
 (17, 6, -1, 0),
