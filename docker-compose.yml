@@ -2,7 +2,8 @@ version : "3"
 services:
   application:
     container_name: ViewIt-webapp
-    image: registry.gitlab.com/hei-projet/hei-projet-2020/site-viewit
+    #image: registry.gitlab.com/hei-projet/hei-projet-2020/site-viewit
+    build: .
     depends_on:
       - database
     ports:
@@ -14,7 +15,9 @@ services:
   database:
     container_name: ViewIt-database
     image: mariadb:latest
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
+      LANG: C.UTF-8
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - ./Docker/database/sql:/docker-entrypoint-initdb.d
