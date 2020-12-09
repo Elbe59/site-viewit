@@ -44,6 +44,7 @@ public class FileStorageService {
             String fileName = filmTitle.replace(" ","");
             fileName = fileName.replace(":","");
             fileName = fileName.replace("!","");
+            fileName = fileName.replace("-","");
             fileName = fileName.replace("'","")+"."+extension;
             try {
                 // Vérification de caractère invalide dans le nom du fichier
