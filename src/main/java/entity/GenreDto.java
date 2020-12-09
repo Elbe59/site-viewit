@@ -1,9 +1,8 @@
 package entity;
 
 public class GenreDto extends Genre{
+	
     private int nbFilmLie;
-
-
 
     public GenreDto(Integer id, String nom, int nbFilmLie) {
         super(id,nom);

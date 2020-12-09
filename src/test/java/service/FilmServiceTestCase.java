@@ -32,9 +32,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
 @RunWith(MockitoJUnitRunner.class)
-public class FilmServiceTestCaseMockito {
-
-
+public class FilmServiceTestCase {
+	
     @InjectMocks
     FilmService filmService;
     @Mock
@@ -619,7 +618,6 @@ public class FilmServiceTestCaseMockito {
     
     @Test
     public void shouldAddDislikeButThrowUserNotFoundException() throws FilmNotFoundException, UserNotFoundException, IOException {
-        
     	//GIVEN
         int idUser = 2;
         int idFilm = 1;
@@ -637,7 +635,6 @@ public class FilmServiceTestCaseMockito {
     
     @Test
     public void shouldRemoveAvis() throws FilmNotFoundException, UserNotFoundException, IOException, SQLException {
-        
     	//GIVEN
         int idUser = 2;
         int idFilm = 1;
@@ -658,7 +655,6 @@ public class FilmServiceTestCaseMockito {
     
     @Test
     public void shouldRemoveAvisButThrowFilmNotFoundException() throws FilmNotFoundException, UserNotFoundException, IOException, SQLException {
-        
     	//GIVEN
         int idUser = 2;
         int idFilm = 1;
@@ -675,8 +671,7 @@ public class FilmServiceTestCaseMockito {
     }
     
     @Test
-    public void shouldRemoveAvisButThrowUserNotFoundException() throws FilmNotFoundException, UserNotFoundException, IOException, SQLException {
-        
+    public void shouldRemoveAvisButThrowUserNotFoundException() throws FilmNotFoundException, UserNotFoundException, IOException, SQLException {    
     	//GIVEN
         int idUser = 2;
         int idFilm = 1;
@@ -692,10 +687,8 @@ public class FilmServiceTestCaseMockito {
         Mockito.verify(filmDao,Mockito.times(1)).removeAvis(idFilm,idUser);
     }
     
-    
     @Test
     public void shouldListFilmDto() throws IOException {
-        
     	//GIVEN
         int idUser = 1;
         
@@ -715,10 +708,66 @@ public class FilmServiceTestCaseMockito {
         Assertions.assertThat(res).isEqualTo(filmDtoList);
         Mockito.verify(filmDao,Mockito.times(1)).listFilmsDto(idUser);
     }
+    
+    @Test
+    public void shouldReturnPourcentageFilm() throws IOException, FilmNotFoundException {
+    	
+    	//GIVEN
+        Film film = new Film(1,"newTitre3","resume3",LocalDate.of(2019,12,20), 120, "realisateur3","acteur3","image3.png","3",new Genre(1,"Drame"),0);
+        int id = 1;
+        
+        Mockito.when(filmDao.getFilm(id)).thenReturn(film);
+        Mockito.when(filmDao.getPourcentageFilm(id)).thenReturn(85);
+    	
+        //WHEN
+    	int res = filmService.getPourcentageFilm(id);
+    	
+    	//THEN
+    	assertThat(res).isEqualTo(85);
+        Mockito.verify(filmDao,Mockito.times(1)).getFilm(1);
+        Mockito.verify(filmDao,Mockito.times(1)).getPourcentageFilm(1);
+    }
+    
+    @Test
+    public void shouldReturnPourcentageFilmButThrowFilmNotFoundException() throws IOException, FilmNotFoundException {
+        
+    	//GIVEN
+        int id = 1;
+        Mockito.when(filmDao.getFilm(id)).thenThrow(FilmNotFoundException.class);
+        
+        //WHEN
+        int res = filmService.getPourcentageFilm(id);
+        
+        //THEN
+        assertThat(res).isEqualTo(-1);
+        Mockito.verify(filmDao,Mockito.times(1)).getFilm(1);
+        Mockito.verify(filmDao,Mockito.never()).getPourcentageFilm(Mockito.any());
+    }
+    
+    @Test
+    public void shouldTrierListFilms () throws IOException {
+    	
+    	//GIVEN
+    	FilmDto f1 = new FilmDto(1, "A-titre 1", "positif", true, 100);
+    	FilmDto f2 = new FilmDto(2, "B-titre 2", "negatif", true, 0);
+    	
+    	List<FilmDto> listFilmsDto = new ArrayList<FilmDto>();
+    	listFilmsDto.add(f1);
+    	listFilmsDto.add(f2);
+    	
+    	Mockito.when(filmDao.trierListFilms(listFilmsDto)).thenReturn(listFilmsDto);
+    	
+    	//WHEN
+    	List<FilmDto> res = filmService.trierListFilms(listFilmsDto);
+    	
+    	//THEN
+        assertThat(res).containsExactlyElementsOf(listFilmsDto);
+        Mockito.verify(filmDao,Mockito.times(1)).trierListFilms(listFilmsDto);
+
+    }
 
     @Test
     public void shouldListFavorisFilmOfUser() throws IOException, UserNotFoundException {
-        
     	//GIVEN
         String trie="cc";
         int idUser = 1;
@@ -759,7 +808,6 @@ public class FilmServiceTestCaseMockito {
         Assertions.assertThatExceptionOfType(UserNotFoundException.class);
     }
     
-
     @Test
     public void shouldListGenre() {
         
@@ -960,6 +1008,8 @@ public class FilmServiceTestCaseMockito {
         Mockito.verify(genreDao,Mockito.times(1)).listGenreDto(genreList);
     }
     
+  //----------Test Autre----------//
+    
     @Test
     public void shouldFormaterDate() {
         
@@ -1015,75 +1065,21 @@ public class FilmServiceTestCaseMockito {
     	String t2 = "alpha";
     	String t3 = "recent";
     	String t4 = "ancien";
+    	String t5 = "Popularite";
     	
     	//WHEN
     	String res1 = filmService.parametreTrie(t1);
     	String res2 = filmService.parametreTrie(t2);
     	String res3 = filmService.parametreTrie(t3);
     	String res4 = filmService.parametreTrie(t4);
+    	String res5 = filmService.parametreTrie(t5);
     	
     	//THEN
     	assertThat(res1).isEqualTo("titreFilm");
     	assertThat(res2).isEqualTo("titreFilm");
     	assertThat(res3).isEqualTo("dateSortie DESC");
     	assertThat(res4).isEqualTo("dateSortie");
-    }
-    
-    @Test
-    public void shouldReturnPourcentageFilm() throws IOException, FilmNotFoundException {
-    	
-    	//GIVEN
-        Film film = new Film(1,"newTitre3","resume3",LocalDate.of(2019,12,20), 120, "realisateur3","acteur3","image3.png","3",new Genre(1,"Drame"),0);
-        int id = 1;
-        
-        Mockito.when(filmDao.getFilm(id)).thenReturn(film);
-        Mockito.when(filmDao.getPourcentageFilm(id)).thenReturn(85);
-    	
-        //WHEN
-    	int res = filmService.getPourcentageFilm(id);
-    	
-    	//THEN
-    	assertThat(res).isEqualTo(85);
-        Mockito.verify(filmDao,Mockito.times(1)).getFilm(1);
-        Mockito.verify(filmDao,Mockito.times(1)).getPourcentageFilm(1);
-    }
-    
-    @Test
-    public void shouldReturnPourcentageFilmButThrowFilmNotFoundException() throws IOException, FilmNotFoundException {
-        
-    	//GIVEN
-        int id = 1;
-        Mockito.when(filmDao.getFilm(id)).thenThrow(FilmNotFoundException.class);
-        
-        //WHEN
-        int res = filmService.getPourcentageFilm(id);
-        
-        //THEN
-        assertThat(res).isEqualTo(-1);
-        Mockito.verify(filmDao,Mockito.times(1)).getFilm(1);
-        Mockito.verify(filmDao,Mockito.never()).getPourcentageFilm(Mockito.any());
-    }
-    
-    @Test
-    public void shouldTrierListFilms () throws IOException {
-    	
-    	//GIVEN
-    	FilmDto f1 = new FilmDto(1, "A-titre 1", "positif", true, 100);
-    	FilmDto f2 = new FilmDto(2, "B-titre 2", "negatif", true, 0);
-    	
-    	List<FilmDto> listFilmsDto = new ArrayList<FilmDto>();
-    	listFilmsDto.add(f1);
-    	listFilmsDto.add(f2);
-    	
-    	Mockito.when(filmDao.trierListFilms(listFilmsDto)).thenReturn(listFilmsDto);
-    	
-    	//WHEN
-    	List<FilmDto> res = filmService.trierListFilms(listFilmsDto);
-    	
-    	//THEN
-        assertThat(res).containsExactlyElementsOf(listFilmsDto);
-        Mockito.verify(filmDao,Mockito.times(1)).trierListFilms(listFilmsDto);
-
+    	assertThat(res5).isEqualTo("Popularite");
     }
 }
 

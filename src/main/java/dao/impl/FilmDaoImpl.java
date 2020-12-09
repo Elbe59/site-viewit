@@ -19,6 +19,8 @@ public class FilmDaoImpl implements FilmDao {
 	private UtilisateurDao userDao = new UtilisateurDaoImpl();
 	static final Logger LOGGER = LogManager.getLogger();
 
+	//---------- Film ----------//
+	
 	public List<Film> listFilms() {
 		List<Film> listOfFilms = new ArrayList<Film>();
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
@@ -49,6 +51,7 @@ public class FilmDaoImpl implements FilmDao {
 		return listOfFilms;
 	}
 
+	//Liste les films en fonction d'un paramètre
 	public List<Film> listFilms(String param) {
 		List<Film> listOfFilms = new ArrayList<Film>();
 		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
@@ -114,30 +117,6 @@ public class FilmDaoImpl implements FilmDao {
 		}
 		LOGGER.debug("Succesfully found "+film.getTitre()+", for id "+id);
 		return film;
-	}
-
-	public List<Film> listFavorisFilm(Integer idUtilisateur, String param) throws UserNotFoundException {
-		List<Film> listOfFilms = new ArrayList<Film>();
-		LOGGER.debug("Looking for list favoris of user id: "+idUtilisateur+", order by parameter: "+param);
-		userDao.getUser(idUtilisateur);
-		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
-			try(PreparedStatement pStm = co.prepareStatement("SELECT preferer.idFilm FROM preferer JOIN film ON film.idFilm = preferer.idFilm WHERE idUtilisateur=? AND favoris = 1 ORDER BY "+param)) {
-				pStm.setInt(1, idUtilisateur);
-				try(ResultSet rs = pStm.executeQuery()) {
-					while(rs.next()) {
-						Integer idFilm = rs.getInt("idFilm");
-						System.out.println(idFilm);
-						Film film = getFilm(idFilm);
-						listOfFilms.add(film);
-					}
-				}
-			}
-		} catch (SQLException | FilmNotFoundException e) {
-			LOGGER.error("Error while looking for list favoris");
-			e.printStackTrace();
-		}
-		LOGGER.debug("Returned list of favoris of user "+idUtilisateur+", of size "+listOfFilms.size());
-		return listOfFilms;
 	}
 	
 	public Film addFilm(Film film) throws FilmAlreadyExistingException {
@@ -322,6 +301,8 @@ public class FilmDaoImpl implements FilmDao {
 		LOGGER.debug("Succesfully trier list film, of size "+listFilmsDtoTri.size());
 		return listFilmsDtoTri;
 	}
+	
+	//---------- Préférence - Favoris ----------//
 
 	public Film addFavori (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
 		LOGGER.debug("Trying to add film nb "+idFilm+" to favoris of user nb"+idUtilisateur);
@@ -398,6 +379,34 @@ public class FilmDaoImpl implements FilmDao {
 		LOGGER.info("Succesfully removed films "+film.getTitre()+" from favoris of user nb"+idUtilisateur);
 		return film;
 	}
+	
+	
+	
+	public List<Film> listFavorisFilm(Integer idUtilisateur, String param) throws UserNotFoundException {
+		List<Film> listOfFilms = new ArrayList<Film>();
+		LOGGER.debug("Looking for list favoris of user id: "+idUtilisateur+", order by parameter: "+param);
+		userDao.getUser(idUtilisateur);
+		try(Connection co = DataSourceProvider.getDataSource().getConnection()){
+			try(PreparedStatement pStm = co.prepareStatement("SELECT preferer.idFilm FROM preferer JOIN film ON film.idFilm = preferer.idFilm WHERE idUtilisateur=? AND favoris = 1 ORDER BY "+param)) {
+				pStm.setInt(1, idUtilisateur);
+				try(ResultSet rs = pStm.executeQuery()) {
+					while(rs.next()) {
+						Integer idFilm = rs.getInt("idFilm");
+						System.out.println(idFilm);
+						Film film = getFilm(idFilm);
+						listOfFilms.add(film);
+					}
+				}
+			}
+		} catch (SQLException | FilmNotFoundException e) {
+			LOGGER.error("Error while looking for list favoris");
+			e.printStackTrace();
+		}
+		LOGGER.debug("Returned list of favoris of user "+idUtilisateur+", of size "+listOfFilms.size());
+		return listOfFilms;
+	}
+	
+	//---------- Préférence - Like ----------//
 	
 	public Film addLike (Integer idFilm, Integer idUtilisateur) throws FilmNotFoundException, UserNotFoundException {
 		LOGGER.debug("Trying to add a like to films "+idFilm+" from user nb"+idUtilisateur);
@@ -529,6 +538,7 @@ public class FilmDaoImpl implements FilmDao {
 		return film;
 	}
 	
+	//Récupération du taux de like/dislike d'un film
 	public Integer getPourcentageFilm (Integer id) throws FilmNotFoundException {
 		LOGGER.debug("Calculating percentage of film "+id);
 		Integer pourcentage = 0;

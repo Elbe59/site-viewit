@@ -31,9 +31,29 @@ public class UtilisateurService {
 
     private UtilisateurDao utilisateurDao = new UtilisateurDaoImpl();
 
-    private UtilisateurService() {
-
+    private UtilisateurService() {}
+    
+    public List<Utilisateur> listUser() {
+        return utilisateurDao.listUser();
     }
+
+    public Utilisateur getUser(int id) throws UserNotFoundException {
+    	try {
+    		return utilisateurDao.getUser(id);
+    	}
+        catch(UserNotFoundException e) {
+        	return null;
+        }
+    }
+
+    public Utilisateur getUserByEmail(String email) throws UserNotFoundException {
+        try{
+            return utilisateurDao.getUserByEmail(email);
+        }catch (UserNotFoundException e){
+            return null;
+        }
+    }
+    
     public Utilisateur addUser(Utilisateur user) throws UserAlreadyExistingException {
     	List<Utilisateur> users = utilisateurDao.listUser();
         boolean existing  = false;
@@ -92,27 +112,6 @@ public class UtilisateurService {
             listUserDto.add(userDto);
         }
         return listUserDto;
-    }
-    
-    public List<Utilisateur> listUser() {
-        return utilisateurDao.listUser();
-    }
-
-    public Utilisateur getUser(int id) throws UserNotFoundException {
-    	try {
-    		return utilisateurDao.getUser(id);
-    	}
-        catch(UserNotFoundException e) {
-        	return null;
-        }
-    }
-
-    public Utilisateur getUserByEmail(String email) throws UserNotFoundException {
-        try{
-            return utilisateurDao.getUserByEmail(email);
-        }catch (UserNotFoundException e){
-            return null;
-        }
     }
 
     public Utilisateur deleteUser(Integer id) throws UserNotFoundException, SQLException {

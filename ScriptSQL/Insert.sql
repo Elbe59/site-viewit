@@ -1,14 +1,18 @@
 #--- Création des insert
 
-INSERT INTO UTILISATEUR (idUtilisateur, prenomUtilisateur, nomUtilisateur, email, mdpHash, admin) VALUES
+INSERT INTO utilisateur (idUtilisateur, prenomUtilisateur, nomUtilisateur, email, mdpHash, admin) VALUES
 (1,"Defaut", "Defaut","defaut.defaut@gmail.com","$argon2i$v=19$m=65536,t=5,p=1$zFnaINNvYeCrC75OYuuZEl9al5weOMnSXcOUoIWhUdIMRbNvXF1ipU5aMaU0HVXtsotzpepy/LxIHtd7SJMgFpk7T4T6eE24y3CxyiuG1woN5vMrPCnl4ldjtAmWQ/iEsL0JRXuthPrbFO1GkA+k4D2s7E9SNF9JA8sJaSHURU8$U5xfj0Qz7+T3sr05PxuUhEgAKU2+WxhcrFMUUS2yVGi2egf4rSsxZ9FSXYliBnx03aXgNEvtPrZ7zWq2TQdw9LA+gWS4+IOrKkR56EkVZDgD59jkDVE5P59jmqSIVpQq51jx8SkCITxgOaS8xMGuDaUtpBIce1UfxGGEgGi8pRg",0),
 (2,"Jack", "Barzone","jack.barzone@gmail.com","$argon2i$v=19$m=65536,t=5,p=1$dTSkKiptldBfurDMM/Ez+1xdd8kAbGOk6INnM4YxG8bBVkywlRCjWB7+qrQjj9Ifb1axUqWswQHEX8zm8jKcg1SFi+WCb1ZHTFea6TtkNnsTva+sOT6SshKfiCY7HOLAvUUmDsX+W8mxUtDhOdvHfYU96dkgy6H2TM5CkP73Im0$q0xJDLk0mJcq+JodHjncyxtqOk+2KPr9AQ1womwdmYajdeoVuRaS/IrDoKVlwxYBL6M5BzNAUk7sDudKtEzSwKcsjeBcJEkKWoIZIsS+yo59tJ7vwd0PsgWLqWt1M49UG0sT1dS/jVAUIp6ANclZkTtgq5kJrNncR6SCSPyjLk8",1),
 (3,"Denis", "Cauchois","denis.cauchois@yncrea.fr","$argon2i$v=19$m=65536,t=5,p=1$WPUiir9tiipIBdnm7yTVpZu11Z14DGoBPgQ/8kVJpO+FozRh+LcwA5UchCcpPOxHjzPxRs5FOSSS+1OTrGPyiYA65tq8W5sOldJMVLvCCDIGEqnHuz1vhoAZHzbcfrH3uK9W3SHFiWZAONF9+v/N2zrxLgtd7DBllOK3N5viuEU$Y6/QAaEt/u9cO7uSd7wL25hCTRG8VVLnk+SrTTszEteHh5Soa9t4cz0Bs2zl3DhTNNDfAq18uheiLNu0hZlORuPmEnbbDRo1vF+2pHiD+OhVBaHeouhEY/IypHqa3oOKXdbtxRqHq4bwPIp4+QhM0jcU+xSXX88T9R9kO11bYJA",1),
 (4,"Yann", "Riquier","yann.riquier@externe.junia.com","$argon2i$v=19$m=65536,t=5,p=1$+Q2ncq4NWBznggWM4VNPDfc0+AB5qT2RXBtkcauZ0OhkdtTCHJ/H4ASooZtoOxSKj0p32oXZcBHkpEYt8e2FNU343WZY4TfnTi5Dy6LtZ2MSPCevEEeCb1WseVQ7NYs+u1H2hf54HRCBSJ0Jg7Zz1dJn7o2nuI0UJwPbJ6mmkHg$KVtSpZ2ceqrJ13Kig6MvyMTpf/Hzvc/fo4cSGYATmG42H2ukYU8Tw5u9Ro7WQEOwFguW3Nb8mi6W2qzZIieU8pNaM8kIC3G19ckCIHlcwoBLoDoF6mSEeiO9yZMAp73AZvLnVXvpGTgCJtZuEpcMVBG5QQXQ1r5ak9d3c5W/TqQ",0),
 (5,"Fabien", "Turpin","fab.turpin@gmail.com","$argon2i$v=19$m=65536,t=5,p=1$jWTIoFAnUmy7rl4vW96liLXkGT8Y/CqS9OcFNUP7fBMeYQLhgvR3nM101cCtlnlzlm7036NPPkzHBzGrwAIapzyGTQu+JsIqdpvAZGKEApfMplP2Kk5BlM37DoYpZ7lGi/dYI41QPDoHT19ptO1eKP7JJdRWLDmqL2fNr1kjwZ4$ykaOBReDqgQoNpsdvlc2zxQGfHykaSC6Jkamm4Tr6oanUIQdevqHXcXKwnAYvqaW8n3h+H8A0H+lLzC9PJYSTFuP6urw6oVO3HoW/oX3pNwfI00P1NzeCMWr+eH9wFO0joGEIOOaF3c2c4fFiHY3pTerXROeDdRuALN43hBUqWE",0),
-(6,"Jean", "Dupont","jean.dupont@gmail.com","$argon2i$v=19$m=65536,t=5,p=1$oH8H9ga/FfvciTjmvJIXHA5bfOg4Gkdd/oCX9rmeKodLflqrIVlCpZQnD07AKvw0/0f/yv2NGvhICutwSJgnEewmxTyvpO/KsZZblWC1H69XSoqra5n9sgbxTN7T2VhYsrg8KDtJBGvJqvwDSW1nuMGHebSzrVIsSSdk9H7XRcA$JVNigVCKVNAN/Lj0uX5V+bK5wlE5VJ6S4EN1v/RJEjJtvvbn30qOYmUnKLrZ3kpVTatF6aTGTQBCv3kMjQffoP/Fts0RFCTWLDXBTiM5a+0JVwXfHiaeVg9H4mOPLbx9NLy7JDlp14u1mFcy6TBDtf/vd2zI3rEGT5H4qYk8dVM",0);
+(6,"Jean", "Dupont","jean.dupont@gmail.com","$argon2i$v=19$m=65536,t=5,p=1$oH8H9ga/FfvciTjmvJIXHA5bfOg4Gkdd/oCX9rmeKodLflqrIVlCpZQnD07AKvw0/0f/yv2NGvhICutwSJgnEewmxTyvpO/KsZZblWC1H69XSoqra5n9sgbxTN7T2VhYsrg8KDtJBGvJqvwDSW1nuMGHebSzrVIsSSdk9H7XRcA$JVNigVCKVNAN/Lj0uX5V+bK5wlE5VJ6S4EN1v/RJEjJtvvbn30qOYmUnKLrZ3kpVTatF6aTGTQBCv3kMjQffoP/Fts0RFCTWLDXBTiM5a+0JVwXfHiaeVg9H4mOPLbx9NLy7JDlp14u1mFcy6TBDtf/vd2zI3rEGT5H4qYk8dVM",0),
+(7, "Emile", "Mongenet", "emile.mongenet@student.yncrea.fr", "$argon2i$v=19$m=65536,t=5,p=1$lDevnBIpBMZxpdTROvfBzeZ5F6t3D/Skq5pdaLCP2bZU6ik/wCe8QQsIv15khRy84r5WBGOI9Nvu++0zcd3Q5rFptfBlt2rGqITYJQ2VIGqhA0cwpfONa9TE7iCBUB+EQRUnUgjzAfrmR4K0EmDahc5+sjNg6Tn3qfSOld4fQN4$HeJBjzvm09d0OWboW8zUC0rJLvLhKrQIcdZ10ayowI90wpivlxClMiRrMH/A1KvJUHP8w886nwU8Dg3q2gfm2+3RatTf0UBlX5jaFSc4u1p6n8v+pobpspn1xFCNJpKX1FvszR3PnsXWxoen9rgWb5wqCcoCnz8PL0ok+2B9tII", 0),
+(8, "Kylian", "Barthelemot", "kylian.barthelemot@student.yncrea.fr", "$argon2i$v=19$m=65536,t=5,p=1$LngexZ3eBmaD5wZAvNCG7wqNHn+XeDB4VELb5tcrYPGvRBGypKq/UynOt1jEVDfWRKbmC+x0b2FoetJ1JHTZzxrbNFFcdqtxVFmeTw2C+jCWSx82RVr63avizQyMLBopoduLK/rcuSoLvWM0NI214KDKz9pIqKmFGsjEChGVO1k$NWJnN6by04xoZ5ssy2f0xIVPcHJsL2FWa7DKroOP9ZQAuqyHNdMbsIXraBUSCsj5xcQOxAlkp5AceNn73CzRqSp8t3dL+DH2HH0C/MEWeGMQ6c1kf6wqdtcNairf91HPOzKkx7d+Fx50cVI2Zy/9/7CYpAhJP6dNrorUxyhMIxU", 0),
+(9, "Quentin", "Callens", "quentin.callens@hei.yncrea.fr", "$argon2i$v=19$m=65536,t=5,p=1$Hc+8BKsRZWhPWiRvUsM5uit+tu1zrSYB8x9kkFVKSmW0vWD1aEuAwpI5MVEv18bdLG1ENHPl0J53d+r+jau3Tp89jsGCaP9L0E+ypE3E01TcX7eRknltdz/ig5m5Pfvy9oxZSOzP1NjiC76pyfiKHN0NLHwvL6kqfxlA5i/KH+Q$zaRhsOJzwL7l+O4Nc8r9k+9Th9hxFezoUIFeshnXCwMNCs2WQIJzY89JlI/7FhjG4QB+KrsqyAGg5KcE3uBHphPBWumoCTK7ScnuWnpTLF+dY2y8hOCVkvVTlqiyTJpmz89J2kbZOW5XkMMLRY64emgAo9RIZWwXX9i6XIOO4yo", 0),
+(10, "Pierre", "Sanchez", "pierre.sanchez@hei.yncrea.fr", "$argon2i$v=19$m=65536,t=5,p=1$NHllxEJI1OfNZS2gsRW71Kc2+9WzDy7Rg0EIpnJ9zfPE+7rpTbHEaD392fUij5gIlMtAWrauuDk4MYfscp2Ui5tVXbE2PyS1nsaMUe7odPk/f8PCuohTKg4AHPML2uN1ox9balp8/y17kheYQI3kpUdfTEIoAYLsY6q0Ao7MNMw$kfLvueW31KqLWge+H1w1YwB25mFLsAuSMNdk57WVY+2UXNh0rPitJLKjvNdKeYnLQt7DXioZ9cBGFI4MacdfWME1dN3BgXu4JEc+BtDCwfOiFmE8jCxWBg7MNU4A4VJdaKzROTZaTd2sHI26ggUP8kWITtNmK+M4MV8oHhwLepA", 0);
 
-INSERT INTO GENRE (idGenre, nomGenre) VALUES
+INSERT INTO genre (idGenre, nomGenre) VALUES
 (1, "Comédie"),
 (2, "Drame"),
 (3, "Romance"),
@@ -28,7 +32,7 @@ INSERT INTO GENRE (idGenre, nomGenre) VALUES
 (17, "Espionnage"),
 (18, "Guerre");
 
-INSERT INTO FILM (idFilm, titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide) VALUES
+INSERT INTO film (idFilm, titreFilm, resumeFilm, dateSortie, dureeFilm, realisateur, acteur, imgFilm, urlBA, idGenre, valide) VALUES
 (1, "Captain America: First Avenger", "Captain America: First Avenger nous plonge dans les premières années de l\'univers Mavel. Steve Rogers,  frêle et timide participe à un programme expérimental le transformant en Super Soldat, plus connu sous le nom de Captain America. Il sera confronté à la diabolique organisation HYDRA dirigée par le redoutable Red Skull.", "2011-08-17", 124, "Joe Johnston", "Chris Evans", "CaptainAmericaFirstAvenger.jpg", "IsiV9IJieMk", 14, 1),
 (2, "Iron Man", "Tony Stark, playboy, milliardaire, n\'est pas seulement l\'héritier des usines d\'armement de son père, c\'est également un inventeur de génie. Alors qu\'il est en déplacement en Afghanistan pour présenter sa dernière création, il est enlevé par des terroristes. Traumatisé par cette expérience, il décida de créer une armure de combat unique pour combattre le mal.", "2008-04-30", 126, "Jon Favreau", "Robert Downey Jr.", "IronMan.jpg", "Q2lEqf_F6Pk", 14, 1),
 (3, "Iron Man 2", "Le monde sait désormais que l\'inventeur milliardaire Tony Stark et le super-héros Iron Man ne font qu\'un. Cependant, malgré les pressions, Tony n\'est pas disposé à divulguer les secrets de son armure, redoutant que l\'information atterrisse dans de mauvaises mains. Avec Pepper Potts et James Rhodey Rhodes à ses côtés, Tony va forger de nouvelles alliances et affronter de nouvelles forces toutes-puissantes.", "2010-04-28", 126, "Jon Favreau", "Robert Downey Jr.", "IronMan2.jpg", "VdZj2QYTAic", 14, 1),
@@ -37,11 +41,74 @@ INSERT INTO FILM (idFilm, titreFilm, resumeFilm, dateSortie, dureeFilm, realisat
 (6, "Le Seigneur des anneaux : La Communauté de l\'anneau", "Un jeune et timide Hobbit, Frodon Sacquet, hérite d\'un anneau magique. Bien loin d\'être une simple babiole, il s\'agit d\'un instrument de pouvoir absolu qui permettrait à Sauron, le Seigneur des ténèbres, de régner sur la Terre du Milieu et de réduire en esclavage ses peuples. Frodon doit parvenir jusqu\'à la Crevasse du Destin pour détruire l\'anneau.", "2020-11-26", 228, "Peter Jackson", "Elijah Wood", "LeSeigneurdesanneauxLaCommunautédelanneau.jpg", "nalLU8i4zgs", 7, 1),
 (7, "Avengers : Infinity War", "Père adoptif de Gamora et Nébula, Thanos a commencé à recueillir les six Pierres d\'Infinité : la Pierre du Pouvoir, la Pierre de l\'Espace, la Pierre de Réalité, la Pierre de l\'Âme, la Pierre du Temps et la Pierre de l\'Esprit. Son objectif est de réunir ces six gemmes sur un gantelet doré, forgé par le nain Eitri sur Nidavellir, afin d\'utiliser leur immense puissance pour détruire la moitié de la population de l\'Univers et rétablir ainsi un certain équilibre. Dans sa quête le menant sur diverses planètes, la Terre, Knowhere et Vormir, Thanos est aidé par ses enfants adoptifs : Ebony Maw, Cull Obsidian, Corvus Glaive et Proxima Midnight. Face à cette nouvelle menace qui concerne l\'Univers entier, le groupe de super-héros des Avengers, divisé depuis 2 ans, doit se reformer, et s\'associer au Docteur Strange, aux Gardiens de la Galaxie et au peuple du Wakanda.", "2018-04-25", 149, "Anthony et Joe Russo", "Robert Downey Jr.", "AvengersInfinityWar.jpg", "eIWs2IUr3Vs", 14, 1),
 (8, "Rambo", "Un ancien militaire du Vietnam doit se battre pour rester en vie.", "1982-10-22", 90, "Ted Kotchev", "Sylvester Stallone", "Rambo.jpg", "lXtZmFf0OKo", 2, 0),
-(9, "Joker", "Le film, qui relate une histoire originale inédite sur grand écran, se focalise sur la figure emblématique de lennemi juré de Batman. Il brosse le portrait dArthur Fleck, un homme sans concession méprisé par la société.", "2019-10-09", 122, "Todd Phillips", "Joaquin Phoenix", "Joker.jpg", "OoTx1cYC5u8", 2, 0);
+(9, "Joker", "Le film, qui relate une histoire originale inédite sur grand écran, se focalise sur la figure emblématique de lennemi juré de Batman. Il brosse le portrait dArthur Fleck, un homme sans concession méprisé par la société.", "2019-10-09", 122, "Todd Phillips", "Joaquin Phoenix", "Joker.jpg", "OoTx1cYC5u8", 2, 0),
+10, "Ça : Chapitre 2", "Tous les 27 ans, une créature maléfique revient hanter les rues de Derry, dans le Maine. Près de trente ans après les événements du premier opus, les membres du Club des Ratés, désormais adultes, se retrouvent.", "2019-11-26", 169, "Andrés Muschietti", "Bill Skarsgård", "ÇaChapitre2.jpg", "G8fR1vvrLmI", 12, 1),
+(11, "Ça", "À Derry, dans le Maine, sept enfants ayant du mal à s\'intégrer se sont regroupés au sein du « Club des Ratés ». Rejetés par leurs camarades, ils sont les cibles favorites des gros durs de l\'école. Ils ont aussi en commun le fait d\'avoir éprouvé leur plus grande terreur face à un terrible prédateur métamorphe qu\'ils appellent « Ça ». Car depuis toujours, Derry est en proie à une créature qui émerge des égouts tous les 27 ans pour se nourrir des terreurs de ses victimes de choix : les enfants. Bien décidés à rester soudés, les Ratés tentent de surmonter leurs peurs pour enrayer un nouveau cycle meurtrier. Un cycle qui a commencé un jour de pluie lorsqu\'un petit garçon poursuivant son bateau en papier s\'est retrouvé face-à-face avec un clown répondant au nom de Grippe-Sou...", "2018-01-28", 135, "Andrés Muschietti", "Bill Skarsgård", "Ça.jpg", "Bk9F2lt0xn4", 12, 1),
+(12, "Interstellar", "Dans un futur proche, la Terre est de moins en moins accueillante pour l\'humanité qui connaît une grave crise alimentaire. Le film raconte les aventures d\'un groupe d\'explorateurs qui utilise une faille récemment découverte dans l\'espace-temps afin de repousser les limites humaines et partir à la conquête des distances astronomiques dans un voyage interstellaire.", "2018-11-18", 169, "Christopher Nolan", "Matthew McConaughey", "Interstellar.jpg", "VaOijhK3CRU", 11, 1),
+(13, "The Revenant", "Durant une expédition dans une Amérique profondément sauvage, le légendaire trappeur Hugh Glass est brutalement attaqué par un ours et laissé pour mort par les membres de sa propre équipe. Dans sa quête de survie, Glass endure une souffrance inimaginable ainsi que la trahison de son homme de confiance, John Fitzgerald. Guidé par la volonté et l\'amour de sa famille, Glass doit affronter un hiver brutal dans une inexorable lutte pour survivre et trouver la rédemption.", "2016-02-24", 159, "Alejandro González Iñárritu", "Leonardo DiCaprio", "TheRevenant.jpg", "E1jOiqbNTpo", 6, 1),
+(14, "Wonder Woman 1984", "Suite des aventures de Diana Prince, alias Wonder Woman, Amazone devenue une super-héroïne dans notre monde. Après la Première guerre mondiale, direction les années 80 ! Cette fois, Wonder Woman doit affronter deux nouveaux ennemis, particulièrement redoutables : Max Lord et Cheetah.", "2020-12-16", 151, "Patty Jenkins", "Gal Gadot", "WonderWoman1984.jpg", "XW2E2Fnh52w", 14, 1);
 
-INSERT INTO Preferer (idFilm, idUtilisateur, liker, favoris) VALUES
-(5, 6, 2, 0),
-(4, 2, 1, 1),
-(1, 4, 1, 1),
+
+INSERT INTO preferer (idFilm, idUtilisateur, liker, favoris) VALUES
 (1, 2, 1, 1),
-(1, 6, 1, 1);
+(1, 4, 1, 1),
+(1, 6, 1, 1),
+(1, 7, 1, 1),
+(1, 8, 1, 0),
+(1, 9, -1, 0),
+(1, 10, -1, 0),
+(2, 3, -1, 0),
+(2, 7, 1, 1),
+(2, 8, 1, 0),
+(2, 9, -1, 0),
+(2, 10, 1, 0),
+(3, 3, -1, 0),
+(3, 7, 1, 1),
+(3, 8, 1, 0),
+(3, 9, 1, 0),
+(3, 10, -1, 0),
+(4, 2, 1, 1),
+(4, 7, 1, 1),
+(4, 9, -1, 0),
+(4, 10, -1, 0),
+(5, 6, 2, 0),
+(5, 7, 1, 0),
+(5, 8, 1, 0),
+(5, 9, 1, 0),
+(5, 10, -1, 0),
+(6, 3, 1, 1),
+(6, 7, 1, 1),
+(6, 8, 1, 0),
+(6, 9, -1, 0),
+(6, 10, 1, 0),
+(7, 3, 1, 1),
+(7, 7, 1, 1),
+(7, 8, 0, 1),
+(7, 9, 0, 1),
+(7, 10, 1, 1),
+(8, 3, 0, 1),
+(8, 7, 1, 1),
+(8, 8, -1, 0),
+(8, 9, 1, 0),
+(8, 10, -1, 0),
+(9, 3, 1, 0),
+(9, 8, 1, 1),
+(9, 9, 1, 0),
+(9, 10, 1, 0),
+(10, 3, 1, 1),
+(10, 8, 0, 1),
+(10, 9, 1, 0),
+(10, 10, 1, 0),
+(11, 3, 1, 1),
+(11, 8, 1, 1),
+(11, 9, -1, 0),
+(11, 10, 1, 0),
+(12, 3, 1, 1),
+(12, 8, 1, 1),
+(12, 10, 1, 0),
+(13, 8, 1, 1),
+(13, 9, 1, 0),
+(13, 10, 1, 0),
+(14, 7, 1, 0),
+(14, 9, 1, 0),
+(14, 10, 1, 0);

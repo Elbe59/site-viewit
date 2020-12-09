@@ -278,8 +278,7 @@ public class FilmService {
 	
 	/*--------- AUTRE METHODE ------------*/
 	
-	public LocalDate formaterDate(String date)
-	{
+	public LocalDate formaterDate(String date){
 		return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 	}
 	
@@ -315,8 +314,6 @@ public class FilmService {
 		}
 	}
 	
-
-	
 	public String parametreTrie(String choix) {
 		if(choix == null)
 			return ("titreFilm");
@@ -332,5 +329,4 @@ public class FilmService {
 			return ("titreFilm");
 		}
 	}
-	
 }

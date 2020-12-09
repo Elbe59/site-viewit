@@ -87,7 +87,8 @@ public class FileStorageServiceTestCase {
 		//GIVEN
 		String fileName = "test1.jpg";	
 		//WHEN
-		String result = fileStorageService.deleteFile(fileName);
+		@SuppressWarnings("static-access")
+		String result = fileStorageService.getInstance().deleteFile(fileName);
 		//THEN
 		Assertions.assertThat(result).isEqualTo(fileName);
 	}

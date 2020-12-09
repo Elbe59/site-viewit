@@ -1,14 +1,14 @@
 #--- Drop Table si elles existent
 
-DROP TABLE IF EXISTS Preferer;
-DROP TABLE IF EXISTS FILM;
-DROP TABLE IF EXISTS GENRE;
-DROP TABLE IF EXISTS UTILISATEUR;
+DROP TABLE IF EXISTS preferer;
+DROP TABLE IF EXISTS film;
+DROP TABLE IF EXISTS genre;
+DROP TABLE IF EXISTS utilisateur;
 
 #--- Création des tables
 
 #--- admin = 0 : Utilisateur, admin = 1 : Administrateur
-CREATE TABLE UTILISATEUR(
+CREATE TABLE utilisateur(
 	idUtilisateur     Int(5)  Auto_increment  NOT NULL ,
 	prenomUtilisateur Varchar (50) NOT NULL ,
     nomUtilisateur    Varchar (50) NOT NULL ,
@@ -18,14 +18,14 @@ CREATE TABLE UTILISATEUR(
 	CONSTRAINT UTILISATEUR_PK PRIMARY KEY (idUtilisateur)
 );
 
-CREATE TABLE GENRE(
+CREATE TABLE genre(
     idGenre  Int(2)  Auto_increment  NOT NULL ,
     nomGenre Varchar (50) NOT NULL,
 	CONSTRAINT GENRE_PK PRIMARY KEY (idGenre)
 );
 
 #--- valide = 0 : Non affiché, valide = 1 : Affiche
-CREATE TABLE FILM(
+CREATE TABLE film(
     idFilm      Int(5)  Auto_increment  NOT NULL ,
     titreFilm   Varchar (100) NOT NULL ,
     resumeFilm  Varchar (1000) NOT NULL ,
@@ -42,9 +42,9 @@ CREATE TABLE FILM(
 	CONSTRAINT FILM_GENRE_FK FOREIGN KEY (idGenre) REFERENCES GENRE(idGenre)
 );
 
-#--- liker = 0 : défaut, liker = 1 : j'aime, liker = 2 : j'aime pas
+#--- liker = 0 : défaut, liker = 1 : j'aime, liker = -1 : j'aime pas
 #--- favoris = 0 : non défaut; favoris = 1 : oui
-CREATE TABLE PREFERER (
+CREATE TABLE preferer (
     idFilm        Int(5) NOT NULL ,
     idUtilisateur Int(5) NOT NULL,
 	liker		  Int(1) NOT NULL,
