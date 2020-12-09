@@ -326,7 +326,7 @@ public class FilmService {
 		else if (choix.equals("Popularite"))
 			return ("Popularite");
 		else if(choix.equals("valide"))
-			return ("valide");
+			return ("valide, titreFilm");
 		else {
 			return ("titreFilm");
 		}
