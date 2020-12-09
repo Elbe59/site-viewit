@@ -1,3 +1,8 @@
+#--- Create TABLE viewIt
+
+CREATE DATABASE IF NOT EXISTS `viewit` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `viewit`;
+
 #--- Drop Table si elles existent
 
 DROP TABLE IF EXISTS preferer;
@@ -38,8 +43,8 @@ CREATE TABLE film(
 	idGenre     Int(2) NOT NULL,
 	valide		Int(1) NOT NULL,
 	CONSTRAINT FILM_PK PRIMARY KEY (idFilm),
-	
-	CONSTRAINT FILM_GENRE_FK FOREIGN KEY (idGenre) REFERENCES GENRE(idGenre)
+
+	CONSTRAINT FILM_GENRE_FK FOREIGN KEY (idGenre) REFERENCES genre(idGenre)
 );
 
 #--- liker = 0 : défaut, liker = 1 : j'aime, liker = -1 : j'aime pas
@@ -51,6 +56,6 @@ CREATE TABLE preferer (
 	favoris		  Int(1) NOT NULL,
 	CONSTRAINT Preferer_PK PRIMARY KEY (idFilm,idUtilisateur),
 
-	CONSTRAINT Preferer_FILM_FK FOREIGN KEY (idFilm) REFERENCES FILM(idFilm) ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT Preferer_UTILISATEUR_FK FOREIGN KEY (idUtilisateur) REFERENCES UTILISATEUR(idUtilisateur) ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT Preferer_FILM_FK FOREIGN KEY (idFilm) REFERENCES film(idFilm) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT Preferer_UTILISATEUR_FK FOREIGN KEY (idUtilisateur) REFERENCES utilisateur(idUtilisateur) ON DELETE CASCADE ON UPDATE CASCADE
 );
