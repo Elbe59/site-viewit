@@ -106,7 +106,7 @@ public class GenreDaoImpl implements GenreDao {
         LOGGER.debug("Trying to add genre "+name);
         Genre res = new Genre(name);
         try (Connection co = DataSourceProvider.getDataSource().getConnection()) {
-        	try (PreparedStatement pStm = co.prepareStatement("INSERT INTO Genre (nomGenre) VALUES (?);", Statement.RETURN_GENERATED_KEYS)) {
+        	try (PreparedStatement pStm = co.prepareStatement("INSERT INTO genre (nomGenre) VALUES (?);", Statement.RETURN_GENERATED_KEYS)) {
         		pStm.setString(1, name);
                 pStm.executeUpdate();
                 ResultSet ids = pStm.getGeneratedKeys();
