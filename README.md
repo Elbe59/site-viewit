@@ -54,7 +54,7 @@ Pour finir, sur GitBash ou autre console de commande, se placer à la racine du 
 
 ### 2.1 Rechercher un film à l'aide de son titre
 
-En tant qu'administrateur vous avez la possibilité de rechercher un film à partir de son titre.
+En tant qu'utilisateur non connecté vous avez la possibilité de rechercher un film à partir de son titre.
 
 Taper dans la barre de recherche un film que vous voulez trouver (exemple : "the revenant").
 La liste des films se réduit en gardant les films qui contiennent la lettre ou la suite de lettres dans son titre.
@@ -138,7 +138,7 @@ Il peut également supprimer ceux qu'il considère inutile (les genres liés à 
 
 ### 4.3 Gestion des utilisateurs
 
-Pour finir, l'administrateur a la possibilité de gérer les informations des utilisateurs du site.
+L'administrateur a la possibilité de gérer les informations des utilisateurs du site.
 Il est le seul à pouvoir modifier les informations concernant le nom, le prénom, l'adresse-mail et le mot de passe.
 De plus, seul l'administrateur à la possibilité de créer un nouvel utilisateur.
 
@@ -146,7 +146,7 @@ Il a également la possibilité de promouvoir un utilisateur en tant qu'administ
 
 ### 4.4 Gestion des films
 
-L'administrateur à accès à la liste des films qu'ils soient valides ou non.
+Pour finir, l'administrateur a accès à la liste des films qu'ils soient valides ou non.
 A partir de cette page, l'administrateur a la possibilté de valider un film (une fois validé, le film sera visible dans la page accueil).
 Il peut également modifier ou supprimer un film.
 
@@ -154,7 +154,7 @@ Lorsque l'administrateur souhaite modifier un film, celui-ci est alors conduit d
 
 Exemple :
 
-Vous pouvez alors modifier le film que vous avez créer plus tôt,
+Vous pouvez alors modifier le film que vous avez créé en tant qu'utilisateur plus tôt,
 
 Image de couverture : (Sélectionner l'image du film dans le dossier "/data/filmImages")
 Lien vers la bande-annonce : https://www.youtube.com/watch?v=wV-Q0o2OQjQ
