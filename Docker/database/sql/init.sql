@@ -59,7 +59,6 @@ CREATE TABLE preferer (
 	CONSTRAINT Preferer_FILM_FK FOREIGN KEY (idFilm) REFERENCES film(idFilm) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT Preferer_UTILISATEUR_FK FOREIGN KEY (idUtilisateur) REFERENCES utilisateur(idUtilisateur) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
 #--- Création des insert
 
 INSERT INTO utilisateur (idUtilisateur, prenomUtilisateur, nomUtilisateur, email, mdpHash, admin) VALUES
@@ -204,5 +203,4 @@ INSERT INTO preferer (idFilm, idUtilisateur, liker, favoris) VALUES
 (18, 6, -1, 0),
 (19, 2, 1, 1),
 (20, 2, 0, 1),
-(21, 2, 1, 1),
-(23, 6, 1, 1);
+(21, 2, 1, 1);

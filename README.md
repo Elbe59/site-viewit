@@ -8,39 +8,32 @@ Ce site internet permet à un utilisateur de rechercher des films, d'en ajouter 
 
 ## Step 1 : Initialisation
 
-### 1.1 Lancer le projet à partir de Eclipse ou IntellJ
-
-#### 1. Télécharger le projet
-
 Cloner ce projet : https://gitlab.com/hei-projet/hei-projet-2020/site-viewit.git.
 
-#### 2. Importer le projet dans Eclipse ou IntellJ (Projet Maven)
+### 1.1 Lancer le projet à partir de Eclipse ou IntellJ
+
+#### 1. Importer le projet dans Eclipse ou IntellJ (Projet Maven)
 
 Ouvrir le projet avec un des logiciels.
 Vérifier que le 'context root' est bien "/" et non "/viewit".
 
-#### 3. Initialisation de la base de donnée.
+#### 2. Initialisation de la base de donnée.
 
 Copier le script "CreateTable.sql" contenu dans le dossier ScriptSQL dans votre base de donnée (MariaDB par exemple) 
 Puis ensuite copier le script "Insert.sql" contenu dans le dossier ScriptSQL au même endroit.
 
-#### 4. Initialiser le fichier "images.properties"
-
-##### 4.1. Pour le lancement du projet
+#### 3. Initialiser les fichiers "images.properties"
 
 Se rendre dans le fichier "src/main/ressources/images.properties".
 Remplacer le chemin d'accés par votre propre chemin d'accés : "{your way}/data/filmImages".
 
 Faire de mêmes pour le fichier "src/test/ressources/images.properties".
-Remplacer le chemin d'accés par votre propre chemin d'accés : "{your way}/test/dataTest".
-
-Faire de même dans le fichier "src/main/test/ressources/images.properties".
-Le chemin : "{your way}/src/test/resources/dataTest".
+Remplacer le chemin d'accés par votre propre chemin d'accés : "{your way}/src/test/resources/dataTest".
 
 ### 1.2 Lancer le projet avec Docker
 
 Nous avons mis en place Docker pour lancer notre site sur n'importe quel poste avec plus de facilitée.
-Notre fichier Docker-compose permet de lancer notre projet à partir d'une Image Tomcat et d'une image MariaDB.
+Notre fichier docker-compose.yml permet de lancer notre projet à partir d'une Image Tomcat et d'une image MariaDB.
 Pour lancer le projet sur Docker sans utiliser l'image crée à partir de gitlab-ci,
 il faut remplacer la ligne 5 du fichier docker-compose.yml (image: registry.gitlab.com/hei-projet/hei-projet-2020/site-viewit  -- par --  build: .    )
 Pour finir, sur GitBash ou autre console de commande, se placer à la racine du projet puis lancer la commande "docker-compose up".

@@ -77,7 +77,9 @@ public class ModifFilmServlet extends ServletGenerique {
 		}
 		else{
 			try {
-				FileStorageService.getInstance().deleteFile(previousFilm.getImageName());
+				if(!previousFilm.getImageName().contentEquals("filmInconnu.png")){
+					FileStorageService.getInstance().deleteFile(previousFilm.getImageName());
+				}
 				fileNameForStorage = FileStorageService.getInstance().storeFile(titre, in, extension);
 			} catch (FileStorageException e) {
 				LOGGER.error("error loading the image");
