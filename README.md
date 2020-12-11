@@ -50,6 +50,7 @@ Se connecter ensuite sur http://localhost:8888/
 Nous avons mis en place gitLab-CI pour notre projet afin de faire une vérification des tests après chaque push.
 La mise en place de cette CI nous a également permis de packager notre projet et de produire une image que l'on pourra ensuite utiliser avec Docker.
 il faut remplacer la ligne 5 du fichier docker-compose.yml (build: .    -- par -- image: registry.gitlab.com/hei-projet/hei-projet-2020/site-viewit)
+Ci besoin se connecter à git lab en rentrant la commande suivante : docker login  registry.gitlab.com
 Pour finir, sur GitBash ou autre console de commande, se placer à la racine du projet puis lancer la commande "docker-compose up".
 
 Se connecter ensuite sur http://localhost:8888/
