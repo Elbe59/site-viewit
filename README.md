@@ -22,13 +22,18 @@ Vérifier que le 'context root' est bien "/" et non "/viewit".
 Copier le script "CreateTable.sql" contenu dans le dossier ScriptSQL dans votre base de donnée (MariaDB par exemple) 
 Puis ensuite copier le script "Insert.sql" contenu dans le dossier ScriptSQL au même endroit.
 
-#### 3. Initialiser les fichiers "images.properties"
+#### 3. Initialiser les fichiers ".properties"
 
 Se rendre dans le fichier "src/main/ressources/images.properties".
 Remplacer le chemin d'accés par votre propre chemin d'accés : "{your way}/data/filmImages".
 
 Faire de mêmes pour le fichier "src/test/ressources/images.properties".
 Remplacer le chemin d'accés par votre propre chemin d'accés : "{your way}/src/test/resources/dataTest".
+
+Dans le fichier "src/main/ressources/images.properties", remplacer les informations pour vous connecter 
+à la base de donnée que vous avez remplit dans la sous partie précédente.
+
+Se connecter ensuite sur http://localhost:8080/
 
 ### 1.2 Lancer le projet avec Docker
 
@@ -38,6 +43,8 @@ Pour lancer le projet sur Docker sans utiliser l'image crée à partir de gitlab
 il faut remplacer la ligne 5 du fichier docker-compose.yml (image: registry.gitlab.com/hei-projet/hei-projet-2020/site-viewit  -- par --  build: .    )
 Pour finir, sur GitBash ou autre console de commande, se placer à la racine du projet puis lancer la commande "docker-compose up".
 
+Se connecter ensuite sur http://localhost:8888/
+
 ### 1.3 Lancer le projet avec Docker à partir de l'image GitLab-ci
 
 Nous avons mis en place gitLab-CI pour notre projet afin de faire une vérification des tests après chaque push.
@@ -45,6 +52,7 @@ La mise en place de cette CI nous a également permis de packager notre projet e
 il faut remplacer la ligne 5 du fichier docker-compose.yml (build: .    -- par -- image: registry.gitlab.com/hei-projet/hei-projet-2020/site-viewit)
 Pour finir, sur GitBash ou autre console de commande, se placer à la racine du projet puis lancer la commande "docker-compose up".
 
+Se connecter ensuite sur http://localhost:8888/
 
 ## Step 2 : Utilisation en tant que personne non connecté
 

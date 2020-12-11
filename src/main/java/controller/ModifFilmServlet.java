@@ -77,7 +77,7 @@ public class ModifFilmServlet extends ServletGenerique {
 		}
 		else{
 			try {
-				if(!previousFilm.getImageName().contentEquals("filmInconnu.png")){
+				if(!previousFilm.getImageName().contentEquals("filmInconnu.jpg")){
 					FileStorageService.getInstance().deleteFile(previousFilm.getImageName());
 				}
 				fileNameForStorage = FileStorageService.getInstance().storeFile(titre, in, extension);
