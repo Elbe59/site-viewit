@@ -14,7 +14,7 @@ Cloner ce projet : https://gitlab.com/hei-projet/hei-projet-2020/site-viewit.git
 
 #### 1. Importer le projet dans Eclipse ou IntellJ (Projet Maven)
 
-Ouvrir le projet avec un des logiciels.
+Ouvrir le projet avec un des IDE.
 Vérifier que le 'context root' est bien "/" et non "/viewit".
 
 #### 2. Initialisation de la base de donnée.
